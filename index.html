@@ -218,6 +218,19 @@ details[open] .chev{transform:rotate(-135deg)}
 .brand-foot+.disclaimer{margin-top:1.5rem}
 .print-only img{height:32px;width:auto;vertical-align:middle;margin-right:.6rem;border-radius:6px}
 
+
+.sbars{display:grid;gap:.5rem;margin-top:1rem;max-width:620px}
+.sb{display:grid;grid-template-columns:150px 1fr 120px;gap:.8rem;align-items:center}
+.sb .bar.sm{height:10px}
+.sb .sv{color:var(--muted);font-size:.9rem}
+@media (max-width:560px){.sb{grid-template-columns:1fr 1fr;row-gap:.2rem}.sb .bar.sm{grid-column:1/-1;order:3}}
+.flow{list-style:none;padding:0;margin:1rem 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem}
+.flow li{display:flex;flex-direction:column;gap:.3rem;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.flow b{color:var(--accent);font-family:var(--font-display)}
+.flow .hint{margin:0;font-size:.9rem}
+.c-warn{background:var(--mark);color:var(--mark-ink)}
+.c-warn h4,.c-warn p{color:var(--mark-ink)}
+
 /* hexagon */
 .hx-grid{fill:none;stroke:var(--line);stroke-width:1.2}
 .hx-axis{stroke:var(--line);stroke-width:1}
@@ -236,7 +249,7 @@ details[open] .chev{transform:rotate(-135deg)}
   .noprint,.filters,.actions,.more,.chev,.brand-foot{display:none!important}
   .print-only{display:block;color:var(--muted);margin-bottom:.5rem}
   .wrap{padding:0}
-  details.career,.profile,.t3,.inst,.naac-note,.dl{break-inside:avoid}
+  details.career,.profile,.t3,.inst,.naac-note,.dl,.flow li{break-inside:avoid}
   .how details{border:0}
   .btn.small{border:0;padding:0;text-decoration:underline;color:var(--accent);background:none;min-height:0}
   .hx-shape{animation:none}
@@ -289,24 +302,37 @@ const QPOOL={
   C:[['Keeping accounts, records or files neat and accurate',['mec','cec']],['Working with spreadsheets and tables of numbers',[]],['Following clear steps and procedures to get a job done right',[]],['Planning a budget and tracking where the money goes',['mec','cec']],['Checking work carefully to catch small mistakes',[]],['Recording lab readings and measurements accurately',['mpc','bipc']],['Organising notes, files and schedules so nothing is missed',[]],['Filling in forms and documents correctly',[]],['Following safety rules and standard procedures at work',['bipc','mpc']],['Doing tax, banking or insurance calculations',['mec','cec']],['Keeping patient, library or school records in order',['bipc','arts']],['Sorting data into neat categories and tables',[]],['Making timetables and checklists and sticking to them',[]],['Working with a computer system that has fixed rules and formats',['mpc']],['Proofreading and correcting a document line by line',['arts']]]
 };
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-/* Each student gets 5 questions per interest type, drawn at random from the pool of 15 and weighted towards their subject group. */
+/* Comparable scoring: 3 anchor questions per interest type are the same for every student; 2 are drawn at random and weighted towards the student's subject group. */
+const ANCHORS={
+  R:['Fixing or building something with my own hands','Spending a work day outdoors or on the move instead of at a desk','Sports, fitness or physical challenges'],
+  I:['Studying numbers or data to spot a pattern','Reading about new discoveries in science, economics or technology','Researching a topic deeply until I fully understand it'],
+  A:['Drawing, designing or making something that looks good','Making videos, music, photos or animation','Coming up with original ideas instead of following a set method'],
+  S:['Explaining a hard topic to a classmate until they get it','Volunteering for a cause or helping in my community','Having a job where I help people stay healthy, learn or feel better'],
+  E:['Leading a team or a school club','Debating, pitching or persuading people to back an idea','Organising an event and making sure it succeeds'],
+  C:['Working with spreadsheets and tables of numbers','Following clear steps and procedures to get a job done right','Checking work carefully to catch small mistakes']
+};
 function buildQuestions(stream){
   const picks={};
   ORDER.forEach(t=>{
-    const pool=QPOOL[t].map(x=>({text:x[0],st:x[1]}));
+    const fixed=QPOOL[t].filter(x=>ANCHORS[t].includes(x[0])).map(x=>({text:x[0]}));
+    const pool=QPOOL[t].filter(x=>!ANCHORS[t].includes(x[0])).map(x=>({text:x[0],st:x[1]}));
     const chosen=[];
-    for(let n=0;n<5;n++){
+    for(let n=0;n<2;n++){
       const w=pool.map(q=>(!stream||stream==='unsure'||!q.st.length)?2:(q.st.includes(stream)?4:0.5));
       let r=Math.random()*w.reduce((a,b)=>a+b,0),idx=0;
       for(;idx<w.length-1;idx++){r-=w[idx];if(r<=0)break;}
       chosen.push(pool.splice(idx,1)[0]);
     }
-    picks[t]=chosen;
+    picks[t]=shuffle(fixed.concat(chosen));
   });
   const out=[];
   for(let k=0;k<5;k++){shuffle([...ORDER]).forEach(t=>out.push({t,text:picks[t][k].text}));}
   return out;
 }
+/* School-subject comfort questions, used only in the After Class 10 flow. */
+const SUBJECTS=[['math','Mathematics'],['phy','Physics'],['chem','Chemistry'],['bio','Biology'],['soc','Social science (history, geography, civics and economics)'],['lang','English and languages'],['comp','Computers and coding']];
+const SUB_LABELS=['Struggle a lot','Find it hard','It’s okay','Good at it','Very strong'];
+const subjectQuestions=()=>SUBJECTS.map(s=>({t:'X',sub:s[0],text:s[1],stem:'How comfortable are you with…',labels:SUB_LABELS}));
 const ANSWERS=['Not for me','Not much','It’s okay','Like it','Love it'];
 const STREAMS={
   mec:{label:'MEC',long:'Maths, Economics, Commerce'},
@@ -901,7 +927,7 @@ function tableHTML(list){
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 /* ---------- STATE ---------- */
-const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pctText=v=>Math.round(v*100)+'%';
@@ -964,17 +990,171 @@ function collegesFor(c){
     .sort((a,b)=>b.o-a.o||GR[b.i.g]-GR[a.i.g]||b.i.cg-a.i.cg||a.i.n.localeCompare(b.i.n));
 }
 
+/* ---------- AFTER CLASS 10 PATHWAYS ---------- */
+const PATHS=[
+ {id:'mpc',streams:['mpc'],title:'Science with Maths (MPC)',duration:'2 years, Class 11–12',code:'IRC',w:{math:3,phy:3,chem:2,comp:1},
+  blurb:'Engineering, technology, pure sciences, architecture and defence.',
+  subjects:'Mathematics, Physics and Chemistry, with English and one more subject such as Computer Science.',
+  after:['BTech or BE in engineering and technology','BSc in Physics, Chemistry, Mathematics, Computer Science or Statistics','Architecture (BArch)','NDA for the armed forces (Navy and Air Force need Maths and Physics)','Also open: BBA, BCA, law, economics and design'],
+  exams:['JEE Main and JEE Advanced (IITs, NITs and IIITs)','BITSAT and state engineering tests (EAPCET in Andhra Pradesh and Telangana)','CUET-UG for BSc and central universities','NDA, NATA and the IISER aptitude test'],
+  note:'This keeps the most doors open, and moving from Science to Commerce or Humanities later is usually possible. It needs Maths and Physics practice every day, so choose it because you can keep that work up, not because friends or relatives expect it.'},
+ {id:'bipc',streams:['bipc'],title:'Science with Biology (BiPC)',duration:'2 years, Class 11–12',code:'ISR',w:{bio:3,chem:2,phy:1},
+  blurb:'Medicine, dentistry, nursing, pharmacy, biotechnology and agriculture.',
+  subjects:'Biology, Physics and Chemistry, with English and an optional subject.',
+  after:['MBBS, BDS, AYUSH degrees and veterinary science','BSc Nursing, physiotherapy (BPT) and allied health sciences','BPharm, biotechnology, agriculture and food science','BSc in Zoology, Botany, Biochemistry or Environmental Science','Also open: psychology, law, design and hospitality'],
+  exams:['NEET-UG (medicine, dentistry, AYUSH and veterinary)','State pharmacy and agriculture tests (EAPCET in Andhra Pradesh and Telangana)','CUET-UG for BSc programmes'],
+  note:'NEET-UG is very competitive, so plan a backup route such as pharmacy, biotechnology, nursing or allied health. Without Maths, engineering is closed, so be sure before you choose.'},
+ {id:'pcmb',streams:['mpc','bipc'],title:'Science with Maths and Biology (PCMB)',duration:'2 years, Class 11–12',code:'IRS',w:{math:2,phy:2,chem:2,bio:2},
+  blurb:'Keeps both engineering and medicine open.',
+  subjects:'Physics, Chemistry, Mathematics and Biology. Offered in CBSE and some other boards, but not in most state junior colleges.',
+  after:['Everything open to MPC: engineering, BSc and architecture','Everything open to BiPC: medicine, pharmacy, nursing and biotechnology','Fields that use both, such as biomedical and bioinformatics courses'],
+  exams:['JEE Main and JEE Advanced for engineering','NEET-UG for medicine','CUET-UG and state tests for BSc, pharmacy and agriculture'],
+  note:'The workload is heavy, and most students narrow down to one route by Class 12. Check that your school offers it before you plan around it.'},
+ {id:'mec',streams:['mec'],title:'Commerce with Maths (MEC)',duration:'2 years, Class 11–12',code:'CEI',w:{math:3,soc:1,lang:1},
+  blurb:'Finance, economics, data, management, CA and actuarial science.',
+  subjects:'Mathematics, Economics and Commerce subjects such as Accountancy and Business Studies, with English.',
+  after:['BCom (Honours), BBA and BMS','BA or BSc Economics, Statistics and Data Science (some courses need Maths)','CA, CMA and Company Secretary','Actuarial science','Law, finance and integrated management programmes'],
+  exams:['CUET-UG','IPMAT and university tests for BBA and integrated management programmes','CA Foundation, CMA Foundation and CSEET','ACET for actuarial science and CLAT for law'],
+  note:'Maths keeps data, economics and actuarial science open. Choose it if you are comfortable with Maths and interested in business and money.'},
+ {id:'cec',streams:['cec'],title:'Commerce without Maths (CEC)',duration:'2 years, Class 11–12',code:'ECS',w:{soc:2,lang:2,math:1},
+  blurb:'Accounting, business, banking, law and management.',
+  subjects:'Civics, Economics and Commerce subjects such as Accountancy and Business Studies, with English. Maths is not compulsory.',
+  after:['BCom, BBA and BBM','CA, CMA and Company Secretary','BA Economics, law, banking and insurance, and hospitality','Courses that need Maths, such as BSc Statistics, actuarial science and some BCA programmes, may not be open'],
+  exams:['CUET-UG','CA Foundation, CMA Foundation and CSEET','CLAT for law','Bank and insurance exams after graduation'],
+  note:'Check that your school offers this combination. Without Maths in Class 12, some data and finance courses may be closed, so be sure you do not want them.'},
+ {id:'hec',streams:['arts'],title:'Humanities and Arts (HEC and similar)',duration:'2 years, Class 11–12',code:'ASI',w:{soc:3,lang:3},
+  blurb:'Law, media, design, psychology, policy, teaching and civil services.',
+  subjects:'History, Economics, Civics or Political Science, with electives such as Psychology, Sociology or Geography, and languages.',
+  after:['BA in Economics, Political Science, Psychology, History, English or Sociology','Law (five-year BA LLB)','Journalism and mass communication, design and fine arts','Education (ITEP and later BEd), social work and hospitality','Civil services (UPSC) after any degree'],
+  exams:['CUET-UG','CLAT and AILET for law','UCEED, NID DAT and NIFT for design','UPSC and state civil services after graduation'],
+  note:'Humanities has the widest range of careers in law, media, design, policy and teaching. Subject combinations differ by school, so check what is on offer.'},
+ {id:'poly',streams:[],title:'Diploma in engineering (polytechnic)',duration:'3-year diploma, joined after Class 10',code:'RIC',w:{math:2,phy:2,comp:2},
+  blurb:'Hands-on engineering, early jobs, or BTech through lateral entry.',
+  subjects:'A three-year diploma in a branch such as Mechanical, Civil, Electrical, Electronics, Computer or Automobile engineering.',
+  after:['Work as a technician, supervisor or junior engineer','Join the second year of BTech or BE through lateral entry','Government junior-engineer jobs through recruitment exams','Study further after BTech'],
+  exams:['State polytechnic entrance test (such as POLYCET in Telangana and Andhra Pradesh)','State lateral-entry test (such as ECET) for BTech after the diploma'],
+  careers:['Technician','Junior engineer','Production or site supervisor','Engineer after BTech through lateral entry'],
+  note:'A good option if you like practical, hands-on work and want to start earning or enter BTech sooner. Check your state’s test, seat rules and recognised colleges.'},
+ {id:'iti',streams:[],title:'ITI and skill training (trades)',duration:'1 to 2 year trade course',code:'RCE',w:{phy:1,math:1},
+  blurb:'Skilled trades and early employment.',
+  subjects:'A trade course such as Electrician, Fitter, Welder, Motor Mechanic or Computer Operator and Programming Assistant (COPA).',
+  after:['Skilled jobs in industry, workshops and railways','Apprenticeship with a company','A diploma through lateral entry, where your state allows it','Start your own workshop or service business'],
+  exams:['State ITI admission, usually based on Class 10 marks through online counselling'],
+  careers:['Electrician','Fitter or welder','Motor mechanic','Computer operator (COPA)','Owner of a workshop or service business'],
+  note:'A strong choice if you prefer practical work and want to earn sooner. Check that the ITI is approved (NCVT or SCVT) before you pay any fee.'}
+];
+function scorePaths(pct,subs){
+  const raw=PATHS.map(p=>{
+    const interest=[3,2,1].reduce((d,w,k)=>d+w*pct[p.code[k]],0)/6;
+    const ws=Object.entries(p.w),tw=ws.reduce((a,x)=>a+x[1],0);
+    const subject=ws.reduce((a,x)=>a+x[1]*((subs[x[0]]??2)/4),0)/tw;
+    const low=ws.filter(x=>x[1]>=2&&(subs[x[0]]??2)<=1).map(x=>SUBJECTS.find(s=>s[0]===x[0])[1].split(' (')[0]);
+    return {p,interest,subject,score:0.6*interest+0.4*subject-Math.min(0.2,0.1*low.length),low};
+  });
+  const min=Math.min(...raw.map(r=>r.score)),max=Math.max(...raw.map(r=>r.score));
+  raw.forEach(r=>{r.norm=max>min?(r.score-min)/(max-min):0.7;});
+  raw.sort((a,b)=>b.score-a.score);
+  return raw;
+}
+function pathCareers(p){
+  if(p.careers)return {need:p.careers,open:[]};
+  const sc=state.result.scored;
+  const need=sc.filter(s=>s.c.streams!=='all'&&p.streams.some(k=>s.c.streams.includes(k))).slice(0,6).map(s=>s.c.title);
+  const open=sc.filter(s=>s.c.streams==='all').slice(0,4).map(s=>s.c.title);
+  return {need,open};
+}
+const HOW_TO10=`<div class="how">
+ <details><summary>Documents to keep ready</summary>
+  <ul><li>Class 10 marks memo or marksheet. If results are not out yet, keep your hall ticket and school letter.</li>
+  <li>Transfer certificate (TC) and study certificates from your school.</li>
+  <li>Aadhaar or another photo ID, and recent passport-size photos.</li>
+  <li>Category or income certificates, if you are applying for a reserved seat or a scholarship.</li>
+  <li>A parent’s mobile number and email address. Colleges send OTPs and messages there.</li></ul>
+ </details>
+ <details><summary>Questions to ask a school, junior college or polytechnic</summary>
+  <ul><li>Which subject combinations do you offer, and do they match the stream I want?</li>
+  <li>What minimum Class 10 marks do you ask for, and in which subjects?</li>
+  <li>Is the institution recognised by the board or the state (and by AICTE for diplomas, or NCVT or SCVT for ITI)?</li>
+  <li>What is the total fee, including coaching, books and hostel?</li>
+  <li>What help do you give for entrance exams such as JEE, NEET, CUET or CA Foundation?</li></ul>
+ </details>
+ <details><summary>Step by step: applying for Class 11, a polytechnic or an ITI</summary>
+  <ol>
+   <li><strong>Find the official admissions page</strong> of the school, junior college or your state’s admission portal. Never pay an agent or a personal account.</li>
+   <li><strong>Check eligibility and dates.</strong> Dates differ by state and board and are usually announced after Class 10 results, so check your state’s website.</li>
+   <li><strong>Register with a mobile number and email you will keep</strong>, and note your login details.</li>
+   <li><strong>Fill in the form exactly as on your marks memo.</strong> Choose your stream or trade and your preferred colleges in order.</li>
+   <li><strong>Upload your documents and pay the fee online.</strong> Save the receipt.</li>
+   <li><strong>Submit and keep a copy.</strong> Then follow the counselling or merit list dates and confirm your seat on time.</li>
+  </ol>
+ </details>
+</div>`;
+function pathCard(x,i){
+  const p=x.p,[label,cls]=fit(x.norm),c=pathCareers(p);
+  const warn=x.low.length?`<div class="c-wide c-warn"><h4>Heads-up</h4><p>You rated ${x.low.join(' and ')} low. This pathway needs regular, steady work in ${x.low.length>1?'those subjects':'that subject'}, so talk to your teacher before you choose it.</p></div>`:'';
+  return `<details class="career"${i===0?' open':''}><summary>
+    <span class="c-main"><h3>${p.title}</h3><span class="c-sum">${p.blurb}</span>
+      <span class="c-meta"><span class="chip-fit ${cls}">${label}</span><span class="tag">${p.duration}</span>${x.low.length?'<span class="tag">Check your '+x.low[0]+' marks</span>':''}</span>
+      <span class="fit-bar" aria-hidden="true"><i style="width:${Math.round(30+70*x.norm)}%"></i></span></span>
+    <span class="chev" aria-hidden="true"></span></summary>
+    <div class="c-body">
+      <div><h4>What you will study</h4><p>${p.subjects}</p></div>
+      <div><h4>After this you can aim for</h4><ul>${li(p.after)}</ul></div>
+      <div><h4>Exams to start preparing for</h4><ul>${li(p.exams)}</ul></div>
+      <div><h4>Careers it leads to</h4><ul>${li(c.need)}</ul>${c.open.length?`<p class="hint">Also open after this stream: ${c.open.join(', ')}.</p>`:''}</div>
+      ${warn}
+      <div class="c-wide c-note"><h4>Good to know</h4><p>${p.note}</p></div>
+    </div></details>`;
+}
+function results10(){
+  const r=state.result,top=r.ranked.slice(0,3),nm=state.name.trim(),best=r.paths[0],bc=pathCareers(best.p);
+  const date=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const t3=top.map(t=>`<div class="t3"><h3>${TYPE[t].name} <span>${TYPE[t].full}, ${pctText(r.pct[t])}</span></h3><p>${TYPE[t].blurb}</p><p class="school">${TYPE[t].school}</p></div>`).join('');
+  const sbars=SUBJECTS.map(s=>{const v=r.subs[s[0]]??2;return `<div class="sb"><span>${s[1].split(' (')[0]}</span><span class="bar sm" aria-hidden="true"><i style="width:${v/4*100}%"></i></span><span class="sv">${SUB_LABELS[v]}</span></div>`;}).join('');
+  return `<p class="print-only"><img src="${BRAND_MARK}" alt="" height="32"><strong>Arohaanex Edvantage</strong> | Course Compass. Prepared${nm?' for '+esc(nm):''} on ${date}</p>
+  <div class="res-head">
+    <div><h1>${nm?esc(nm)+'’s pathways after Class 10':'Your pathways after Class 10'}</h1>
+    <p class="lead">Your strongest interests are ${TYPE[top[0]].name}, ${TYPE[top[1]].name} and ${TYPE[top[2]].name}. Your best-fitting pathway is <strong>${best.p.title}</strong>. The list below combines your interests with how comfortable you are with school subjects.</p></div>
+    <div class="actions noprint"><button class="btn" data-act="print">Print or save as PDF</button><button class="btn ghost" data-act="retake">Retake the quiz</button></div>
+  </div>
+  <div class="profile"><div>${hexSVG(r.pct,top)}</div><div class="top3">${t3}</div></div>
+  <section class="block"><h2>Your comfort with school subjects</h2>
+    <p class="sub">This is what you told us. Marks and teachers’ views matter too, so use it as one input.</p>
+    <div class="sbars">${sbars}</div></section>
+  <section class="block"><h2>Pathways after Class 10, best fit first</h2>
+    <p class="sub">Open each one to see what you study, the exams to prepare for, what you can do after Class 12 and the careers it leads to. A pathway you rate lower may still be right if you have a strong reason for it.</p>
+    <div class="list">${r.paths.map(pathCard).join('')}</div></section>
+  <section class="block"><h2>Your path at a glance: ${best.p.title}</h2>
+    <ol class="flow">
+      <li><b>Step 1</b><span>${best.p.duration}</span><span class="hint">${best.p.subjects}</span></li>
+      <li><b>Step 2</b><span>Prepare for</span><span class="hint">${best.p.exams.slice(0,2).join('; ')}</span></li>
+      <li><b>Step 3</b><span>Then study</span><span class="hint">${best.p.after.slice(0,2).join('; ')}</span></li>
+      <li><b>Step 4</b><span>Careers</span><span class="hint">${bc.need.slice(0,3).join('; ')}</span></li>
+    </ol></section>
+  <section class="block"><h2>Keeping your options open</h2>
+    <ul class="steps">
+      <li>Science usually keeps the most options open. Moving from Science to Commerce or Humanities after Class 11 or 12 is usually possible, but moving the other way usually is not.</li>
+      <li>Your Class 10 marks, especially in Maths and Science, can decide which stream or college accepts you. Check the minimum marks.</li>
+      <li>Choose by what you enjoy, what you are good at and what you can work at every day. Do not choose only because friends or relatives did, or because of salary stories.</li>
+      <li>Talk to a teacher, an older student in each stream you are considering, and someone who works in a career you like.</li>
+    </ul></section>
+  <section class="block"><h2>How to apply</h2>
+    <p class="sub">The steps are similar everywhere, but dates and portals differ by state and board.</p>${HOW_TO10}</section>
+  ${brandFoot()}
+  <p class="disclaimer">This is a career interest quiz, not a psychometric or aptitude test. It shows what you enjoy and how comfortable you say you are with subjects, not what you are good at. It is one input among many, so please discuss it with your teachers, parents and a counsellor. Exam names, eligibility and dates change every year, so confirm them on the official websites. Course Compass is a career guidance tool from Arohaanex Edvantage and is not affiliated with any institution it mentions.</p>`;
+}
+
 /* ---------- VIEWS ---------- */
 function welcome(){
+  const a10=state.level==='after10';
   const chips=Object.keys(STREAMS).map(k=>`<label class="chip"><input type="radio" name="stream" value="${k}"${state.stream===k?' checked':''}><span>${STREAMS[k].label}<small>${STREAMS[k].long}</small></span></label>`).join('');
-  return `<div class="hero">
-    <div>
-      <h1>Find courses that match what you enjoy</h1>
-      <p class="lead">Answer 30 quick questions about the things you like doing. The questions are picked for your subject group, so every student gets a different set. You get a profile of your interests, a ranked list of degrees and careers, and colleges and universities to explore in the regions you choose, all taken from NAAC’s records of A++, A+ and A grades.</p>
-      <form id="start" novalidate>
-        <div class="field"><label for="name">Your first name <span class="note">(optional, printed on your results)</span></label>
-          <input id="name" type="text" maxlength="30" autocomplete="given-name" value="${esc(state.name)}"></div>
-        <fieldset class="field"><legend>Your subject group in Class 11–12</legend>
+  const lv=[['after10','Class 10','Choosing a stream or course'],['after12','Class 11 or 12','Choosing a degree after Class 12']].map(x=>`<label class="chip"><input type="radio" name="level" value="${x[0]}"${state.level===x[0]?' checked':''}><span>${x[1]}<small>${x[2]}</small></span></label>`).join('');
+  const lead=a10
+    ?'Answer 30 quick questions about the things you like doing, then rate how comfortable you are with 7 school subjects. You get ranked pathways after Class 10: Science, Commerce, Humanities, a polytechnic diploma or ITI training, with the exams to prepare for and the careers each one leads to.'
+    :'Answer 30 quick questions about the things you like doing. Most questions are the same for every student so scores can be compared, and a few are picked for your subject group. You get a profile of your interests, a ranked list of degrees and careers, and colleges and universities to explore in the regions you choose, all taken from NAAC’s records of A++, A+ and A grades.';
+  const extra=a10
+    ?'<p class="hint" style="margin-bottom:1.35rem">Class 10 students do not need to pick a subject group or region. We will suggest the streams and courses instead.</p>'
+    :`<fieldset class="field"><legend>Your subject group in Class 11–12</legend>
           <div class="chips">${chips}</div>
           <p class="hint">CBSE students: choose the group closest to your subjects. Commerce with Maths and Economics is MEC.</p>
           <p class="err" id="err" role="alert" hidden>Choose your subject group, or pick “Not sure yet”.</p>
@@ -982,9 +1162,18 @@ function welcome(){
         <fieldset class="field"><legend>Where would you study?</legend>
           <div class="chips">${regionChips()}</div>
           <p class="hint">Pick one or more regions. You can change this later on the results page.</p>
-        </fieldset>
+        </fieldset>`;
+  return `<div class="hero">
+    <div>
+      <h1>Find courses that match what you enjoy</h1>
+      <p class="lead">${lead}</p>
+      <form id="start" novalidate>
+        <fieldset class="field"><legend>Which class are you in?</legend><div class="chips">${lv}</div></fieldset>
+        <div class="field"><label for="name">Your first name <span class="note">(optional, printed on your results)</span></label>
+          <input id="name" type="text" maxlength="30" autocomplete="given-name" value="${esc(state.name)}"></div>
+        ${extra}
         <button class="btn" type="submit">Start the quiz</button>
-        <p class="hint">Takes about 6 minutes. There are no right or wrong answers.</p>
+        <p class="hint">Takes about ${a10?'8':'6'} minutes. There are no right or wrong answers.</p>
       </form>
     </div>
     <div class="hero-art">${hexSVG(null)}</div>
@@ -995,11 +1184,11 @@ function welcome(){
 
 function quiz(){
   const q=state.questions[state.i],n=state.questions.length,cur=state.answers[state.i];
-  const opts=ANSWERS.map((a,v)=>`<label class="opt"><input type="radio" name="ans" value="${v}"${cur===v?' checked':''}><span class="face"><b>${v+1}</b><span>${a}</span></span></label>`).join('');
+  const opts=(q.labels||ANSWERS).map((a,v)=>`<label class="opt"><input type="radio" name="ans" value="${v}"${cur===v?' checked':''}><span class="face"><b>${v+1}</b><span>${a}</span></span></label>`).join('');
   return `<div class="quiz">
     <div class="progress-line"><span>Question ${state.i+1} of ${n}</span><span>${Math.round(state.i/n*100)}% done</span></div>
     <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${state.i}"><i style="width:${state.i/n*100}%"></i></div>
-    <p class="q-stem">How much would you enjoy…</p>
+    ${q.sub&&state.i>0&&!state.questions[state.i-1].sub?'<p class="hint" style="margin-top:1.5rem">Now a few questions about your school subjects.</p>':''}<p class="q-stem">${q.stem||'How much would you enjoy…'}</p>
     <h2 class="q-text" id="qtext" tabindex="-1">${q.text}</h2>
     <fieldset class="opts" aria-labelledby="qtext">${opts}</fieldset>
     <div class="quiz-foot"><button class="linkbtn" id="back"${state.i===0?' disabled':''}>Back</button><span>Tip: press 1 to 5 on your keyboard</span></div>
@@ -1112,24 +1301,25 @@ function results(){
     </ol>
   </section>
   ${brandFoot()}
-  <p class="disclaimer">This quiz shows what you enjoy, not what you are good at, and it is one input among many. Course lists, entrance exams, eligibility and accreditation change every year. Confirm everything on the official university, exam and NAAC websites before you apply. Course Compass is a career guidance tool from Arohaanex Edvantage and is not affiliated with any institution it lists.</p>`;
+  <p class="disclaimer">This is a career interest quiz, not a psychometric or aptitude test. It shows what you enjoy, not what you are good at, and it is one input among many. Course lists, entrance exams, eligibility and accreditation change every year. Confirm everything on the official university, exam and NAAC websites before you apply. Course Compass is a career guidance tool from Arohaanex Edvantage and is not affiliated with any institution it lists.</p>`;
 }
 
 /* ---------- LOGIC ---------- */
 function compute(){
-  const sums={R:0,I:0,A:0,S:0,E:0,C:0};
-  state.questions.forEach((q,i)=>{sums[q.t]+=state.answers[i]||0;});
+  const sums={R:0,I:0,A:0,S:0,E:0,C:0},subs={};
+  state.questions.forEach((q,i)=>{const v=state.answers[i]||0;if(q.sub)subs[q.sub]=v;else sums[q.t]+=v;});
   const pct={};ORDER.forEach(t=>pct[t]=sums[t]/20);
   const ranked=[...ORDER].sort((a,b)=>pct[b]-pct[a]||ORDER.indexOf(a)-ORDER.indexOf(b));
   const dots=CAREERS.map(c=>[3,2,1].reduce((d,w,k)=>d+w*pct[c.code[k]],0)/6);
   const min=Math.min(...dots),max=Math.max(...dots);
   const scored=CAREERS.map((c,i)=>({c,dot:dots[i],norm:max>min?(dots[i]-min)/(max-min):0.7}));
   scored.sort((a,b)=>b.dot-a.dot||a.c.title.localeCompare(b.c.title));
-  state.result={pct,ranked,scored};
+  state.result={pct,ranked,scored,subs};
+  if(state.level==='after10')state.result.paths=scorePaths(pct,subs);
 }
 
 function render(){
-  app.innerHTML=state.view==='welcome'?welcome():state.view==='quiz'?quiz():results();
+  app.innerHTML=state.view==='welcome'?welcome():state.view==='quiz'?quiz():(state.level==='after10'?results10():results());
 }
 function refresh(){
   document.getElementById('list').innerHTML=listHTML();
@@ -1163,14 +1353,22 @@ function setRegions(t){
 app.addEventListener('submit',e=>{
   if(e.target.id!=='start')return;
   e.preventDefault();
-  const sel=app.querySelector('input[name="stream"]:checked');
+  const lv=app.querySelector('input[name="level"]:checked');
+  state.level=lv?lv.value:state.level;
   state.name=document.getElementById('name').value;
-  if(!sel){document.getElementById('err').hidden=false;return;}
-  state.stream=sel.value;state.answers=[];state.i=0;state.questions=buildQuestions(state.stream);
+  if(state.level==='after10'){
+    state.stream='unsure';state.questions=buildQuestions('unsure').concat(subjectQuestions());
+  }else{
+    const sel=app.querySelector('input[name="stream"]:checked');
+    if(!sel){document.getElementById('err').hidden=false;return;}
+    state.stream=sel.value;state.questions=buildQuestions(state.stream);
+  }
+  state.answers=[];state.i=0;
   go('quiz');
 });
 app.addEventListener('change',e=>{
   const t=e.target;
+  if(t.name==='level'){const nm=document.getElementById('name');if(nm)state.name=nm.value;state.level=t.value;render();return;}
   if(t.name==='ans'){answer(parseInt(t.value,10));return;}
   if(t.name==='stream'){const err=document.getElementById('err');if(err)err.hidden=true;return;}
   if(t.name==='region'){setRegions(t);if(state.view==='results'){state.filters.allC=false;refresh();}return;}
