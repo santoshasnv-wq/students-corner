@@ -280,18 +280,32 @@ const TYPE={
      blurb:'You like order: clear rules, accurate numbers, tidy records and plans that actually get followed.',
      school:'In school you may enjoy accountancy, spreadsheets, planning and exam preparation.'}
 };
-const QTEXT={
-  R:['Fixing or building something with my own hands','Spending a work day outdoors or on the move instead of at a desk','Using tools, machines or electronics to make something work','Sports, fitness or physical challenges','Taking gadgets or engines apart to learn how they work'],
-  I:['Working through a tough maths or logic puzzle','Running an experiment to find out why something happens','Studying numbers or data to spot a pattern','Reading about new discoveries in science, economics or technology','Researching a topic deeply until I fully understand it'],
-  A:['Drawing, designing or making something that looks good','Writing stories, poems, scripts or blog posts','Making videos, music, photos or animation','Coming up with original ideas instead of following a set method','Styling or decorating a space, an outfit or an event'],
-  S:['Explaining a hard topic to a classmate until they get it','Listening when a friend is going through a tough time','Volunteering for a cause or helping in my community','Mentoring or coaching younger students','Having a job where I help people stay healthy, learn or feel better'],
-  E:['Leading a team or a school club','Starting a small business or selling something','Debating, pitching or persuading people to back an idea','Organising an event and making sure it succeeds','Negotiating, making deals or taking a calculated risk to win'],
-  C:['Keeping accounts, records or files neat and accurate','Working with spreadsheets and tables of numbers','Following clear steps and procedures to get a job done right','Planning a budget and tracking where the money goes','Checking work carefully to catch small mistakes']
+const QPOOL={
+  R:[['Fixing or building something with my own hands',[]],['Spending a work day outdoors or on the move instead of at a desk',[]],['Using tools, machines or electronics to make something work',['mpc']],['Sports, fitness or physical challenges',[]],['Taking gadgets or engines apart to learn how they work',['mpc']],['Working with plants, soil or animals',['bipc']],['Setting up and running equipment in a science laboratory',['mpc','bipc']],['Building a model, circuit, robot or small machine',['mpc']],['Working on a farm, in a garden or in a forest or nature reserve',['bipc']],['Cooking, baking or preparing food from scratch',[]],['Driving, flying or operating vehicles and heavy machines',['mpc']],['Doing practical jobs such as repairing, painting or carpentry',[]],['Learning first aid and using simple medical instruments',['bipc']],['Seeing how things are made on a shop floor or in a factory',['mec','cec']],['Managing stock, displays and packing for a shop or stall',['mec','cec']]],
+  I:[['Working through a tough maths or logic puzzle',['mpc','mec']],['Running an experiment to find out why something happens',['mpc','bipc']],['Studying numbers or data to spot a pattern',[]],['Reading about new discoveries in science, economics or technology',[]],['Researching a topic deeply until I fully understand it',[]],['Writing a program to solve a problem',['mpc']],['Studying how the human body, cells or diseases work',['bipc']],['Solving physics problems about motion, energy or electricity',['mpc']],['Looking at living things under a microscope',['bipc']],['Working out why prices, jobs or markets go up and down',['mec','cec']],['Proving that a maths result is always true',['mpc','mec']],['Analysing a company’s numbers to judge whether it is doing well',['mec','cec']],['Investigating historical events or social problems from several sources',['arts','cec']],['Testing chemicals, materials or medicines in a lab',['bipc','mpc']],['Finding out how a machine or an app works behind the scenes',['mpc']]],
+  A:[['Drawing, designing or making something that looks good',[]],['Writing stories, poems, scripts or blog posts',['arts']],['Making videos, music, photos or animation',[]],['Coming up with original ideas instead of following a set method',[]],['Styling or decorating a space, an outfit or an event',[]],['Designing the look of an app, a poster or a website',['mpc','mec']],['Drawing neat diagrams or models to explain science ideas',['bipc','mpc']],['Acting, dancing, singing or performing in front of people',[]],['Creating an advertisement or a brand story for a product',['mec','cec']],['Taking photographs or filming nature, people or events',[]],['Sketching buildings, rooms or city layouts',['mpc']],['Writing speeches, essays or opinion pieces',['arts','cec']],['Inventing a new gadget, game or product idea',['mpc']],['Telling stories about history, culture or society through writing or art',['arts']],['Designing packaging, logos or presentations for a business idea',['mec','cec']]],
+  S:[['Explaining a hard topic to a classmate until they get it',[]],['Listening when a friend is going through a tough time',[]],['Volunteering for a cause or helping in my community',[]],['Mentoring or coaching younger students',[]],['Having a job where I help people stay healthy, learn or feel better',[]],['Caring for patients, older people or young children',['bipc']],['Helping a customer choose the right product or plan',['mec','cec']],['Teaching science or maths ideas to other students',['mpc','bipc']],['Counselling someone through a decision about their studies or career',[]],['Taking part in health camps, blood donation drives or awareness programmes',['bipc']],['Working with people from different backgrounds on a shared goal',[]],['Helping people understand their rights, laws or government services',['arts','cec']],['Running a class, workshop or club for other students',[]],['Supporting a teammate who is stuck or stressed',[]],['Speaking up for people who are treated unfairly',['arts']]],
+  E:[['Leading a team or a school club',[]],['Starting a small business or selling something',['mec','cec']],['Debating, pitching or persuading people to back an idea',[]],['Organising an event and making sure it succeeds',[]],['Negotiating, making deals or taking a calculated risk to win',[]],['Turning a technical idea into a product for a startup',['mpc']],['Managing a budget, pricing and profit for a project',['mec','cec']],['Convincing a team to try a new way of doing things',[]],['Running a clinic, pharmacy or laboratory as my own business one day',['bipc']],['Campaigning in a student election or for a cause',['arts','cec']],['Selling products online or building a following on social media',[]],['Competing to win in contests, tournaments or quizzes',[]],['Taking charge when a group is confused or a plan falls apart',[]],['Pitching a project to judges, investors or a principal',[]],['Making business or career plans several years ahead',[]]],
+  C:[['Keeping accounts, records or files neat and accurate',['mec','cec']],['Working with spreadsheets and tables of numbers',[]],['Following clear steps and procedures to get a job done right',[]],['Planning a budget and tracking where the money goes',['mec','cec']],['Checking work carefully to catch small mistakes',[]],['Recording lab readings and measurements accurately',['mpc','bipc']],['Organising notes, files and schedules so nothing is missed',[]],['Filling in forms and documents correctly',[]],['Following safety rules and standard procedures at work',['bipc','mpc']],['Doing tax, banking or insurance calculations',['mec','cec']],['Keeping patient, library or school records in order',['bipc','arts']],['Sorting data into neat categories and tables',[]],['Making timetables and checklists and sticking to them',[]],['Working with a computer system that has fixed rules and formats',['mpc']],['Proofreading and correcting a document line by line',['arts']]]
 };
-const QUESTIONS=[];
-for(let k=0;k<5;k++){
-  const off=(k*2)%6;
-  for(let j=0;j<6;j++){const t=ORDER[(j+off)%6];QUESTIONS.push({t,text:QTEXT[t][k]});}
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+/* Each student gets 5 questions per interest type, drawn at random from the pool of 15 and weighted towards their subject group. */
+function buildQuestions(stream){
+  const picks={};
+  ORDER.forEach(t=>{
+    const pool=QPOOL[t].map(x=>({text:x[0],st:x[1]}));
+    const chosen=[];
+    for(let n=0;n<5;n++){
+      const w=pool.map(q=>(!stream||stream==='unsure'||!q.st.length)?2:(q.st.includes(stream)?4:0.5));
+      let r=Math.random()*w.reduce((a,b)=>a+b,0),idx=0;
+      for(;idx<w.length-1;idx++){r-=w[idx];if(r<=0)break;}
+      chosen.push(pool.splice(idx,1)[0]);
+    }
+    picks[t]=chosen;
+  });
+  const out=[];
+  for(let k=0;k<5;k++){shuffle([...ORDER]).forEach(t=>out.push({t,text:picks[t][k].text}));}
+  return out;
 }
 const ANSWERS=['Not for me','Not much','It’s okay','Like it','Love it'];
 const STREAMS={
@@ -310,7 +324,19 @@ const REGIONS={
   east:{label:'East and North-East India',short:'East and North-East India',long:'West Bengal, Odisha, Bihar, Jharkhand, Assam and the North-East'}
 };
 const GR={'A++':3,'A+':2,'A':1};
-const TAGLABEL={commerce:'Commerce',finance:'Finance',mgmt:'Management',econ:'Economics',data:'Data',cs:'Computing',eng:'Engineering',law:'Law',media:'Media',design:'Design',arts:'Arts and humanities',social:'Social sciences',psych:'Psychology',edu:'Education',science:'Sciences',health:'Health sciences',hosp:'Hospitality',policy:'Public policy',arch:'Architecture',sports:'Sports'};
+/* Fields that matter most to each subject group; used to prioritise and filter institutions. */
+const STREAM_FIELDS={
+  mpc:['eng','cs','data','science','arch'],
+  bipc:['med','health','pharm','bio','agri','science'],
+  mec:['commerce','finance','econ','mgmt'],
+  cec:['commerce','finance','econ','mgmt','law','social'],
+  arts:['arts','social','psych','media','law','edu','policy']
+};
+/* Core fields: institutions strong in these are ranked first for the group. */
+const STREAM_CORE={mpc:['eng','cs','data','arch'],bipc:['med','pharm','health','agri'],mec:['commerce','finance','econ'],cec:['commerce','finance','econ','social','law'],arts:['arts','social','psych','media','law']};
+const streamCore=i=>{const f=STREAM_CORE[state.stream];return f&&i.tags.some(t=>f.includes(t))?1:0;};
+const streamOverlap=i=>{const f=STREAM_FIELDS[state.stream];return f?i.tags.filter(t=>f.includes(t)).length:0;};
+const TAGLABEL={commerce:'Commerce',finance:'Finance',mgmt:'Management',econ:'Economics',data:'Data',cs:'Computing',eng:'Engineering',law:'Law',media:'Media',design:'Design',arts:'Arts and humanities',social:'Social sciences',psych:'Psychology',edu:'Education',science:'Sciences',health:'Health sciences',hosp:'Hospitality',policy:'Public policy',arch:'Architecture',sports:'Sports',med:'Medicine and dentistry',pharm:'Pharmacy',bio:'Biotechnology and life sciences',agri:'Agriculture and food'};
 
 const CAREERS=[
  {title:'Data science and analytics',code:'ICR',streams:['mpc','mec'],math:true,tags:['data','cs','science'],
@@ -418,12 +444,12 @@ const CAREERS=[
   courses:['BA Liberal Arts','BA English or other languages','BA History or Political Science'],
   entry:'CUET-UG or university tests.',
   paths:['Writer','Researcher','Translator','Curator','Teacher','Civil services']},
- {title:'Computer science and software',code:'IRC',streams:['mpc','mec'],math:true,tags:['cs','eng','data'],
+ {title:'Computer science and software',code:'IRC',streams:['mpc','mec'],math:true,tags:['cs','eng','data'],note:'IITs, NITs and IIITs are mostly not graded by NAAC, so they are not in the college lists here. They admit through JEE Main and JEE Advanced with JoSAA counselling, so check their own sites and NIRF rankings as well.',
   summary:'Build the apps, systems and AI tools everyone else depends on.',
   courses:['BTech in CSE or AI','BCA','BSc Computer Science'],
   entry:'JEE Main or state exams for BTech; CUET-UG or university tests for BCA and BSc. Maths in Class 12 is usually needed.',
   paths:['Software developer','AI engineer','Cybersecurity analyst','Product engineer','Startup founder']},
- {title:'Core engineering',code:'RIC',streams:['mpc'],math:true,tags:['eng'],
+ {title:'Core engineering',code:'RIC',streams:['mpc'],math:true,tags:['eng'],note:'IITs, NITs and IIITs are mostly not graded by NAAC, so they are not in the college lists here. They admit through JEE Main and JEE Advanced with JoSAA counselling, so check their own sites and NIRF rankings as well.',
   summary:'Design and build the machines, structures, circuits and systems around us.',
   courses:['BTech or BE in Mechanical, Civil, Electrical, Electronics or Aerospace'],
   entry:'JEE Main and Advanced, state CETs, BITSAT or university tests.',
@@ -433,22 +459,22 @@ const CAREERS=[
   courses:['BArch (five years)'],
   entry:'NATA or JEE Main Paper 2.',
   paths:['Architect','Urban planner','Interior or landscape designer']},
- {title:'Medicine and healthcare',code:'ISR',streams:['bipc'],math:false,tags:['health'],
+ {title:'Medicine and healthcare',code:'ISR',streams:['bipc'],math:false,tags:['med'],note:'AIIMS and government medical colleges admit through NEET-UG counselling (MCC and state counselling). Many are not graded by NAAC, so they are not in the lists here. Also check that each college is approved by the National Medical Commission.',
   summary:'Diagnose, treat and care for patients, or work on public health.',
   courses:['MBBS, BDS, BAMS, BHMS','BPT and BSc Nursing','Allied health sciences'],
   entry:'NEET-UG for most medical, dental and AYUSH courses.',
   paths:['Doctor','Dentist','Physiotherapist','Public health specialist']},
- {title:'Pharmacy and biotechnology',code:'IRS',streams:['bipc','mpc'],math:false,tags:['health','science'],
+ {title:'Pharmacy and biotechnology',code:'IRS',streams:['bipc','mpc'],math:false,tags:['pharm','bio'],note:'Pharmacy colleges should also be approved by the Pharmacy Council of India, so check that as well.',
   summary:'Develop and test medicines, vaccines and biological products.',
   courses:['BPharm','BSc or BTech Biotechnology'],
   entry:'State CETs and university tests.',
   paths:['Researcher','Pharmacist','Quality analyst','Biotech engineer']},
- {title:'Pure sciences and research',code:'IRA',streams:['mpc','bipc'],math:false,tags:['science'],
+ {title:'Pure sciences and research',code:'IRA',streams:['mpc','bipc'],math:false,tags:['science','bio'],note:'IISERs and IISc are mostly assessed through NIRF rather than NAAC, so they are not in the college lists here. Check their own admission routes.',
   summary:'Chase open questions in physics, chemistry, biology or earth sciences.',
   courses:['BSc in a core science','IISER integrated programmes','Integrated MSc'],
   entry:'IISER Aptitude Test, CUET-UG, then JAM or university tests for postgraduate study.',
   paths:['Research scientist','Professor','ISRO or DRDO roles']},
- {title:'Environment and sustainability',code:'RIS',streams:['bipc','mpc'],math:false,tags:['science'],
+ {title:'Environment and sustainability',code:'RIS',streams:['bipc','mpc'],math:false,tags:['science','agri','bio'],
   summary:'Protect ecosystems and help organisations cut their environmental footprint.',
   courses:['BSc Environmental Science','Ecology or Climate studies'],
   entry:'CUET-UG or university tests.',
@@ -462,11 +488,22 @@ const CAREERS=[
   summary:'Coach, manage and analyse sport and fitness, on or off the field.',
   courses:['BPEd','BSc Sports Science','BBA in Sports Management'],
   entry:'University tests; fitness or trials may be part of selection.',
-  paths:['Coach','Sports analyst','Sports manager','Fitness trainer']}
+  paths:['Coach','Sports analyst','Sports manager','Fitness trainer']},
+ {title:'Nursing, physiotherapy and allied health sciences',code:'SIR',streams:['bipc'],math:false,tags:['health'],
+  summary:'Care for patients, help them recover and run the tests and scans that doctors rely on.',
+  courses:['BSc Nursing','BPT (Physiotherapy)','BSc Medical Laboratory Technology, Radiology and Imaging, Optometry'],
+  entry:'Rules differ by state: many use NEET-UG or state counselling for nursing and physiotherapy, while allied health programmes often use CUET-UG or the university’s own test. Check each state’s rules.',
+  paths:['Nurse','Physiotherapist','Laboratory technologist','Radiographer','Optometrist'],
+  note:'Check that the college is approved by the relevant council, such as the Indian Nursing Council for nursing.'},
+ {title:'Agriculture, food science and veterinary sciences',code:'RIS',streams:['bipc','mpc'],math:false,tags:['agri'],
+  summary:'Grow, protect and process the food we eat, or care for animals and their health.',
+  courses:['BSc (Hons) Agriculture and Horticulture','BSc Food Technology','BVSc and AH (veterinary)'],
+  entry:'Agricultural universities admit mostly through CUET-UG or state agriculture entrance tests, and veterinary degrees through NEET-UG. Check each university’s rules.',
+  paths:['Agricultural officer','Food technologist','Veterinarian','Agri-business manager','Researcher']}
 ];
 
 /* NAAC A++, A+ or A institutions. Grade, CGPA and declaration date come from NAAC's file "Institutions accredited by NAAC having valid accreditation as on 14.08.2025", as republished by CollegeJaancho.com. Students must still confirm on naac.gov.in. */
-const STATE_REGION={'Karnataka':'south','Tamil Nadu':'south','Kerala':'south','Andhra Pradesh':'south','Telangana':'south','Puducherry':'south','Maharashtra':'west','Gujarat':'west','Goa':'west','West Bengal':'east','Odisha':'east','Bihar':'east','Jharkhand':'east','Assam':'east','Mizoram':'east'};
+const STATE_REGION={'Karnataka':'south','Tamil Nadu':'south','Kerala':'south','Andhra Pradesh':'south','Telangana':'south','Puducherry':'south','Maharashtra':'west','Gujarat':'west','Goa':'west','West Bengal':'east','Odisha':'east','Bihar':'east','Jharkhand':'east','Assam':'east','Mizoram':'east','Sikkim':'east','Meghalaya':'east'};
 /* [name, city, state, grade, CGPA, declared YYYY-MM, u=university c=college, field tags, women only, note] */
 const RAW=[
  ['JAIN (Deemed-to-be University)','Bengaluru','Karnataka','A++',3.71,'2021-12','u','mgmt commerce finance data cs eng design media science health arts law',0,'Admission is mainly through the Jain Entrance Test (JET).'],
@@ -614,9 +651,126 @@ const RAW=[
  ['Ramakrishna Mission Residential College (Autonomous)','Narendrapur (Kolkata)','West Bengal','A+',3.46,'2021-10','c','arts science',0,''],
  ['B. Borooah College','Guwahati','Assam','A++',3.62,'2023-10','c','arts science commerce',0,''],
  ['Patna Women’s College','Patna','Bihar','A++',3.51,'2024-05','c','arts science commerce social media',1,'Women only.'],
- ['Gandhi Institute for Technology (GIFT)','Bhubaneswar','Odisha','A++',3.80,'2022-04','c','eng cs mgmt',0,'']
+ ['Gandhi Institute for Technology (GIFT)','Bhubaneswar','Odisha','A++',3.80,'2022-04','c','eng cs mgmt',0,''],
+ ['King George’s Medical University','Lucknow','Uttar Pradesh','A++',3.67,'2025-08','u','med health',0,'Government medical university. MBBS admission is through NEET-UG counselling.'],
+ ['JSS Academy of Higher Education and Research','Mysuru','Karnataka','A++',3.61,'2024-10','u','med health pharm bio science',0,''],
+ ['Sumandeep Vidyapeeth','Vadodara','Gujarat','A++',3.61,'2022-01','u','med health pharm',0,''],
+ ['D. Y. Patil Deemed to be University','Navi Mumbai','Maharashtra','A++',3.59,'2022-11','u','med health pharm eng arch mgmt',0,''],
+ ['Sri Balaji Vidyapeeth','Puducherry','Puducherry','A++',3.58,'2021-12','u','med health pharm',0,''],
+ ['MGM Institute of Health Sciences','Navi Mumbai','Maharashtra','A++',3.55,'2022-07','u','med health pharm',0,''],
+ ['Chettinad Academy of Research and Education','Kelambakkam (Chennai)','Tamil Nadu','A++',3.71,'2022-06','u','med health pharm bio',0,''],
+ ['D. Y. Patil Education Society (Deemed to be University)','Kolhapur','Maharashtra','A++',3.53,'2023-12','u','med health pharm eng',0,''],
+ ['Maharishi Markandeshwar (Deemed to be University)','Mullana (Ambala)','Haryana','A++',3.53,'2021-12','u','med health pharm eng mgmt',0,''],
+ ['Meenakshi Academy of Higher Education and Research','Chennai','Tamil Nadu','A+',3.50,'2023-11','u','med health pharm',0,''],
+ ['Dr. M.G.R. Educational and Research Institute','Chennai','Tamil Nadu','A+',3.48,'2022-08','u','eng med health pharm mgmt',0,''],
+ ['Yenepoya (Deemed to be University)','Mangaluru','Karnataka','A+',3.47,'2022-08','u','med health pharm',0,''],
+ ['Nitte (Deemed to be University)','Mangaluru','Karnataka','A+',3.40,'2021-03','u','med health pharm eng mgmt',0,''],
+ ['Sri Siddhartha Academy of Higher Education','Tumakuru','Karnataka','A+',3.40,'2023-08','u','med health pharm eng',0,''],
+ ['KLE Academy of Higher Education and Research','Belagavi','Karnataka','A+',3.39,'2021-09','u','med health pharm',0,''],
+ ['Krishna Institute of Medical Sciences (Deemed to be University)','Karad','Maharashtra','A+',3.39,'2021-10','u','med health pharm',0,''],
+ ['Adichunchanagiri University','B G Nagara (Mandya)','Karnataka','A+',3.39,'2024-08','u','med health pharm eng',0,''],
+ ['Swami Rama Himalayan University','Dehradun','Uttarakhand','A+',3.27,'2024-10','u','med health pharm',0,''],
+ ['Delhi Pharmaceutical Sciences and Research University','New Delhi','Delhi','A',3.02,'2023-08','u','pharm health',0,''],
+ ['Teerthanker Mahaveer University','Moradabad','Uttar Pradesh','A',3.15,'2022-06','u','med health pharm eng',0,''],
+ ['Sikkim Manipal University','Gangtok','Sikkim','A+',3.28,'2022-08','u','eng med health mgmt',0,''],
+ ['Integral University','Lucknow','Uttar Pradesh','A+',3.40,'2023-05','u','eng pharm health mgmt',0,''],
+ ['Vels Institute of Science, Technology and Advanced Studies (VISTAS)','Chennai','Tamil Nadu','A++',3.52,'2024-10','u','eng pharm health mgmt law',0,''],
+ ['Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology','Chennai','Tamil Nadu','A++',3.53,'2023-02','u','eng cs data mgmt',0,''],
+ ['Kalasalingam Academy of Research and Education','Krishnankoil','Tamil Nadu','A++',3.51,'2024-02','u','eng cs data science',0,''],
+ ['Hindustan Institute of Technology and Science','Chennai','Tamil Nadu','A+',3.48,'2023-10','u','eng cs arch design mgmt',0,''],
+ ['Vignan’s Foundation for Science, Technology and Research','Vadlamudi (Guntur)','Andhra Pradesh','A+',3.49,'2021-10','u','eng cs pharm science',0,''],
+ ['Bennett University','Greater Noida','Uttar Pradesh','A+',3.48,'2025-01','u','eng cs data mgmt law media',0,''],
+ ['Indian Institute of Space Science and Technology (IIST)','Thiruvananthapuram','Kerala','A+',3.47,'2025-03','u','eng science',0,'Space science and technology institute. Admission through JEE Advanced.'],
+ ['GLA University','Mathura','Uttar Pradesh','A+',3.46,'2023-01','u','eng cs mgmt pharm',0,''],
+ ['Jawaharlal Nehru Technological University Kakinada','Kakinada','Andhra Pradesh','A+',3.45,'2023-05','u','eng cs',0,''],
+ ['Pondicherry University','Puducherry','Puducherry','A+',3.43,'2025-06','u','arts science eng mgmt social',0,''],
+ ['Jaypee University of Information Technology','Solan','Himachal Pradesh','A+',3.40,'2024-04','u','eng cs bio science',0,''],
+ ['Cochin University of Science and Technology','Kochi','Kerala','A+',3.39,'2022-10','u','eng science cs',0,''],
+ ['Guru Jambheshwar University of Science and Technology','Hisar','Haryana','A+',3.38,'2022-10','u','eng science',0,''],
+ ['Centurion University of Technology and Management','Bhubaneswar and Paralakhemundi','Odisha','A+',3.37,'2023-08','u','eng agri mgmt',0,''],
+ ['International Institute of Information Technology (IIIT) Bangalore','Bengaluru','Karnataka','A+',3.37,'2021-12','u','cs data eng',0,''],
+ ['B. S. Abdur Rahman Crescent Institute of Science and Technology','Chennai','Tamil Nadu','A+',3.33,'2021-02','u','eng cs mgmt law',0,''],
+ ['Karpagam Academy of Higher Education','Coimbatore','Tamil Nadu','A+',3.33,'2021-12','u','eng pharm health mgmt',0,''],
+ ['M. S. Ramaiah University of Applied Sciences','Bengaluru','Karnataka','A+',3.33,'2024-06','u','eng health pharm design mgmt',0,''],
+ ['Jawaharlal Nehru Technological University Hyderabad','Hyderabad','Telangana','A+',3.32,'2023-07','u','eng cs pharm',0,''],
+ ['Central University of Punjab','Bathinda','Punjab','A+',3.30,'2023-02','u','science bio arts',0,''],
+ ['Reva University','Bengaluru','Karnataka','A+',3.30,'2024-04','u','eng cs mgmt',0,''],
+ ['Shoolini University of Biotechnology and Management Sciences','Solan','Himachal Pradesh','A+',3.30,'2024-11','u','bio science pharm mgmt eng',0,''],
+ ['Dayananda Sagar University','Bengaluru','Karnataka','A+',3.31,'2024-03','u','eng health pharm mgmt',0,''],
+ ['University of Agricultural Sciences, Bangalore','Bengaluru','Karnataka','A+',3.27,'2025-02','u','agri bio science',0,''],
+ ['Charotar University of Science and Technology','Changa (Anand)','Gujarat','A+',3.26,'2022-07','u','eng pharm health science',0,''],
+ ['Chitkara University','Rajpura (Patiala)','Punjab','A+',3.26,'2021-09','u','eng cs mgmt health',0,''],
+ ['Gujarat Technological University','Ahmedabad','Gujarat','A+',3.26,'2023-02','u','eng cs pharm',0,''],
+ ['Jaypee University of Engineering and Technology','Guna','Madhya Pradesh','A+',3.26,'2023-03','u','eng cs',0,''],
+ ['Harcourt Butler Technical University','Kanpur','Uttar Pradesh','A+',3.29,'2023-06','u','eng cs',0,''],
+ ['Acharya Narendra Deva University of Agriculture and Technology','Ayodhya','Uttar Pradesh','A++',3.53,'2024-05','u','agri bio science',0,''],
+ ['Bihar Agricultural University','Bhagalpur (Sabour)','Bihar','A',3.08,'2025-06','u','agri bio science',0,''],
+ ['Sant Longowal Institute of Engineering and Technology','Longowal','Punjab','A',3.02,'2023-09','u','eng cs science',0,''],
+ ['LNM Institute of Information Technology','Jaipur','Rajasthan','A',3.03,'2023-03','u','cs eng data',0,''],
+ ['Jaypee Institute of Information Technology','Noida','Uttar Pradesh','A',3.10,'2023-01','u','eng cs data',0,''],
+ ['Madan Mohan Malaviya University of Technology','Gorakhpur','Uttar Pradesh','A',3.10,'2022-06','u','eng cs',0,''],
+ ['KLE Technological University','Hubballi','Karnataka','A',3.10,'2022-03','u','eng cs',0,''],
+ ['Dharmsinh Desai University','Nadiad','Gujarat','A',3.15,'2023-12','u','eng cs pharm science',0,''],
+ ['DIT University','Dehradun','Uttarakhand','A',3.19,'2023-07','u','eng cs mgmt',0,''],
+ ['Adamas University','Kolkata','West Bengal','A',3.01,'2025-02','u','eng cs science mgmt',0,''],
+ ['Bharathiar University','Coimbatore','Tamil Nadu','A++',3.63,'2023-03','u','science arts commerce bio',0,''],
+ ['Sri Krishna College of Engineering and Technology','Coimbatore','Tamil Nadu','A++',3.71,'2024-08','c','eng cs data',0,''],
+ ['Hindusthan College of Engineering and Technology','Coimbatore','Tamil Nadu','A++',3.69,'2023-10','c','eng cs',0,''],
+ ['Kumaraguru College of Technology','Coimbatore','Tamil Nadu','A++',3.62,'2022-08','c','eng cs data',0,''],
+ ['Sona College of Technology','Salem','Tamil Nadu','A++',3.65,'2024-05','c','eng cs',0,''],
+ ['Rajalakshmi Engineering College','Chennai','Tamil Nadu','A++',3.62,'2023-04','c','eng cs data',0,''],
+ ['Kongu Engineering College (Autonomous)','Perundurai (Erode)','Tamil Nadu','A++',3.52,'2022-03','c','eng cs',0,''],
+ ['K.S.R. College of Engineering','Tiruchengode','Tamil Nadu','A++',3.69,'2023-01','c','eng cs',0,''],
+ ['CMR Institute of Technology','Bengaluru','Karnataka','A++',3.71,'2022-10','c','eng cs data',0,''],
+ ['Atria Institute of Technology','Bengaluru','Karnataka','A++',3.54,'2023-07','c','eng cs',0,''],
+ ['DNR College of Engineering and Technology','Bhimavaram','Andhra Pradesh','A++',3.73,'2023-08','c','eng cs',0,''],
+ ['Potti Sriramulu Chalavadi Mallikarjuna Rao College of Engineering and Technology','Vijayawada','Andhra Pradesh','A++',3.68,'2023-04','c','eng cs',0,''],
+ ['Godavari Institute of Engineering and Technology','Rajahmundry','Andhra Pradesh','A++',3.58,'2024-04','c','eng cs',0,''],
+ ['Vignan Pharmacy College','Vadlamudi (Guntur)','Andhra Pradesh','A++',3.65,'2023-08','c','pharm health',0,''],
+ ['Vignan Institute of Pharmaceutical Technology','Visakhapatnam','Andhra Pradesh','A++',3.56,'2023-08','c','pharm health',0,''],
+ ['Vardhaman College of Engineering','Hyderabad','Telangana','A++',3.58,'2021-03','c','eng cs data',0,''],
+ ['Gokaraju Rangaraju Institute of Engineering and Technology','Hyderabad','Telangana','A++',3.55,'2021-02','c','eng cs data',0,''],
+ ['Mahatma Gandhi Institute of Technology','Hyderabad','Telangana','A++',3.53,'2023-11','c','eng cs',0,''],
+ ['Institute of Aeronautical Engineering','Hyderabad','Telangana','A++',3.62,'2023-12','c','eng cs',0,''],
+ ['Sri Venkateswara Dental College and Hospital','Chennai','Tamil Nadu','A++',3.57,'2023-03','c','med health',0,''],
+ ['Sibar Institute of Dental Sciences','Guntur','Andhra Pradesh','A++',3.56,'2024-02','c','med health',0,''],
+ ['BLDEA’s Shri Sanganabasava Mahaswamiji College of Pharmacy and Research Centre','Vijayapura','Karnataka','A++',3.51,'2022-06','c','pharm health',0,''],
+ ['St. Aloysius College (Autonomous)','Mangaluru','Karnataka','A++',3.67,'2023-01','c','arts science commerce bio',0,''],
+ ['Sri Dharmasthala Manjunatheshwara College (Autonomous), Ujire','Ujire','Karnataka','A++',3.56,'2023-02','c','arts science commerce bio',0,''],
+ ['K.L.E. Society’s P.C. Jabin Science College','Hubballi','Karnataka','A++',3.54,'2023-07','c','science bio',0,''],
+ ['Marian College','Kuttikkanam','Kerala','A++',3.71,'2023-04','c','science arts commerce',0,''],
+ ['Newman College','Thodupuzha','Kerala','A++',3.71,'2024-04','c','science arts commerce',0,''],
+ ['Dr. D. Y. Patil Institute of Pharmaceutical Sciences and Research','Pimpri (Pune)','Maharashtra','A++',3.77,'2022-12','c','pharm health',0,''],
+ ['Dr. D. Y. Patil Institute of Technology','Pimpri (Pune)','Maharashtra','A++',3.74,'2023-09','c','eng cs',0,''],
+ ['Modern College of Engineering','Pune','Maharashtra','A++',3.66,'2022-10','c','eng cs',0,''],
+ ['Pimpri Chinchwad College of Engineering and Research','Ravet (Pune)','Maharashtra','A++',3.54,'2023-05','c','eng cs',0,''],
+ ['MGM Dental College and Hospital','Navi Mumbai','Maharashtra','A++',3.70,'2023-03','c','med health',0,''],
+ ['Dr. Bhanuben Nanavati College of Pharmacy','Mumbai','Maharashtra','A++',3.64,'2024-03','c','pharm health',0,''],
+ ['G. H. Raisoni College of Engineering','Nagpur','Maharashtra','A++',3.55,'2023-06','c','eng cs',0,''],
+ ['Yeshwantrao Chavan College of Engineering','Nagpur','Maharashtra','A++',3.60,'2022-05','c','eng cs',0,''],
+ ['Rajarshi Chhatrapati Shahu College','Kolhapur','Maharashtra','A++',3.78,'2023-08','c','science arts commerce',0,''],
+ ['Yashavantrao Chavan Institute of Science','Satara','Maharashtra','A++',3.61,'2025-01','c','science bio',0,''],
+ ['Shri Manibhai Virani and Smt. Navalben Virani Science College','Rajkot','Gujarat','A++',3.65,'2024-02','c','science bio',0,''],
+ ['Bhaskaracharya College of Applied Sciences','New Delhi','Delhi','A++',3.60,'2023-07','c','science cs data',0,'University of Delhi college. Admission through CUET-UG.'],
+ ['Government Holkar (Model, Autonomous) Science College','Indore','Madhya Pradesh','A++',3.64,'2024-02','c','science bio',0,''],
+ ['Roorkee Institute of Technology','Roorkee','Uttarakhand','A++',3.62,'2023-08','c','eng cs',0,''],
 ];
 const INSTITUTIONS=RAW.map(r=>({n:r[0],c:r[1],s:r[2],g:r[3],cg:r[4],d:r[5],k:r[6],tags:r[7].split(' '),women:!!r[8],note:r[9],r:STATE_REGION[r[2]]||'north'}));
+const TAG_ADD={
+ 'Manipal Academy of Higher Education (MAHE)':['med','pharm','bio'],'SRM Institute of Science and Technology':['med','pharm','bio'],'Amrita Vishwa Vidyapeetham':['med','pharm','bio'],
+ 'Saveetha Institute of Medical and Technical Sciences':['med','pharm'],'Sri Ramachandra Institute of Higher Education and Research':['med','pharm','bio'],
+ 'Datta Meghe Institute of Higher Education and Research':['med','pharm'],'Dr. D. Y. Patil Vidyapeeth':['med','pharm'],'Bharati Vidyapeeth (Deemed to be University)':['med','pharm'],
+ 'Jamia Hamdard':['med','pharm'],'Aligarh Muslim University':['med','pharm'],'Lovely Professional University (LPU)':['med','pharm','bio','agri'],
+ 'Chandigarh University':['pharm','bio'],'Manav Rachna International Institute of Research and Studies':['med','pharm'],'Karunya Institute of Technology and Sciences':['bio'],
+ 'Vellore Institute of Technology (VIT)':['bio'],'SASTRA Deemed University':['bio'],'KIIT (Kalinga Institute of Industrial Technology)':['med','pharm','bio'],
+ 'Siksha ‘O’ Anusandhan':['med','pharm','bio'],'Nirma University':['pharm'],'Institute of Chemical Technology (ICT)':['pharm','bio'],'Parul University':['med','pharm'],
+ 'Symbiosis International (Deemed University)':['med'],'Birla Institute of Technology and Science (BITS) Pilani':['pharm'],'Thapar Institute of Engineering and Technology':['bio'],
+ 'GITAM (Deemed to be University)':['med','pharm'],'Anna University':['bio'],'Jadavpur University':['pharm'],'Panjab University':['pharm'],'Andhra University':['pharm']
+};
+INSTITUTIONS.forEach(i=>{
+  (TAG_ADD[i.n]||[]).forEach(t=>{if(!i.tags.includes(t))i.tags.push(t);});
+  if(i.k==='u'&&i.tags.includes('arts')&&i.tags.includes('science')&&!i.tags.includes('bio'))i.tags.push('bio');
+});
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const declared=d=>{const p=d.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
 const isOld=d=>{const p=d.split('-').map(Number),n=new Date();return (n.getFullYear()-p[0])*12+(n.getMonth()+1-p[1])>60;};
@@ -725,6 +879,8 @@ const HOW_TO=`<div class="how">
 
 const WEB={"JAIN (Deemed-to-be University)": ["https://www.jainuniversity.ac.in/", "c"], "CHRIST (Deemed to be University)": ["https://christuniversity.in/", "c"], "SASTRA Deemed University": ["https://www.sastra.edu/", "r"], "Bangalore University": ["https://bangaloreuniversity.ac.in/", "r"], "Andhra University": ["https://www.andhrauniversity.edu.in/", "r"], "Sathyabama Institute of Science and Technology": ["https://www.sathyabama.ac.in/", "r"], "Amrita Vishwa Vidyapeetham": ["https://www.amrita.edu/", "r"], "Vellore Institute of Technology (VIT)": ["https://vit.ac.in/", "c"], "Saveetha Institute of Medical and Technical Sciences": ["https://www.saveetha.com/", "r"], "Manipal Academy of Higher Education (MAHE)": ["https://manipal.edu/", "c"], "Avinashilingam Institute for Home Science and Higher Education for Women": ["https://www.avinuty.ac.in/", "r"], "University of Kerala": ["https://www.keralauniversity.ac.in/", "r"], "Mahatma Gandhi University": ["https://www.mgu.ac.in/", "r"], "University of Madras": ["https://www.unom.ac.in/", "r"], "SRM Institute of Science and Technology": ["https://www.srmist.edu.in/", "c"], "Anna University": ["https://www.annauniv.edu/", "r"], "GITAM (Deemed to be University)": ["https://www.gitam.edu/", "r"], "Sri Ramachandra Institute of Higher Education and Research": ["https://www.sriramachandra.edu.in/", "r"], "Karunya Institute of Technology and Sciences": ["https://www.karunya.edu/", "r"], "ICFAI Foundation for Higher Education (IFHE)": ["https://www.ifheindia.org/", "r"], "NALSAR University of Law": ["https://www.nalsar.ac.in/", "r"], "International Institute of Information Technology (IIIT) Hyderabad": ["https://www.iiit.ac.in/", "c"], "University of Hyderabad": ["https://uohyd.ac.in/", "r"], "KIIT (Kalinga Institute of Industrial Technology)": ["https://kiit.ac.in/", "r"], "Siksha ‘O’ Anusandhan": ["https://www.soa.ac.in/", "r"], "Ravenshaw University": ["https://www.ravenshawuniversity.ac.in/", "r"], "Central University of South Bihar": ["https://cusb.ac.in/", "r"], "Jadavpur University": ["https://jadavpuruniversity.in/", "r"], "Presidency University": ["https://www.presiuniv.ac.in/", "r"], "West Bengal National University of Juridical Sciences (NUJS)": ["https://www.nujs.edu/", "r"], "Tezpur University": ["https://www.tezu.ernet.in/", "r"], "Gauhati University": ["https://www.gauhati.ac.in/", "r"], "Cotton University": ["https://www.cottonuniversity.ac.in/", "r"], "Utkal University": ["https://www.utkaluniversity.ac.in/", "r"], "XIM University": ["https://xim.edu.in/", "r"], "Birla Institute of Technology (BIT) Mesra": ["https://www.bitmesra.ac.in/", "r"], "Mizoram University": ["https://www.mzu.edu.in/", "r"], "SVKM’s NMIMS (Deemed-to-be University)": ["https://www.nmims.edu/", "c"], "University of Mumbai": ["https://mu.ac.in/", "r"], "Dr. D. Y. Patil Vidyapeeth": ["https://dpu.edu.in/", "r"], "Bharati Vidyapeeth (Deemed to be University)": ["https://bvuniversity.edu.in/", "r"], "FLAME University": ["https://www.flame.edu.in/", "r"], "Symbiosis International (Deemed University)": ["https://www.siu.edu.in/", "c"], "Datta Meghe Institute of Higher Education and Research": ["https://www.dmiher.edu.in/", "r"], "Parul University": ["https://paruluniversity.ac.in/", "r"], "Nirma University": ["https://nirmauni.ac.in/", "r"], "Institute of Chemical Technology (ICT)": ["https://www.ictmumbai.edu.in/", "r"], "The Maharaja Sayajirao University of Baroda": ["https://msubaroda.ac.in/", "r"], "Tata Institute of Social Sciences (TISS)": ["https://www.tiss.edu/", "r"], "Ahmedabad University": ["https://ahduni.edu.in/", "r"], "Gujarat University": ["https://www.gujaratuniversity.ac.in/", "r"], "Goa University": ["https://www.unigoa.ac.in/", "r"], "DA-IICT": ["https://www.daiict.ac.in/", "r"], "MIT Art, Design and Technology University": ["https://mituniversity.ac.in/", "r"], "Somaiya Vidyavihar University": ["https://somaiya.edu/", "r"], "Jawaharlal Nehru University (JNU)": ["https://www.jnu.ac.in/", "r"], "Jamia Millia Islamia": ["https://www.jmi.ac.in/", "c"], "University of Delhi": ["https://www.du.ac.in/", "r"], "Guru Gobind Singh Indraprastha University": ["https://www.ipu.ac.in/", "r"], "Banasthali Vidyapith": ["https://www.banasthali.ac.in/", "r"], "Birla Institute of Technology and Science (BITS) Pilani": ["https://www.bits-pilani.ac.in/", "r"], "Thapar Institute of Engineering and Technology": ["https://www.thapar.edu/", "r"], "Panjab University": ["https://puchd.ac.in/", "r"], "Guru Nanak Dev University": ["https://gndu.ac.in/", "r"], "Lovely Professional University (LPU)": ["https://www.lpu.in/", "r"], "Manav Rachna International Institute of Research and Studies": ["https://www.mriirs.edu.in/", "r"], "University of Lucknow": ["https://www.lkouniv.ac.in/", "r"], "Jiwaji University": ["https://www.jiwaji.edu/", "r"], "Guru Ghasidas Vishwavidyalaya": ["https://www.ggu.ac.in/", "r"], "University of Jammu": ["https://www.jammuuniversity.ac.in/", "r"], "University of Kashmir": ["https://www.kashmiruniversity.net/", "r"], "Aligarh Muslim University": ["https://www.amu.ac.in/", "r"], "Amity University Rajasthan": ["https://www.amity.edu/jaipur/", "r"], "Chandigarh University": ["https://www.cuchd.in/", "r"], "Manipal University Jaipur": ["https://jaipur.manipal.edu/", "r"], "Graphic Era (Deemed to be University)": ["https://geu.ac.in/", "c"], "Delhi Technological University": ["https://www.dtu.ac.in/", "r"], "Jamia Hamdard": ["https://jamiahamdard.edu/", "r"], "University of Rajasthan": ["https://uniraj.ac.in/", "r"], "Devi Ahilya Vishwavidyalaya": ["https://www.dauniv.ac.in/", "r"], "Pt. Ravishankar Shukla University": ["https://www.prsu.ac.in/", "r"], "University of Allahabad": ["https://www.allduniv.ac.in/", "r"], "National Law University Delhi": ["https://nludelhi.ac.in/", "r"], "Shiv Nadar University": ["https://snu.edu.in/", "r"], "UPES": ["https://www.upes.ac.in/", "r"], "Loyola College (Autonomous)": ["https://loyolacollege.edu/", "c"], "St Joseph’s College of Commerce (Autonomous)": ["https://sjcc.edu.in/", "r"], "Kristu Jayanti College": ["https://www.kristujayanti.edu.in/", "r"], "Mount Carmel College (Autonomous)": ["https://www.mccblr.edu.in/", "r"], "Jyoti Nivas College (Autonomous)": ["https://jyotinivas.org/", "r"], "Stella Maris College (Autonomous)": ["https://stellamariscollege.edu.in/", "r"], "Women’s Christian College": ["https://www.wcc.edu.in/", "r"], "Ethiraj College for Women (Autonomous)": ["https://www.ethirajcollege.edu.in/", "r"], "PSG College of Arts and Science (Autonomous)": ["https://www.psgcas.ac.in/", "r"], "PSGR Krishnammal College for Women (Autonomous)": ["https://www.psgrkcw.ac.in/", "r"], "Rajagiri College of Social Sciences": ["https://rajagiri.edu/", "r"], "St. Thomas College (Autonomous)": ["https://www.stthomas.ac.in/", "r"], "St. Joseph’s College (Autonomous), Devagiri": ["https://www.devagiricollege.org/", "r"], "Mar Ivanios College (Autonomous)": ["https://www.mic.ac.in/", "r"], "B.M.S. College of Engineering": ["https://bmsce.ac.in/", "r"], "R. V. College of Engineering": ["https://rvce.edu.in/", "r"], "Siddaganga Institute of Technology": ["https://www.sit.ac.in/", "r"], "PSG College of Technology": ["https://www.psgtech.edu/", "r"], "Thiagarajar College of Engineering": ["https://www.tce.edu/", "r"], "Chaitanya Bharathi Institute of Technology": ["https://www.cbit.ac.in/", "r"], "VNR Vignana Jyothi Institute of Engineering and Technology": ["https://vnrvjiet.ac.in/", "r"], "Vasavi College of Engineering": ["https://vce.ac.in/", "r"], "Gayatri Vidya Parishad College of Engineering": ["https://www.gvpce.ac.in/", "r"], "Mithibai College of Arts, Chauhan Institute of Science and Amrutben Jivanlal College of Commerce and Economics": ["https://www.mithibai.ac.in/", "r"], "Jai Hind College (Empowered Autonomous)": ["https://www.jaihindcollege.com/", "r"], "Vishwakarma Institute of Technology": ["https://www.vit.edu/", "r"], "College of Engineering Pune (COEP)": ["https://www.coeptech.ac.in/", "r"], "Shri Ram College of Commerce (SRCC)": ["https://www.srcc.edu/", "r"], "Hansraj College": ["https://hansrajcollege.ac.in/", "r"], "Hindu College": ["https://www.hinducollege.ac.in/", "r"], "St. Stephen’s College": ["https://www.ststephens.edu/", "r"], "Miranda House": ["https://www.mirandahouse.ac.in/", "c"], "Lady Shri Ram College for Women": ["https://lsr.edu.in/", "r"], "Kirori Mal College": ["https://kmc.du.ac.in/", "c"], "Atma Ram Sanatan Dharma College": ["https://arsd.du.ac.in/", "r"], "Ramanujan College": ["https://www.ramanujancollege.ac.in/", "r"], "Shaheed Sukhdev College of Business Studies": ["https://www.sscbsdu.ac.in/", "r"], "Sri Venkateswara College": ["https://www.svc.ac.in/", "r"], "Sri Guru Gobind Singh College of Commerce": ["https://sggscc.ac.in/", "r"], "Jesus and Mary College": ["https://www.jmc.ac.in/", "r"], "Vivekananda Institute of Professional Studies (VIPS-TC)": ["https://vips.edu/", "r"], "Swami Keshvanand Institute of Technology, Management and Gramothan": ["https://www.skit.ac.in/", "r"], "Ajay Kumar Garg Engineering College": ["https://www.akgec.ac.in/", "r"], "Jaipuria Institute of Management": ["https://www.jaipuria.ac.in/", "r"], "Madhav Institute of Technology and Science": ["https://www.mitsgwalior.in/", "r"], "St. Xavier’s College (Autonomous)": ["https://www.sxccal.edu/", "r"], "Ramakrishna Mission Vivekananda Centenary College": ["https://www.rkmvccrahara.org/", "r"], "Ramakrishna Mission Vidyamandira": ["https://www.vidyamandira.ac.in/", "r"], "B. Borooah College": ["https://www.bborooahcollege.ac.in/", "r"], "Patna Women’s College": ["https://www.patnawomenscollege.in/", "r"], "Gandhi Institute for Technology (GIFT)": ["https://gift.edu.in/", "r"]};
 /* WEB[name] = [address, flag]. c = address seen on the institution’s own pages while researching; r = address recalled from general knowledge and not yet verified. */
+/* Addresses below are recalled from general knowledge and not yet verified. */
+Object.assign(WEB,{"Indian Institute of Space Science and Technology (IIST)": ["https://www.iist.ac.in/", "r"], "International Institute of Information Technology (IIIT) Bangalore": ["https://www.iiitb.ac.in/", "r"], "Jawaharlal Nehru Technological University Kakinada": ["https://www.jntuk.edu.in/", "r"], "Jawaharlal Nehru Technological University Hyderabad": ["https://jntuh.ac.in/", "r"], "Pondicherry University": ["https://www.pondiuni.edu.in/", "r"], "Cochin University of Science and Technology": ["https://www.cusat.ac.in/", "r"], "University of Agricultural Sciences, Bangalore": ["https://www.uasbangalore.edu.in/", "r"], "Chitkara University": ["https://www.chitkara.edu.in/", "r"], "Shoolini University of Biotechnology and Management Sciences": ["https://shooliniuniversity.com/", "r"], "Reva University": ["https://www.reva.edu.in/", "r"], "Dayananda Sagar University": ["https://www.dsu.edu.in/", "r"], "M. S. Ramaiah University of Applied Sciences": ["https://www.msruas.ac.in/", "r"], "Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology": ["https://www.veltech.edu.in/", "r"], "Hindustan Institute of Technology and Science": ["https://hindustanuniv.ac.in/", "r"], "Vignan’s Foundation for Science, Technology and Research": ["https://vignan.ac.in/", "r"], "Bennett University": ["https://www.bennett.edu.in/", "r"], "GLA University": ["https://www.gla.ac.in/", "r"], "Nitte (Deemed to be University)": ["https://www.nitte.edu.in/", "r"], "Yenepoya (Deemed to be University)": ["https://yenepoya.edu.in/", "r"], "KLE Academy of Higher Education and Research": ["https://www.kledeemeduniversity.edu.in/", "r"], "MGM Institute of Health Sciences": ["https://www.mgmuhs.com/", "r"], "Dr. M.G.R. Educational and Research Institute": ["https://www.drmgrdu.ac.in/", "r"], "Sri Balaji Vidyapeeth": ["https://www.sbvu.ac.in/", "r"], "Chettinad Academy of Research and Education": ["https://www.care.edu.in/", "r"], "JSS Academy of Higher Education and Research": ["https://jssuni.edu.in/", "r"], "Swami Rama Himalayan University": ["https://www.srhu.edu.in/", "r"], "Teerthanker Mahaveer University": ["https://www.tmu.ac.in/", "r"], "Integral University": ["https://www.iul.ac.in/", "r"], "Sikkim Manipal University": ["https://www.smu.edu.in/", "r"], "King George’s Medical University": ["https://kgmu.org/", "r"], "Bharathiar University": ["https://b-u.ac.in/", "r"], "Kalasalingam Academy of Research and Education": ["https://kalasalingam.ac.in/", "r"], "Karpagam Academy of Higher Education": ["https://kahedu.edu.in/", "r"], "B. S. Abdur Rahman Crescent Institute of Science and Technology": ["https://www.crescent.education/", "r"], "Gujarat Technological University": ["https://www.gtu.ac.in/", "r"], "Charotar University of Science and Technology": ["https://www.charusat.ac.in/", "r"], "Dharmsinh Desai University": ["https://www.ddu.ac.in/", "r"], "DIT University": ["https://www.dituniversity.edu.in/", "r"], "Jaypee University of Information Technology": ["https://www.juit.ac.in/", "r"], "Jaypee University of Engineering and Technology": ["https://www.juet.ac.in/", "r"], "Harcourt Butler Technical University": ["https://hbtu.ac.in/", "r"], "Madan Mohan Malaviya University of Technology": ["https://mmmut.ac.in/", "r"], "Jaypee Institute of Information Technology": ["https://www.jiit.ac.in/", "r"], "LNM Institute of Information Technology": ["https://www.lnmiit.ac.in/", "r"], "Sant Longowal Institute of Engineering and Technology": ["https://www.sliet.ac.in/", "r"], "Guru Jambheshwar University of Science and Technology": ["https://www.gjust.ac.in/", "r"], "Central University of Punjab": ["https://www.cup.edu.in/", "r"], "Acharya Narendra Deva University of Agriculture and Technology": ["https://nduat.org/", "r"], "Bihar Agricultural University": ["https://www.bausabour.ac.in/", "r"], "Centurion University of Technology and Management": ["https://cutm.ac.in/", "r"], "Adamas University": ["https://adamasuniversity.ac.in/", "r"], "Delhi Pharmaceutical Sciences and Research University": ["https://dpsru.edu.in/", "r"], "KLE Technological University": ["https://www.kletech.ac.in/", "r"], "Vels Institute of Science, Technology and Advanced Studies (VISTAS)": ["https://vistas.ac.in/", "r"], "Meenakshi Academy of Higher Education and Research": ["https://www.maher.ac.in/", "r"], "D. Y. Patil Deemed to be University": ["https://dypatil.edu/", "r"]});
 const host=u=>{try{return new URL(u).hostname.replace(/^www\./,'');}catch(e){return u;}};
 function webRow(i){
   const w=WEB[i.n];
@@ -745,7 +901,7 @@ function tableHTML(list){
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 /* ---------- STATE ---------- */
-const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pctText=v=>Math.round(v*100)+'%';
@@ -789,6 +945,7 @@ function fieldList(tags){
 function instCard(i){
   const meta=[i.k==='u'?'University':'College'];
   if(i.women)meta.push('Women only');
+  if(streamCore(i))meta.push('Strong match for your group');
   const note=i.note&&i.note!=='Women only.'?`<p class="note2">${i.note.replace(/^Women only\. /,'')}</p>`:'';
   return `<div class="inst"><div class="inst-top"><h3>${i.n}</h3>${gradeChip(i.g)}</div>
     <p class="loc">${i.c}, ${i.s}. ${meta.join('. ')}.</p>
@@ -798,9 +955,9 @@ function instCard(i){
     ${webRow(i)}
     <p class="src">NAAC ${i.g}, CGPA ${i.cg.toFixed(2)}, declared ${declared(i.d)}.${isOld(i.d)?' <strong>Declared over five years ago, so confirm it is still valid.</strong>':''}</p></div>`;
 }
-function eligibleInst(){
+function eligibleInst(useFocus){
   const regs=state.regions.includes('any')?null:state.regions;
-  return INSTITUTIONS.filter(i=>GR[i.g]>=state.minGrade&&(state.kind==='all'||i.k===state.kind)&&(!regs||regs.includes(i.r)));
+  return INSTITUTIONS.filter(i=>GR[i.g]>=state.minGrade&&(state.kind==='all'||i.k===state.kind)&&(!regs||regs.includes(i.r))&&(!(useFocus&&state.focus&&STREAM_FIELDS[state.stream])||streamOverlap(i)>0));
 }
 function collegesFor(c){
   return eligibleInst().map(i=>({i,o:i.tags.filter(t=>c.tags.includes(t)).length})).filter(x=>x.o>0)
@@ -813,7 +970,7 @@ function welcome(){
   return `<div class="hero">
     <div>
       <h1>Find courses that match what you enjoy</h1>
-      <p class="lead">Answer 30 quick questions about the things you like doing. You get a profile of your interests, a ranked list of degrees and careers, and colleges and universities to explore in the regions you choose, all taken from NAAC’s records of A++, A+ and A grades.</p>
+      <p class="lead">Answer 30 quick questions about the things you like doing. The questions are picked for your subject group, so every student gets a different set. You get a profile of your interests, a ranked list of degrees and careers, and colleges and universities to explore in the regions you choose, all taken from NAAC’s records of A++, A+ and A grades.</p>
       <form id="start" novalidate>
         <div class="field"><label for="name">Your first name <span class="note">(optional, printed on your results)</span></label>
           <input id="name" type="text" maxlength="30" autocomplete="given-name" value="${esc(state.name)}"></div>
@@ -837,7 +994,7 @@ function welcome(){
 }
 
 function quiz(){
-  const q=QUESTIONS[state.i],n=QUESTIONS.length,cur=state.answers[state.i];
+  const q=state.questions[state.i],n=state.questions.length,cur=state.answers[state.i];
   const opts=ANSWERS.map((a,v)=>`<label class="opt"><input type="radio" name="ans" value="${v}"${cur===v?' checked':''}><span class="face"><b>${v+1}</b><span>${a}</span></span></label>`).join('');
   return `<div class="quiz">
     <div class="progress-line"><span>Question ${state.i+1} of ${n}</span><span>${Math.round(state.i/n*100)}% done</span></div>
@@ -868,6 +1025,7 @@ function card(s){
       <div><h4>Degrees and courses</h4><ul>${li(c.courses)}</ul></div>
       <div><h4>How to get in</h4><p>${c.entry}</p></div>
       <div><h4>Where it can lead</h4><ul>${li(c.paths)}</ul></div>
+      ${c.note?`<div class="c-wide c-note"><h4>Good to know</h4><p>${c.note}</p></div>`:''}
       <div class="c-wide"><h4>Colleges to explore ${regionLabel()}</h4>${colBlock}</div>
     </div></details>`;
 }
@@ -887,7 +1045,7 @@ function listHTML(){
   return h;
 }
 function collegesHTML(){
-  const items=eligibleInst().sort((a,b)=>GR[b.g]-GR[a.g]||b.cg-a.cg||a.n.localeCompare(b.n));
+  const items=eligibleInst(true).sort((a,b)=>(streamCore(b)-streamCore(a))||(streamOverlap(b)>0)-(streamOverlap(a)>0)||GR[b.g]-GR[a.g]||b.cg-a.cg||a.n.localeCompare(b.n));
   const f=state.filters,shown=f.allC?items:items.slice(0,12);
   if(!items.length)return `<p class="empty">No institution in our list matches this region and grade. Choose another region or lower the minimum grade, or search naac.gov.in for accredited colleges in your state.</p>`;
   const tb=state.view2==='table';
@@ -917,6 +1075,7 @@ function results(){
     <div class="filters">
       <label class="f">Subject group <select id="f-stream">${streamOpts}</select></label>
       <label class="f"><input class="plain" type="checkbox" id="f-only"${state.filters.only?' checked':''}> Only options open to my group</label>
+      <label class="f"><input class="plain" type="checkbox" id="f-focus"${state.focus?' checked':''}> Only colleges with programmes for my subject group</label>
       <label class="f">NAAC grade of colleges <select id="f-grade">${gradeOpts}</select></label>
       <label class="f">Show <select id="f-kind"><option value="all"${state.kind==='all'?' selected':''}>Colleges and universities</option><option value="u"${state.kind==='u'?' selected':''}>Universities only</option><option value="c"${state.kind==='c'?' selected':''}>Colleges only</option></select></label>
       <div class="regions"><p class="filter-title">Regions to study in</p><div class="chips">${regionChips()}</div></div>
@@ -929,6 +1088,7 @@ function results(){
       <p>NAAC grades a whole institution out of 4.00: A++ is 3.51 to 4.00, A+ is 3.26 to 3.50 and A is 3.01 to 3.25. A grade does not approve a particular course, so also check UGC, AICTE, Bar Council or NMC approval where it applies.</p>
       <p>NAAC announced in February 2025 that it is moving from letter grades to “Accredited” with maturity levels. Institutions already on their second cycle or later keep their current grade until the new system starts, so a newly assessed college may show a level instead of a letter.</p>
       <p>Grades, CGPA scores and declaration dates come from NAAC’s own file of institutions with valid accreditation, dated 14 August 2025, as republished by CollegeJaancho.com. We could not open naac.gov.in directly, and NAAC updates its file, so confirm each college there before you apply. Colleges with a declaration date more than five years old are flagged.</p>
+      <p>Science and medical students: IITs, NITs, IIITs, IISERs and AIIMS are mostly assessed through other systems (such as NIRF and NBA), so they are mostly not in this list. They admit through JEE, NEET and their own counselling, so check their own sites.</p>
       <p>This is a selection of well-known institutions, not every one: NAAC’s file has 313 universities and about 2,100 colleges with an A, A+ or A++ grade. If a college you like is missing, it may still be accredited, so search for it on naac.gov.in.</p>
     </div>
     <p class="hint" style="margin-top:1rem">Official website: “Confirmed” means we saw the address on the institution’s own pages while researching. “Check the address” means it comes from general knowledge and has not been confirmed yet, so check it matches the college name and ends in .ac.in, .edu.in or .edu. You can also cross-check any college on naac.gov.in and the UGC lists at ugc.gov.in.</p>
@@ -958,7 +1118,7 @@ function results(){
 /* ---------- LOGIC ---------- */
 function compute(){
   const sums={R:0,I:0,A:0,S:0,E:0,C:0};
-  QUESTIONS.forEach((q,i)=>{sums[q.t]+=state.answers[i]||0;});
+  state.questions.forEach((q,i)=>{sums[q.t]+=state.answers[i]||0;});
   const pct={};ORDER.forEach(t=>pct[t]=sums[t]/20);
   const ranked=[...ORDER].sort((a,b)=>pct[b]-pct[a]||ORDER.indexOf(a)-ORDER.indexOf(b));
   const dots=CAREERS.map(c=>[3,2,1].reduce((d,w,k)=>d+w*pct[c.code[k]],0)/6);
@@ -985,7 +1145,7 @@ function answer(v){
   const idx=state.i;
   setTimeout(()=>{
     if(state.view!=='quiz'||state.i!==idx)return;
-    if(idx<QUESTIONS.length-1){state.i++;render();const q=document.getElementById('qtext');if(q)q.focus({preventScroll:true});}
+    if(idx<state.questions.length-1){state.i++;render();const q=document.getElementById('qtext');if(q)q.focus({preventScroll:true});}
     else{compute();go('results');}
   },240);
 }
@@ -1006,7 +1166,7 @@ app.addEventListener('submit',e=>{
   const sel=app.querySelector('input[name="stream"]:checked');
   state.name=document.getElementById('name').value;
   if(!sel){document.getElementById('err').hidden=false;return;}
-  state.stream=sel.value;state.answers=[];state.i=0;
+  state.stream=sel.value;state.answers=[];state.i=0;state.questions=buildQuestions(state.stream);
   go('quiz');
 });
 app.addEventListener('change',e=>{
@@ -1018,6 +1178,7 @@ app.addEventListener('change',e=>{
   else if(t.id==='f-only'){state.filters.only=t.checked;}
   else if(t.id==='f-grade'){state.minGrade=parseInt(t.value,10);}
   else if(t.id==='f-kind'){state.kind=t.value;}
+  else if(t.id==='f-focus'){state.focus=t.checked;}
   else return;
   state.filters.all=false;state.filters.allC=false;
   refresh();
@@ -1030,7 +1191,7 @@ app.addEventListener('click',e=>{
   else if(act==='allc'){state.filters.allC=true;refresh();}
   else if(act==='cards'||act==='table'){state.view2=act;refresh();}
   else if(act==='print'){window.print();}
-  else if(act==='retake'){state.answers=[];state.i=0;state.result=null;state.filters={only:true,all:false,allC:false};go('welcome');}
+  else if(act==='retake'){state.answers=[];state.i=0;state.questions=[];state.result=null;state.filters={only:true,all:false,allC:false};go('welcome');}
 });
 document.addEventListener('keydown',e=>{
   if(state.view!=='quiz'||e.ctrlKey||e.metaKey||e.altKey)return;
