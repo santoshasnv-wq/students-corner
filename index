@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Course Compass by Arohaanex Edvantage</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+:root{
+  --bg:#F2F5F5; --surface:#FFFFFF; --text:#14202B; --muted:#52606B; --line:#D3DCDF;
+  --accent:#0C7C86; --accent-soft:#DDF0F1; --on-accent:#FFFFFF;
+  --mark:#F0B429; --mark-ink:#3B2A00; --danger:#B3261E;
+  --font-display:"Bricolage Grotesque","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E161B; --surface:#16222A; --text:#E8EFF1; --muted:#9DB0B8; --line:#2A3A43;
+    --accent:#4FC3CC; --accent-soft:#14343A; --on-accent:#06262A; --danger:#FF8A80;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E161B; --surface:#16222A; --text:#E8EFF1; --muted:#9DB0B8; --line:#2A3A43;
+  --accent:#4FC3CC; --accent-soft:#14343A; --on-accent:#06262A; --danger:#FF8A80;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:1.0625rem;line-height:1.55;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;line-height:1.1;letter-spacing:-.015em}
+h1{font-weight:800;font-size:clamp(2.1rem,5.4vw,3.4rem);letter-spacing:-.025em}
+h2{font-weight:800;font-size:clamp(1.45rem,3.2vw,2rem)}
+h3{font-weight:600;font-size:1.25rem;line-height:1.2}
+h4{font-weight:600;font-size:1rem}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:1.25rem 1.25rem 3.5rem}
+.site-head{display:flex;align-items:center;gap:.65rem;padding:.4rem 0 1.75rem;font-family:var(--font-display);font-weight:800;font-size:1.15rem}
+.site-head small{font-family:var(--font-body);font-weight:400;font-size:.95rem;color:var(--muted)}
+.lead{font-size:1.15rem;color:var(--muted);max-width:58ch;margin-top:1rem}
+
+/* welcome */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:start}
+.hero-art{max-width:460px;width:100%;justify-self:center;position:sticky;top:1rem}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:1.5rem}.hero-art{order:2;position:static}}
+form{margin-top:1.75rem;max-width:560px}
+.field{margin:0 0 1.35rem;padding:0;border:0;min-width:0}
+.field>label,.field>legend{display:block;font-weight:700;margin-bottom:.5rem;padding:0}
+.note{font-weight:400;color:var(--muted)}
+input[type=text]{width:100%;min-height:48px;padding:.65rem .85rem;border:2px solid var(--line);border-radius:10px;background:var(--surface)}
+input[type=text]:focus-visible{border-color:var(--accent);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{position:relative;display:block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:block;padding:.55rem .9rem;border:2px solid var(--line);border-radius:999px;background:var(--surface);font-weight:700;line-height:1.25}
+.chip small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
+.chip input:checked + span{border-color:var(--accent);background:var(--accent-soft)}
+.chip input:focus-visible + span{outline:3px solid var(--accent);outline-offset:3px}
+.hint{font-size:.9rem;color:var(--muted);margin-top:.6rem}
+.err{color:var(--danger);font-weight:700;margin-top:.6rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.7rem 1.4rem;border-radius:10px;border:2px solid var(--accent);background:var(--accent);color:var(--on-accent);font-weight:700;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:hover{filter:brightness(1.07)}
+
+/* quiz */
+.quiz{max-width:780px;margin:0 auto}
+.progress-line{display:flex;justify-content:space-between;color:var(--muted);font-size:.95rem;margin-bottom:.5rem}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .25s ease}
+.q-stem{margin-top:2.25rem;color:var(--muted)}
+.q-text{margin-top:.35rem;font-family:var(--font-display);font-weight:600;font-size:clamp(1.55rem,4vw,2.3rem);line-height:1.15;letter-spacing:-.015em;outline:none}
+.opts{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin:2rem 0 1.25rem;border:0;padding:0}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.face{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;min-height:92px;padding:.6rem .4rem;border:2px solid var(--line);border-radius:12px;background:var(--surface);text-align:center;font-weight:700;line-height:1.2}
+.face b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--line);font-size:.9rem}
+.opt:hover .face{border-color:var(--accent)}
+.opt input:checked + .face{border-color:var(--accent);background:var(--accent-soft)}
+.opt input:checked + .face b{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.opt input:focus-visible + .face{outline:3px solid var(--accent);outline-offset:3px}
+@media (max-width:640px){
+  .opts{grid-template-columns:1fr;gap:.5rem}
+  .face{flex-direction:row;justify-content:flex-start;min-height:54px;padding:.5rem .9rem;gap:.8rem;text-align:left}
+}
+.quiz-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;color:var(--muted);font-size:.9rem}
+.linkbtn{background:none;border:0;padding:.5rem .25rem;color:var(--accent);font-weight:700;cursor:pointer;min-height:44px}
+.linkbtn[disabled]{visibility:hidden}
+
+/* results */
+.print-only{display:none}
+.res-head{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:flex-end}
+.res-head .lead{margin-top:.8rem}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem}
+.profile{display:grid;grid-template-columns:minmax(300px,1.1fr) 1fr;gap:2rem;align-items:center;margin-top:2rem;padding:1.5rem;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+@media (max-width:820px){.profile{grid-template-columns:1fr;padding:1rem}}
+.top3{display:grid;gap:1.1rem}
+.t3{padding-left:1rem;border-left:5px solid var(--line)}
+.t3:first-child{border-left-color:var(--mark)}
+.t3 h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem}
+.t3 h3 span{font-family:var(--font-body);font-weight:400;font-size:.95rem;color:var(--muted)}
+.t3 p{margin-top:.3rem;max-width:52ch}
+.t3 .school{color:var(--muted);font-size:.95rem}
+.low-note{margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:var(--accent-soft)}
+section.block{margin-top:3rem}
+.sub{color:var(--muted);max-width:70ch;margin-top:.6rem}
+.filters{display:flex;flex-wrap:wrap;gap:.85rem 1.5rem;align-items:center;margin:1.1rem 0 1.25rem;padding:.9rem 1.1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.filters label.f{display:flex;align-items:center;gap:.5rem;font-weight:700}
+.filters select{min-height:44px;padding:.4rem .6rem;border:2px solid var(--line);border-radius:8px;background:var(--bg)}
+.filters input[type=checkbox].plain{width:20px;height:20px;accent-color:var(--accent)}
+.filters .regions{flex:1 1 100%}
+.filters .regions .chip span{padding:.4rem .8rem;font-size:.95rem}
+.filters .regions .chip small{display:none}
+.filter-title{font-weight:700;margin-bottom:.4rem}
+.count{color:var(--muted);margin-bottom:.75rem}
+.list{display:grid;gap:.8rem}
+details.career{border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+details.career[open]{border-color:var(--accent)}
+details.career>summary{list-style:none;display:flex;gap:1rem;align-items:flex-start;justify-content:space-between;padding:1.1rem 1.25rem;cursor:pointer}
+details.career>summary::-webkit-details-marker{display:none}
+.c-main{display:block;flex:1;min-width:0}
+.c-sum{display:block;margin-top:.3rem;color:var(--muted)}
+.c-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem}
+.chip-fit{display:inline-block;padding:.15rem .65rem;border-radius:999px;font-size:.85rem;font-weight:700}
+.chip-fit.top{background:var(--mark);color:var(--mark-ink)}
+.chip-fit.mid{background:var(--accent-soft);color:var(--accent)}
+.chip-fit.low{border:1px solid var(--line);color:var(--muted)}
+.tag{display:inline-block;padding:.15rem .65rem;border-radius:6px;border:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+.fit-bar{display:block;height:5px;margin-top:.8rem;border-radius:3px;background:var(--line);max-width:340px}
+.fit-bar i{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.chev{flex:none;width:12px;height:12px;margin-top:.55rem;border-right:3px solid var(--accent);border-bottom:3px solid var(--accent);transform:rotate(45deg);transition:transform .2s ease}
+details[open] .chev{transform:rotate(-135deg)}
+.c-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem 1.75rem;padding:1.1rem 1.25rem 1.3rem;border-top:1px solid var(--line)}
+.c-body h4{margin-bottom:.4rem}
+.c-body ul{margin:0;padding-left:1.15rem}
+.c-body li{margin:.15rem 0}
+.c-wide{grid-column:1/-1;padding:.9rem 1rem;border-radius:10px;background:var(--accent-soft)}
+.c-wide ul{list-style:none;padding:0}
+.c-wide li{margin:.35rem 0}
+.c-wide .none{color:var(--muted)}
+.more{margin-top:1rem}
+.empty{padding:1.25rem;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
+.steps{margin:1rem 0 0;padding-left:1.4rem;max-width:62ch}
+.steps li{margin:.5rem 0;padding-left:.3rem}
+.disclaimer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;max-width:80ch}
+
+/* NAAC grade chips and college cards */
+.g{display:inline-block;padding:.05rem .55rem;border-radius:999px;font-size:.8rem;font-weight:700;white-space:nowrap;vertical-align:middle}
+.g3{background:var(--mark);color:var(--mark-ink)}
+.g2{background:var(--accent-soft);color:var(--accent)}
+.g1{border:1px solid var(--line);color:var(--muted)}
+.naac-note{margin-top:1.25rem;padding:1rem 1.2rem;border-left:5px solid var(--mark);border-radius:0 10px 10px 0;background:var(--surface);max-width:80ch}
+.naac-note h3{font-size:1.05rem;margin-bottom:.4rem}
+.naac-note p+p{margin-top:.5rem}
+.insts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.85rem}
+.inst{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);break-inside:avoid}
+.inst-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.inst h3{font-size:1.05rem;line-height:1.25}
+.inst .loc{margin-top:.2rem;color:var(--muted);font-size:.95rem}
+.inst .note2{margin-top:.5rem;font-size:.95rem}
+.inst .fields{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
+.inst .src{margin-top:.5rem;font-size:.82rem;color:var(--muted)}
+
+
+/* admissions */
+.st{display:inline-block;padding:.05rem .6rem;border-radius:999px;font-size:.8rem;font-weight:700;vertical-align:middle;white-space:nowrap}
+.st-open{background:var(--accent);color:var(--on-accent)}
+.st-soon{background:var(--mark);color:var(--mark-ink)}
+.st-info{background:var(--accent-soft);color:var(--accent)}
+.st-closed{border:1px solid var(--line);color:var(--muted)}
+.left{display:inline-block;margin-left:.4rem;padding:.02rem .5rem;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:.85rem;font-weight:700}
+.left.urgent{background:var(--mark);color:var(--mark-ink)}
+.btn.small{min-height:40px;padding:.35rem .9rem;font-size:.92rem;border-radius:8px}
+.alert{margin-top:1.25rem;padding:.85rem 1.1rem;border-left:5px solid var(--mark);border-radius:0 10px 10px 0;background:var(--surface)}
+.adm{margin-top:.9rem;padding-top:.8rem;border-top:1px dashed var(--line);font-size:.95rem}
+.adm h4{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.4rem}
+.adm p{margin-top:.35rem}
+.adm .links{margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.adm-none{color:var(--muted)}
+.dls{display:grid;gap:.8rem;margin-top:1rem}
+.dl{display:flex;flex-wrap:wrap;gap:.8rem 1.5rem;justify-content:space-between;padding:1rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.dl-main{flex:1 1 320px;min-width:0}
+.dl h3{font-size:1.1rem}
+.dl-when{margin-top:.3rem}
+.dl-sub{margin-top:.25rem;color:var(--muted);font-size:.95rem}
+.dl-side{display:flex;flex-direction:column;align-items:flex-start;gap:.5rem}
+.how{margin-top:1rem;display:grid;gap:.7rem;max-width:80ch}
+.how details{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0 1.1rem}
+.how summary{cursor:pointer;font-weight:700;padding:.9rem 0}
+.how details[open] summary{border-bottom:1px solid var(--line)}
+.how ul,.how ol{padding-left:1.3rem;margin:.8rem 0}
+.how li{margin:.45rem 0}
+.how .hint{margin:0 0 1rem}
+
+
+.web{margin-top:.5rem;font-size:.95rem}
+.web a,.tbl a{color:var(--accent);font-weight:700;word-break:break-all}
+.vf{display:inline-block;margin-left:.3rem;padding:.02rem .5rem;border-radius:6px;font-size:.78rem;font-weight:700;vertical-align:middle}
+.vf-ok{background:var(--accent);color:var(--on-accent)}
+.vf-chk{background:var(--mark);color:var(--mark-ink)}
+.toggle{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tbl{width:100%;border-collapse:collapse;font-size:.95rem;min-width:640px}
+.tbl th{position:static;text-align:left;padding:.7rem .9rem;background:var(--accent-soft);color:var(--text);font-family:var(--font-display);font-weight:600;border-bottom:1px solid var(--line)}
+.tbl td{padding:.7rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .hint{margin:0;font-size:.85rem}
+
+
+.brand-mark{height:44px;width:auto;display:block;border-radius:10px;background:#000;flex:none}
+.brand-foot{display:flex;justify-content:center;margin-top:3rem}
+.brand-foot img{width:100%;max-width:420px;height:auto;display:block;border-radius:18px}
+.brand-foot+.disclaimer{margin-top:1.5rem}
+.print-only img{height:32px;width:auto;vertical-align:middle;margin-right:.6rem;border-radius:6px}
+
+/* hexagon */
+.hx-grid{fill:none;stroke:var(--line);stroke-width:1.2}
+.hx-axis{stroke:var(--line);stroke-width:1}
+.hx-fill{fill:var(--accent);fill-opacity:.24;stroke:var(--accent);stroke-width:3;stroke-linejoin:round}
+.hx-dot{fill:var(--accent)}
+.hx-dot.top{fill:var(--mark);stroke:var(--text);stroke-width:1.5}
+.hx-name{fill:var(--text);font-family:var(--font-display);font-weight:800;font-size:16px}
+.hx-sub{fill:var(--muted);font-size:13px}
+.hx-shape{transform-box:view-box;transform-origin:200px 170px;animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scale(.12);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.hx-shape{animation:none}.bar>i,.chev{transition:none}}
+
+@media print{
+  html:root:root:root{--bg:#fff;--surface:#fff;--text:#000;--muted:#333;--line:#bbb;--accent:#0C7C86;--accent-soft:#eef7f7;--on-accent:#fff;color-scheme:light}
+  :root{padding:0}
+  .noprint,.filters,.actions,.more,.chev,.brand-foot{display:none!important}
+  .print-only{display:block;color:var(--muted);margin-bottom:.5rem}
+  .wrap{padding:0}
+  details.career,.profile,.t3,.inst,.naac-note,.dl{break-inside:avoid}
+  .how details{border:0}
+  .btn.small{border:0;padding:0;text-decoration:underline;color:var(--accent);background:none;min-height:0}
+  .hx-shape{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="site-head noprint" aria-label="Course Compass by Arohaanex Edvantage">
+    <img id="brand-mark" class="brand-mark" alt="Arohaanex Edvantage logo, a gold mountain-shaped letter A" width="64" height="43">
+    <span>Course Compass <small>by Arohaanex Edvantage</small></span>
+  </div>
+  <main id="app"></main>
+</div>
+
+<script>
+/* ---------- BRAND ---------- */
+const BRAND_MARK='data:image/png;base64,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';
+const BRAND_FULL='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAFIAtADASIAAhEBAxEB/8QAHgABAAEEAwEBAAAAAAAAAAAAAAYFBwgJAQMEAgr/xABWEAABAwMCAwUEBAoFBwkIAwABAAIDBAURBgcIEiETIjFBUQlhcYEUMnKRFSNCUmKCkqGxwRYXM3PRJCU0NUOD0hlERlNWdJSVoicoNlRjdZOys+Hw/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAMEAgUGAQf/xAA+EQACAgIABAMFBwIDBwUBAAAAAQIDBBEFEiExE0FRFCJhcYEGMpGhscHRFfAzUuEjNFNicqLxFkJEVGOC/9oADAMBAAIRAxEAPwDVUiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgGF7rxZK/T9c6iuVHPQ1bWse6CoYWPDXNDmnB8i0gj3FXf4O9kn7878afsE0Tn2enk+n3NwHQU0ZBc0/aPK39ZZT+1c2KZa67Tm5drphHTzsbaLi2JuA17G5gefi0Fn6oWusz6q8uGI370k3/fz6k8aZSrdi7I11ohRbEgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIpvsvtnW7v7oac0jQtcZbnWMike0f2UWcyPPua0ErGUlFOT7I9S29I2I+yR0vYoNv9Y6iglZNqOevZQ1LSO/TwNYHxge5xLjn9H3LMPfXamh3s2k1Jo2ta3FxpXCnkPjFUN70Tx8HgfeVgjtZRwcEnHXJo4SSU+hdZQRw0jpn5a3nP4kk+ZbKHMz+mtljQcdR8V8i47KyjiEM6qW1JKUX8vL+/U6XESlS6pLt0Z+cW/wBjrdNXuvtVxhdT19FO+mnicMFkjHFrh94XgWavtRNkzoTeSn1nQU5ZadVsMkzmjusrWYEg93M3ld96wqPivquJkRy6IXw7SWznbIOubg/IIiK0RhERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAHiFsm9lHskIaa/bn3GDvSZtdq5h05R1nkHxPKz5OWvPRmk7hrnVVo0/aoTPcbnVR0kDGjOXPcAD8BnJ9wW/PaXby3bT7dWDSVqYGUlrpGU/NjrI7GXvPvc4uPzXI/aXP9lxPCg/en0+nn/Bs8CnxLOZ9kY3e0t2ffrHZuDW9rYY77o+cVYljHf8AoziBJg/ouDH/ACKvrwr7yQ767GaZ1SHN/CD4BS3GNpzyVUQDZM+nNgOHucrDe023pG3+yMWkaKYNuurZDTvAPeZSMIdK79Y8jPmVj57KTez+je5N326uFRy27UEX0qha89G1cQyQPtx5+JYFz0MK3M4EpTXWDbj/ANPn+5eldGvL6efR/Mzi40NkGb7bA6gtFPFz3qgYbnbCBk9vECeQfbbzN+YWiqRjmSOa5paQSC0+I9y/SRnHhg/wWkTj52TbsvxDXmKip+wsV8/ztQADutbIT2jB9mTm6eQIVr7JZvNGeHN9uq/f+SDiNWmrUY4Ih8UX0U0oREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBEXpt1BUXS4U1HSxOnqaiRsUUTBkve4gNA+JIQGdXsr9kv6Qa3u+49wgzR2Rho7eXjo6qkb33j7EfT4vW0VuGgnoAPM+AVp+G3aaDZDZzTmk42t+k00AlrXgf2lTJ3pT+0cfABRLji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iA5DseSc3uC4RAc83TGAuAcIiA55/cChdlcIgOeYrnn9wXyiAZymURAAcIeqIgOQ7HvTmXCIATlERAMpnIREAyuS73LhEAymeqIgOebp4Z+K4z1REAymURAEBwiIBlERAAcBc8y4RAc83uCZXCIAucrhEAyueZcIgOeb3YTmXCIATlAcIiAZXIdjPmuEQHJdlOZcIgOebK9+n5rfBfbfJdqeWqtbKiN1XBTvDJJIg4F7Wk9ASMgFU9MoDOK8bVcI27vZ3XS+5tbtbK9o7Wz3eB0jGHHXHN5/B5CrMO9eyfB3tnqazbRXyq19uDfqc0suoJIOzhp29QCDgDlbkkNbnJwSeiwF5kLsrWvCU9RsslKPo9fn02/xLHi66qKTPqWR0sjnvJc5xJJJ6knzXzzH4rgotkVznmXGURAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQH//2Q==';
+document.getElementById('brand-mark').src=BRAND_MARK;
+const brandFoot=()=>`<div class="brand-foot"><img src="${BRAND_FULL}" alt="Arohaanex Edvantage. Ascend with Advantage." width="720" height="328"></div>`;
+/* ---------- DATA ---------- */
+const ORDER=['R','I','A','S','E','C'];
+const TYPE={
+  R:{name:'Doer',full:'Realistic',verb:'builds',
+     blurb:'You like hands-on work: tools, machines, sport, the outdoors and results you can see and touch.',
+     school:'In school you may enjoy labs, workshops, sports and field trips.'},
+  I:{name:'Thinker',full:'Investigative',verb:'figures out',
+     blurb:'You like working things out: puzzles, data, experiments and questions that start with “why”.',
+     school:'In school you may enjoy maths, science, economics and research projects.'},
+  A:{name:'Creator',full:'Artistic',verb:'makes',
+     blurb:'You like making original things with words, images, sound or ideas, and doing it your own way.',
+     school:'In school you may enjoy art, writing, media, drama and design projects.'},
+  S:{name:'Helper',full:'Social',verb:'supports',
+     blurb:'You like teaching, supporting and working with people, and you feel useful when you make someone’s day easier.',
+     school:'In school you may enjoy peer teaching, clubs, service projects and group work.'},
+  E:{name:'Persuader',full:'Enterprising',verb:'leads',
+     blurb:'You like leading, pitching ideas, taking the first step and winning people over to get things moving.',
+     school:'In school you may enjoy debates, student councils, fests and business projects.'},
+  C:{name:'Organiser',full:'Conventional',verb:'arranges',
+     blurb:'You like order: clear rules, accurate numbers, tidy records and plans that actually get followed.',
+     school:'In school you may enjoy accountancy, spreadsheets, planning and exam preparation.'}
+};
+const QPOOL={
+  R:[['Fixing or building something with my own hands',[]],['Spending a work day outdoors or on the move instead of at a desk',[]],['Using tools, machines or electronics to make something work',['mpc']],['Sports, fitness or physical challenges',[]],['Taking gadgets or engines apart to learn how they work',['mpc']],['Working with plants, soil or animals',['bipc']],['Setting up and running equipment in a science laboratory',['mpc','bipc']],['Building a model, circuit, robot or small machine',['mpc']],['Working on a farm, in a garden or in a forest or nature reserve',['bipc']],['Cooking, baking or preparing food from scratch',[]],['Driving, flying or operating vehicles and heavy machines',['mpc']],['Doing practical jobs such as repairing, painting or carpentry',[]],['Learning first aid and using simple medical instruments',['bipc']],['Seeing how things are made on a shop floor or in a factory',['mec','cec']],['Managing stock, displays and packing for a shop or stall',['mec','cec']]],
+  I:[['Working through a tough maths or logic puzzle',['mpc','mec']],['Running an experiment to find out why something happens',['mpc','bipc']],['Studying numbers or data to spot a pattern',[]],['Reading about new discoveries in science, economics or technology',[]],['Researching a topic deeply until I fully understand it',[]],['Writing a program to solve a problem',['mpc']],['Studying how the human body, cells or diseases work',['bipc']],['Solving physics problems about motion, energy or electricity',['mpc']],['Looking at living things under a microscope',['bipc']],['Working out why prices, jobs or markets go up and down',['mec','cec']],['Proving that a maths result is always true',['mpc','mec']],['Analysing a company’s numbers to judge whether it is doing well',['mec','cec']],['Investigating historical events or social problems from several sources',['arts','cec']],['Testing chemicals, materials or medicines in a lab',['bipc','mpc']],['Finding out how a machine or an app works behind the scenes',['mpc']]],
+  A:[['Drawing, designing or making something that looks good',[]],['Writing stories, poems, scripts or blog posts',['arts']],['Making videos, music, photos or animation',[]],['Coming up with original ideas instead of following a set method',[]],['Styling or decorating a space, an outfit or an event',[]],['Designing the look of an app, a poster or a website',['mpc','mec']],['Drawing neat diagrams or models to explain science ideas',['bipc','mpc']],['Acting, dancing, singing or performing in front of people',[]],['Creating an advertisement or a brand story for a product',['mec','cec']],['Taking photographs or filming nature, people or events',[]],['Sketching buildings, rooms or city layouts',['mpc']],['Writing speeches, essays or opinion pieces',['arts','cec']],['Inventing a new gadget, game or product idea',['mpc']],['Telling stories about history, culture or society through writing or art',['arts']],['Designing packaging, logos or presentations for a business idea',['mec','cec']]],
+  S:[['Explaining a hard topic to a classmate until they get it',[]],['Listening when a friend is going through a tough time',[]],['Volunteering for a cause or helping in my community',[]],['Mentoring or coaching younger students',[]],['Having a job where I help people stay healthy, learn or feel better',[]],['Caring for patients, older people or young children',['bipc']],['Helping a customer choose the right product or plan',['mec','cec']],['Teaching science or maths ideas to other students',['mpc','bipc']],['Counselling someone through a decision about their studies or career',[]],['Taking part in health camps, blood donation drives or awareness programmes',['bipc']],['Working with people from different backgrounds on a shared goal',[]],['Helping people understand their rights, laws or government services',['arts','cec']],['Running a class, workshop or club for other students',[]],['Supporting a teammate who is stuck or stressed',[]],['Speaking up for people who are treated unfairly',['arts']]],
+  E:[['Leading a team or a school club',[]],['Starting a small business or selling something',['mec','cec']],['Debating, pitching or persuading people to back an idea',[]],['Organising an event and making sure it succeeds',[]],['Negotiating, making deals or taking a calculated risk to win',[]],['Turning a technical idea into a product for a startup',['mpc']],['Managing a budget, pricing and profit for a project',['mec','cec']],['Convincing a team to try a new way of doing things',[]],['Running a clinic, pharmacy or laboratory as my own business one day',['bipc']],['Campaigning in a student election or for a cause',['arts','cec']],['Selling products online or building a following on social media',[]],['Competing to win in contests, tournaments or quizzes',[]],['Taking charge when a group is confused or a plan falls apart',[]],['Pitching a project to judges, investors or a principal',[]],['Making business or career plans several years ahead',[]]],
+  C:[['Keeping accounts, records or files neat and accurate',['mec','cec']],['Working with spreadsheets and tables of numbers',[]],['Following clear steps and procedures to get a job done right',[]],['Planning a budget and tracking where the money goes',['mec','cec']],['Checking work carefully to catch small mistakes',[]],['Recording lab readings and measurements accurately',['mpc','bipc']],['Organising notes, files and schedules so nothing is missed',[]],['Filling in forms and documents correctly',[]],['Following safety rules and standard procedures at work',['bipc','mpc']],['Doing tax, banking or insurance calculations',['mec','cec']],['Keeping patient, library or school records in order',['bipc','arts']],['Sorting data into neat categories and tables',[]],['Making timetables and checklists and sticking to them',[]],['Working with a computer system that has fixed rules and formats',['mpc']],['Proofreading and correcting a document line by line',['arts']]]
+};
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+/* Each student gets 5 questions per interest type, drawn at random from the pool of 15 and weighted towards their subject group. */
+function buildQuestions(stream){
+  const picks={};
+  ORDER.forEach(t=>{
+    const pool=QPOOL[t].map(x=>({text:x[0],st:x[1]}));
+    const chosen=[];
+    for(let n=0;n<5;n++){
+      const w=pool.map(q=>(!stream||stream==='unsure'||!q.st.length)?2:(q.st.includes(stream)?4:0.5));
+      let r=Math.random()*w.reduce((a,b)=>a+b,0),idx=0;
+      for(;idx<w.length-1;idx++){r-=w[idx];if(r<=0)break;}
+      chosen.push(pool.splice(idx,1)[0]);
+    }
+    picks[t]=chosen;
+  });
+  const out=[];
+  for(let k=0;k<5;k++){shuffle([...ORDER]).forEach(t=>out.push({t,text:picks[t][k].text}));}
+  return out;
+}
+const ANSWERS=['Not for me','Not much','It’s okay','Like it','Love it'];
+const STREAMS={
+  mec:{label:'MEC',long:'Maths, Economics, Commerce'},
+  cec:{label:'CEC',long:'Civics, Economics, Commerce'},
+  mpc:{label:'MPC',long:'Maths, Physics, Chemistry'},
+  bipc:{label:'BiPC',long:'Biology, Physics, Chemistry'},
+  arts:{label:'Humanities / Arts',long:'History, Political Science, etc.'},
+  unsure:{label:'Not sure yet',long:'Show me everything'}
+};
+const REGIONS={
+  any:{label:'Anywhere in India',short:'India',long:'No preference'},
+  south:{label:'South India',short:'South India',long:'Karnataka, Tamil Nadu, Kerala, Andhra Pradesh, Telangana'},
+  west:{label:'West India',short:'West India',long:'Maharashtra, Gujarat, Goa'},
+  north:{label:'North and Central India',short:'North and Central India',long:'Delhi NCR, Punjab, Haryana, Uttar Pradesh, Rajasthan, Uttarakhand, Madhya Pradesh'},
+  east:{label:'East and North-East India',short:'East and North-East India',long:'West Bengal, Odisha, Bihar, Jharkhand, Assam and the North-East'}
+};
+const GR={'A++':3,'A+':2,'A':1};
+/* Fields that matter most to each subject group; used to prioritise and filter institutions. */
+const STREAM_FIELDS={
+  mpc:['eng','cs','data','science','arch'],
+  bipc:['med','health','pharm','bio','agri','science'],
+  mec:['commerce','finance','econ','mgmt'],
+  cec:['commerce','finance','econ','mgmt','law','social'],
+  arts:['arts','social','psych','media','law','edu','policy']
+};
+/* Core fields: institutions strong in these are ranked first for the group. */
+const STREAM_CORE={mpc:['eng','cs','data','arch'],bipc:['med','pharm','health','agri'],mec:['commerce','finance','econ'],cec:['commerce','finance','econ','social','law'],arts:['arts','social','psych','media','law']};
+const streamCore=i=>{const f=STREAM_CORE[state.stream];return f&&i.tags.some(t=>f.includes(t))?1:0;};
+const streamOverlap=i=>{const f=STREAM_FIELDS[state.stream];return f?i.tags.filter(t=>f.includes(t)).length:0;};
+const TAGLABEL={commerce:'Commerce',finance:'Finance',mgmt:'Management',econ:'Economics',data:'Data',cs:'Computing',eng:'Engineering',law:'Law',media:'Media',design:'Design',arts:'Arts and humanities',social:'Social sciences',psych:'Psychology',edu:'Education',science:'Sciences',health:'Health sciences',hosp:'Hospitality',policy:'Public policy',arch:'Architecture',sports:'Sports',med:'Medicine and dentistry',pharm:'Pharmacy',bio:'Biotechnology and life sciences',agri:'Agriculture and food'};
+
+const CAREERS=[
+ {title:'Data science and analytics',code:'ICR',streams:['mpc','mec'],math:true,tags:['data','cs','science'],
+  summary:'Turn raw numbers into answers that companies, hospitals and governments act on.',
+  courses:['BSc Data Science and Analytics','BCA or BTech with AI and Data Science','BSc Statistics'],
+  entry:'Most universities use their own entrance test or CUET-UG. BTech seats need JEE Main or a state exam. Class 12 Maths is usually required.',
+  paths:['Data analyst','Machine learning engineer','Business intelligence analyst','Research scientist']},
+ {title:'Economics',code:'ICE',streams:['mec','cec','mpc','arts'],math:false,tags:['econ'],
+  summary:'Study how people, firms and governments make choices, then use it to explain prices, jobs and policy.',
+  courses:['BA or BSc Economics (Honours)','BSc Economics with Mathematics and Statistics','Later: MA or MSc Economics, PhD'],
+  entry:'CUET-UG for central universities; many private universities run their own tests. The maths-heavy BSc versions prefer Class 12 Maths.',
+  paths:['Economist','Policy analyst','Research associate','Banking and consulting','Civil services']},
+ {title:'Mathematics and statistics',code:'ICR',streams:['mec','mpc'],math:true,tags:['science','data'],
+  summary:'Go deep into proof, modelling and probability. It is the base for data, finance, research and teaching.',
+  courses:['BSc Mathematics or Statistics','BSc Economics–Mathematics–Statistics','Integrated MSc, then PhD'],
+  entry:'CUET-UG or university tests. Research tracks such as ISI, CMI and IISER have their own aptitude tests.',
+  paths:['Statistician','Data scientist','Quantitative analyst','Lecturer or researcher','Actuary']},
+ {title:'Actuarial science',code:'ICE',streams:['mec','mpc'],math:true,tags:['science','finance','data'],
+  summary:'Use probability and statistics to price risk for insurers, pension funds and banks.',
+  courses:['BSc Actuarial Science, Statistics or Mathematics','BCom or BSc alongside actuarial exams'],
+  entry:'The Institute of Actuaries of India runs a common entrance test (ACET) after Class 12, followed by professional papers.',
+  paths:['Actuary','Risk analyst','Insurance product specialist','Consultant']},
+ {title:'Chartered Accountancy (CA) and accounting',code:'CIE',streams:'all',math:false,tags:['commerce','finance'],
+  summary:'Become the person who audits, advises on tax and keeps an organisation’s finances honest.',
+  courses:['BCom alongside CA','BCom Professional integrated with CA, CMA or ACCA'],
+  entry:'You can register for CA Foundation (ICAI) after Class 12, from any stream. Commerce subjects give a head start.',
+  paths:['Chartered accountant','Auditor','Tax consultant','Finance controller','CFO track']},
+ {title:'Finance and investing',code:'ECI',streams:'all',math:false,tags:['finance','commerce','mgmt'],
+  summary:'Work with money markets, companies and portfolios to decide where capital should go.',
+  courses:['BBA or BCom with a Finance focus','BSc Economics','Certifications: CFA, FRM, NISM'],
+  entry:'Degree first. CFA and FRM have their own exams, and CFA Level I can be taken in your final undergraduate year.',
+  paths:['Financial analyst','Investment banker','Portfolio or wealth manager','Risk analyst','Equity researcher']},
+ {title:'Business and management (BBA)',code:'ESC',streams:'all',math:false,tags:['mgmt','commerce'],
+  summary:'Learn how organisations run, from operations and people to strategy, then lead them.',
+  courses:['BBA or BBA (Honours)','BMS','Integrated Programme in Management (IPM) with an MBA'],
+  entry:'CUET-UG, IPMAT for IIM integrated programmes, or each university’s own test. Many tests cover English, reasoning, maths and data interpretation.',
+  paths:['Manager','Consultant','Product manager','Entrepreneur','MBA after graduation']},
+ {title:'Marketing, branding and digital media',code:'EAS',streams:'all',math:false,tags:['mgmt','media'],
+  summary:'Work out what people want, tell the story, and make a product or idea spread.',
+  courses:['BBA with Marketing','BA in Media and Communication','Digital marketing certifications'],
+  entry:'University tests or merit, depending on the college. A small portfolio of campaigns or content helps.',
+  paths:['Brand manager','Digital marketer','Content strategist','Market researcher','Advertising planner']},
+ {title:'Entrepreneurship and family business',code:'EAI',streams:'all',math:false,tags:['mgmt'],
+  summary:'Build something of your own, or take a family business to its next stage.',
+  courses:['BBA with an Entrepreneurship focus','Any degree plus incubator programmes'],
+  entry:'Incubators and entrepreneurship cells at many universities are open to first-year students.',
+  paths:['Founder','Startup operations lead','Product owner','Business owner']},
+ {title:'Law',code:'ESI',streams:'all',math:false,tags:['law'],
+  summary:'Argue, advise and draft. Law shapes contracts, companies, rights and public policy.',
+  courses:['BA LLB','BBA LLB','BCom LLB (five years)'],
+  entry:'CLAT for national law universities, AILET for NLU Delhi, LSAT–India and other university tests. Open to every stream.',
+  paths:['Advocate','Corporate lawyer','Judicial services','Legal adviser','Policy work']},
+ {title:'Banking and insurance',code:'CSE',streams:'all',math:false,tags:['commerce','finance'],
+  summary:'Serve customers and manage credit, deposits and risk inside banks and insurers.',
+  courses:['BCom, BBA or any degree','Certifications from NISM and IIBF'],
+  entry:'IBPS, SBI and RBI exams after graduation; insurers recruit through their own processes.',
+  paths:['Probationary officer','Relationship manager','Credit analyst','Insurance underwriter']},
+ {title:'Company Secretary (CS)',code:'CES',streams:'all',math:false,tags:['commerce','law'],
+  summary:'Keep a company on the right side of the law and run its governance and board processes.',
+  courses:['CS alongside BCom, BA or BBA'],
+  entry:'CSEET, the entrance test from ICSI, can be taken after Class 12.',
+  paths:['Company secretary','Compliance officer','Corporate governance specialist']},
+ {title:'Psychology and counselling',code:'SIA',streams:'all',math:false,tags:['psych','arts','social'],
+  summary:'Understand how people think, feel and change, then help them through school, work or health.',
+  courses:['BA or BSc Psychology','Then MA or MSc, then clinical or counselling training'],
+  entry:'CUET-UG or university tests. Clinical practice needs a master’s degree and Rehabilitation Council of India registration.',
+  paths:['Counsellor','School psychologist','Organisational psychologist','Researcher']},
+ {title:'Teaching and education',code:'SCI',streams:'all',math:false,tags:['edu','arts','science'],
+  summary:'Help others learn, and design how learning works in schools and ed-tech.',
+  courses:['Any degree followed by BEd','Four-year integrated teacher education (ITEP)'],
+  entry:'CUET-UG; NCET for ITEP; CTET or state TET for government schools.',
+  paths:['Teacher','Curriculum designer','Ed-tech content lead','Academic coordinator','School leader']},
+ {title:'Human resources and people management',code:'SEC',streams:'all',math:false,tags:['mgmt','psych'],
+  summary:'Hire, train and look after the people who make a company work.',
+  courses:['BBA with HR','BA or BSc Psychology, then MBA in HR'],
+  entry:'University tests or merit. Most HR leaders add an MBA or PGDM later.',
+  paths:['HR executive','Talent acquisition','Learning and development','Organisational consultant']},
+ {title:'Public policy and civil services',code:'SEI',streams:'all',math:false,tags:['policy','arts','econ','social'],
+  summary:'Shape how governments and public bodies solve large problems at scale.',
+  courses:['BA Economics, Political Science or Public Policy','Any degree for UPSC'],
+  entry:'UPSC Civil Services and state PSC exams are open after any degree.',
+  paths:['IAS, IPS, IFS and state services','Policy analyst','Think tanks','Development sector']},
+ {title:'Social work and the development sector',code:'SEC',streams:'all',math:false,tags:['social','arts'],
+  summary:'Work with communities, NGOs and agencies on health, education, livelihoods and rights.',
+  courses:['BSW or BA Sociology','MSW afterwards'],
+  entry:'University tests or merit.',
+  paths:['NGO programme manager','CSR officer','Community organiser','Development agencies']},
+ {title:'Journalism and mass communication',code:'AES',streams:'all',math:false,tags:['media'],
+  summary:'Find the story, check the facts and tell it in print, video, audio or online.',
+  courses:['BA Journalism and Mass Communication','BA English with Journalism'],
+  entry:'CUET-UG or university tests. A portfolio of published work helps.',
+  paths:['Reporter','Editor','Content writer','Anchor or producer','PR professional']},
+ {title:'Design: product, UX, graphic and fashion',code:'AIR',streams:'all',math:false,tags:['design'],
+  summary:'Shape how things look and work, from apps and packaging to clothes.',
+  courses:['BDes','BA in Design','UI and UX certifications'],
+  entry:'UCEED, NID DAT, NIFT or university design tests. A portfolio matters.',
+  paths:['UX designer','Product designer','Graphic designer','Fashion designer']},
+ {title:'Animation, film and digital arts',code:'AER',streams:'all',math:false,tags:['design','media'],
+  summary:'Bring stories to life with moving images, effects, sound and games.',
+  courses:['BA or BSc in Animation and VFX','Film studies and media production'],
+  entry:'Portfolio and aptitude test at most institutes.',
+  paths:['Animator','VFX artist','Video editor','Filmmaker','Game designer']},
+ {title:'Liberal arts, languages and humanities',code:'ASI',streams:'all',math:false,tags:['arts'],
+  summary:'Read widely, write well and think across history, culture, language and society.',
+  courses:['BA Liberal Arts','BA English or other languages','BA History or Political Science'],
+  entry:'CUET-UG or university tests.',
+  paths:['Writer','Researcher','Translator','Curator','Teacher','Civil services']},
+ {title:'Computer science and software',code:'IRC',streams:['mpc','mec'],math:true,tags:['cs','eng','data'],note:'IITs, NITs and IIITs are mostly not graded by NAAC, so they are not in the college lists here. They admit through JEE Main and JEE Advanced with JoSAA counselling, so check their own sites and NIRF rankings as well.',
+  summary:'Build the apps, systems and AI tools everyone else depends on.',
+  courses:['BTech in CSE or AI','BCA','BSc Computer Science'],
+  entry:'JEE Main or state exams for BTech; CUET-UG or university tests for BCA and BSc. Maths in Class 12 is usually needed.',
+  paths:['Software developer','AI engineer','Cybersecurity analyst','Product engineer','Startup founder']},
+ {title:'Core engineering',code:'RIC',streams:['mpc'],math:true,tags:['eng'],note:'IITs, NITs and IIITs are mostly not graded by NAAC, so they are not in the college lists here. They admit through JEE Main and JEE Advanced with JoSAA counselling, so check their own sites and NIRF rankings as well.',
+  summary:'Design and build the machines, structures, circuits and systems around us.',
+  courses:['BTech or BE in Mechanical, Civil, Electrical, Electronics or Aerospace'],
+  entry:'JEE Main and Advanced, state CETs, BITSAT or university tests.',
+  paths:['Design engineer','Project manager','Higher studies through GATE','Civil services']},
+ {title:'Architecture and urban design',code:'ARI',streams:['mpc'],math:true,tags:['arch'],
+  summary:'Design buildings and public spaces that people want to live and work in.',
+  courses:['BArch (five years)'],
+  entry:'NATA or JEE Main Paper 2.',
+  paths:['Architect','Urban planner','Interior or landscape designer']},
+ {title:'Medicine and healthcare',code:'ISR',streams:['bipc'],math:false,tags:['med'],note:'AIIMS and government medical colleges admit through NEET-UG counselling (MCC and state counselling). Many are not graded by NAAC, so they are not in the lists here. Also check that each college is approved by the National Medical Commission.',
+  summary:'Diagnose, treat and care for patients, or work on public health.',
+  courses:['MBBS, BDS, BAMS, BHMS','BPT and BSc Nursing','Allied health sciences'],
+  entry:'NEET-UG for most medical, dental and AYUSH courses.',
+  paths:['Doctor','Dentist','Physiotherapist','Public health specialist']},
+ {title:'Pharmacy and biotechnology',code:'IRS',streams:['bipc','mpc'],math:false,tags:['pharm','bio'],note:'Pharmacy colleges should also be approved by the Pharmacy Council of India, so check that as well.',
+  summary:'Develop and test medicines, vaccines and biological products.',
+  courses:['BPharm','BSc or BTech Biotechnology'],
+  entry:'State CETs and university tests.',
+  paths:['Researcher','Pharmacist','Quality analyst','Biotech engineer']},
+ {title:'Pure sciences and research',code:'IRA',streams:['mpc','bipc'],math:false,tags:['science','bio'],note:'IISERs and IISc are mostly assessed through NIRF rather than NAAC, so they are not in the college lists here. Check their own admission routes.',
+  summary:'Chase open questions in physics, chemistry, biology or earth sciences.',
+  courses:['BSc in a core science','IISER integrated programmes','Integrated MSc'],
+  entry:'IISER Aptitude Test, CUET-UG, then JAM or university tests for postgraduate study.',
+  paths:['Research scientist','Professor','ISRO or DRDO roles']},
+ {title:'Environment and sustainability',code:'RIS',streams:['bipc','mpc'],math:false,tags:['science','agri','bio'],
+  summary:'Protect ecosystems and help organisations cut their environmental footprint.',
+  courses:['BSc Environmental Science','Ecology or Climate studies'],
+  entry:'CUET-UG or university tests.',
+  paths:['Environmental consultant','Sustainability analyst','Conservation scientist']},
+ {title:'Hospitality and tourism',code:'SER',streams:'all',math:false,tags:['hosp'],
+  summary:'Run hotels, travel, events and food experiences where guests feel looked after.',
+  courses:['BHM or BSc Hospitality','BBA in Tourism and Travel'],
+  entry:'NCHMCT JEE for the national hotel management institutes, or a university test.',
+  paths:['Hotel manager','Event manager','Chef','Airline and cruise services']},
+ {title:'Sports and fitness management',code:'RSE',streams:'all',math:false,tags:['sports'],
+  summary:'Coach, manage and analyse sport and fitness, on or off the field.',
+  courses:['BPEd','BSc Sports Science','BBA in Sports Management'],
+  entry:'University tests; fitness or trials may be part of selection.',
+  paths:['Coach','Sports analyst','Sports manager','Fitness trainer']},
+ {title:'Nursing, physiotherapy and allied health sciences',code:'SIR',streams:['bipc'],math:false,tags:['health'],
+  summary:'Care for patients, help them recover and run the tests and scans that doctors rely on.',
+  courses:['BSc Nursing','BPT (Physiotherapy)','BSc Medical Laboratory Technology, Radiology and Imaging, Optometry'],
+  entry:'Rules differ by state: many use NEET-UG or state counselling for nursing and physiotherapy, while allied health programmes often use CUET-UG or the university’s own test. Check each state’s rules.',
+  paths:['Nurse','Physiotherapist','Laboratory technologist','Radiographer','Optometrist'],
+  note:'Check that the college is approved by the relevant council, such as the Indian Nursing Council for nursing.'},
+ {title:'Agriculture, food science and veterinary sciences',code:'RIS',streams:['bipc','mpc'],math:false,tags:['agri'],
+  summary:'Grow, protect and process the food we eat, or care for animals and their health.',
+  courses:['BSc (Hons) Agriculture and Horticulture','BSc Food Technology','BVSc and AH (veterinary)'],
+  entry:'Agricultural universities admit mostly through CUET-UG or state agriculture entrance tests, and veterinary degrees through NEET-UG. Check each university’s rules.',
+  paths:['Agricultural officer','Food technologist','Veterinarian','Agri-business manager','Researcher']}
+];
+
+/* NAAC A++, A+ or A institutions. Grade, CGPA and declaration date come from NAAC's file "Institutions accredited by NAAC having valid accreditation as on 14.08.2025", as republished by CollegeJaancho.com. Students must still confirm on naac.gov.in. */
+const STATE_REGION={'Karnataka':'south','Tamil Nadu':'south','Kerala':'south','Andhra Pradesh':'south','Telangana':'south','Puducherry':'south','Maharashtra':'west','Gujarat':'west','Goa':'west','West Bengal':'east','Odisha':'east','Bihar':'east','Jharkhand':'east','Assam':'east','Mizoram':'east','Sikkim':'east','Meghalaya':'east'};
+/* [name, city, state, grade, CGPA, declared YYYY-MM, u=university c=college, field tags, women only, note] */
+const RAW=[
+ ['JAIN (Deemed-to-be University)','Bengaluru','Karnataka','A++',3.71,'2021-12','u','mgmt commerce finance data cs eng design media science health arts law',0,'Admission is mainly through the Jain Entrance Test (JET).'],
+ ['CHRIST (Deemed to be University)','Bengaluru','Karnataka','A+',3.42,'2022-10','u','mgmt commerce finance econ data cs eng law psych media arts edu hosp science social policy',0,'Admission through its own entrance test.'],
+ ['SASTRA Deemed University','Thanjavur','Tamil Nadu','A++',3.76,'2022-03','u','eng cs data science law mgmt commerce',0,''],
+ ['Bangalore University','Bengaluru','Karnataka','A++',3.75,'2023-06','u','arts science commerce econ law edu social',0,''],
+ ['Andhra University','Visakhapatnam','Andhra Pradesh','A++',3.74,'2023-11','u','arts science commerce econ law eng mgmt edu social data',0,''],
+ ['Sathyabama Institute of Science and Technology','Chennai','Tamil Nadu','A++',3.73,'2023-05','u','eng cs data health arch science law',0,''],
+ ['Amrita Vishwa Vidyapeetham','Coimbatore and other campuses','Tamil Nadu','A++',3.70,'2021-08','u','eng cs data mgmt commerce health science design media arts law arch',0,'Several campuses in South India; check the campus for each programme.'],
+ ['Vellore Institute of Technology (VIT)','Vellore','Tamil Nadu','A++',3.66,'2021-08','u','eng cs data science mgmt commerce law',0,'Admission through VITEEE.'],
+ ['Saveetha Institute of Medical and Technical Sciences','Chennai','Tamil Nadu','A++',3.66,'2022-06','u','health eng cs law science mgmt',0,''],
+ ['Manipal Academy of Higher Education (MAHE)','Manipal','Karnataka','A++',3.65,'2022-05','u','health eng cs data mgmt commerce media design hosp science arts law arch',0,''],
+ ['Avinashilingam Institute for Home Science and Higher Education for Women','Coimbatore','Tamil Nadu','A++',3.65,'2022-02','u','arts science commerce edu psych social',1,'Women only.'],
+ ['University of Kerala','Thiruvananthapuram','Kerala','A++',3.67,'2022-06','u','arts science commerce econ law edu social',0,''],
+ ['Mahatma Gandhi University','Kottayam','Kerala','A++',3.61,'2024-03','u','arts science social edu',0,''],
+ ['University of Madras','Chennai','Tamil Nadu','A++',3.59,'2023-08','u','arts science commerce econ social psych edu',0,''],
+ ['SRM Institute of Science and Technology','Kattankulathur (Chennai)','Tamil Nadu','A++',3.58,'2024-06','u','eng cs data health mgmt commerce law science media hosp arch design',0,''],
+ ['Anna University','Chennai','Tamil Nadu','A++',3.54,'2023-08','u','eng cs data arch science',0,''],
+ ['GITAM (Deemed to be University)','Visakhapatnam','Andhra Pradesh','A++',3.54,'2023-02','u','eng cs data mgmt commerce law health arch science arts econ',0,''],
+ ['Sri Ramachandra Institute of Higher Education and Research','Chennai','Tamil Nadu','A++',3.53,'2021-01','u','health science',0,''],
+ ['Karunya Institute of Technology and Sciences','Coimbatore','Tamil Nadu','A++',3.53,'2022-08','u','eng cs data mgmt science media',0,''],
+ ['ICFAI Foundation for Higher Education (IFHE)','Hyderabad','Telangana','A++',3.59,'2022-09','u','mgmt commerce finance law',0,''],
+ ['NALSAR University of Law','Hyderabad','Telangana','A++',3.52,'2023-09','u','law',0,'Law only.'],
+ ['International Institute of Information Technology (IIIT) Hyderabad','Hyderabad','Telangana','A++',3.51,'2023-05','u','cs data eng science',0,'Very strong in computing, AI and electronics.'],
+ ['University of Hyderabad','Hyderabad','Telangana','A+',3.28,'2023-01','u','arts science social econ policy cs psych',0,''],
+
+ ['KIIT (Kalinga Institute of Industrial Technology)','Bhubaneswar','Odisha','A++',3.52,'2022-08','u','eng cs data mgmt commerce law health media science arts social',0,''],
+ ['Siksha ‘O’ Anusandhan','Bhubaneswar','Odisha','A++',3.88,'2022-05','u','eng cs health mgmt law science',0,''],
+ ['Ravenshaw University','Cuttack','Odisha','A++',3.58,'2023-11','u','arts science commerce econ social',0,''],
+ ['Central University of South Bihar','Gaya','Bihar','A++',3.58,'2023-06','u','arts science social policy',0,''],
+ ['Jadavpur University','Kolkata','West Bengal','A+',3.46,'2024-09','u','eng cs arts science econ',0,''],
+ ['Presidency University','Kolkata','West Bengal','A',3.13,'2024-06','u','arts science econ social',0,''],
+ ['West Bengal National University of Juridical Sciences (NUJS)','Kolkata','West Bengal','A+',3.32,'2024-12','u','law',0,'Law only.'],
+ ['Tezpur University','Tezpur','Assam','A+',3.41,'2022-08','u','science eng cs arts social media',0,''],
+ ['Gauhati University','Guwahati','Assam','A+',3.32,'2024-07','u','arts science commerce law social',0,''],
+ ['Cotton University','Guwahati','Assam','A',3.05,'2024-09','u','arts science econ',0,''],
+ ['Utkal University','Bhubaneswar','Odisha','A+',3.26,'2023-11','u','arts science commerce law social econ',0,''],
+ ['XIM University','Bhubaneswar','Odisha','A',3.14,'2023-02','u','mgmt commerce finance',0,''],
+ ['Birla Institute of Technology (BIT) Mesra','Ranchi','Jharkhand','A',3.17,'2022-11','u','eng cs arch mgmt health',0,''],
+ ['Mizoram University','Aizawl','Mizoram','A+',3.30,'2025-06','u','arts science social',0,''],
+
+ ['SVKM’s NMIMS (Deemed-to-be University)','Mumbai and other campuses','Maharashtra','A++',3.67,'2025-06','u','mgmt commerce finance econ law data cs eng design',0,'Business, commerce, economics, law, technology and design schools.'],
+ ['University of Mumbai','Mumbai','Maharashtra','A++',3.65,'2021-08','u','arts science commerce econ law mgmt media social psych edu data',0,''],
+ ['Dr. D. Y. Patil Vidyapeeth','Pune','Maharashtra','A++',3.64,'2022-02','u','health eng mgmt science',0,''],
+ ['Bharati Vidyapeeth (Deemed to be University)','Pune','Maharashtra','A++',3.60,'2024-11','u','eng health law mgmt arts science arch design social',0,''],
+ ['FLAME University','Pune','Maharashtra','A++',3.56,'2024-10','u','arts mgmt commerce finance econ psych media social policy data',0,'Liberal-education university with business, economics and psychology programmes.'],
+ ['Symbiosis International (Deemed University)','Pune','Maharashtra','A++',3.56,'2022-12','u','mgmt commerce finance econ law media design arts psych social policy eng cs data health hosp science arch',0,'Own entrance tests such as SET and SNAP.'],
+ ['Datta Meghe Institute of Higher Education and Research','Wardha','Maharashtra','A++',3.78,'2023-07','u','health science',0,''],
+ ['Pandit Deendayal Energy University','Gandhinagar','Gujarat','A++',3.52,'2022-09','u','eng cs data mgmt science',0,''],
+ ['Parul University','Vadodara','Gujarat','A++',3.55,'2023-02','u','eng cs mgmt commerce law health design arch science arts media',0,''],
+ ['Nirma University','Ahmedabad','Gujarat','A+',3.33,'2022-04','u','mgmt commerce law eng cs science health data',0,''],
+ ['Institute of Chemical Technology (ICT)','Mumbai','Maharashtra','A+',3.32,'2024-07','u','eng science health',0,''],
+ ['The Maharaja Sayajirao University of Baroda','Vadodara','Gujarat','A+',3.43,'2022-08','u','arts science commerce econ eng design social law edu psych',0,''],
+ ['Tata Institute of Social Sciences (TISS)','Mumbai','Maharashtra','A+',3.33,'2024-06','u','social policy edu psych media arts mgmt',0,'Strong in social sciences, social work and human resources.'],
+ ['Ahmedabad University','Ahmedabad','Gujarat','A',3.25,'2022-10','u','arts mgmt commerce econ psych social cs eng data policy',0,''],
+ ['Gujarat University','Ahmedabad','Gujarat','A+',3.30,'2025-02','u','arts science commerce law econ',0,''],
+ ['Goa University','Taleigao','Goa','A+',3.30,'2025-07','u','arts science commerce econ social',0,''],
+ ['DA-IICT','Gandhinagar','Gujarat','A+',3.32,'2023-09','u','cs data eng science',0,''],
+ ['MIT Art, Design and Technology University','Pune','Maharashtra','A',3.11,'2025-04','u','design eng mgmt arts media',0,''],
+ ['Somaiya Vidyavihar University','Mumbai','Maharashtra','A',3.01,'2024-11','u','eng mgmt commerce arts science media social',0,''],
+
+ ['Jawaharlal Nehru University (JNU)','New Delhi','Delhi','A++',3.62,'2024-09','u','arts policy econ social science',0,'Most programmes are postgraduate; undergraduate options are limited.'],
+ ['Jamia Millia Islamia','New Delhi','Delhi','A++',3.61,'2021-12','u','arts media law eng science econ mgmt design edu policy social cs data',0,''],
+ ['University of Delhi','New Delhi','Delhi','A++',3.55,'2024-11','u','arts science commerce econ law mgmt social psych edu media data cs policy',0,'Admission to its colleges is through CUET-UG.'],
+ ['Guru Gobind Singh Indraprastha University','New Delhi','Delhi','A++',3.56,'2023-02','u','law mgmt eng cs media edu arts',0,''],
+ ['Banasthali Vidyapith','Banasthali (Tonk)','Rajasthan','A++',3.63,'2020-03','u','arts science commerce mgmt design cs edu media social',1,'Women only.'],
+ ['Birla Institute of Technology and Science (BITS) Pilani','Pilani','Rajasthan','A++',3.68,'2024-11','u','eng cs data science econ mgmt health',0,''],
+ ['Thapar Institute of Engineering and Technology','Patiala','Punjab','A++',3.68,'2024-11','u','eng cs data mgmt science',0,''],
+ ['Panjab University','Chandigarh','Chandigarh','A++',3.68,'2023-08','u','arts science commerce law econ mgmt edu media social psych eng',0,''],
+ ['Guru Nanak Dev University','Amritsar','Punjab','A++',3.85,'2022-12','u','arts science commerce eng mgmt media social',0,''],
+ ['Lovely Professional University (LPU)','Phagwara','Punjab','A++',3.68,'2023-08','u','eng cs data mgmt commerce finance law design hosp media science health edu arch sports arts psych econ',0,''],
+ ['Manav Rachna International Institute of Research and Studies','Faridabad','Haryana','A++',3.53,'2023-02','u','eng cs data mgmt commerce finance econ law design hosp media science health arts psych',0,''],
+ ['University of Lucknow','Lucknow','Uttar Pradesh','A++',3.55,'2022-07','u','arts science commerce law econ social',0,''],
+ ['Jiwaji University','Gwalior','Madhya Pradesh','A++',3.60,'2023-04','u','arts science commerce law mgmt',0,''],
+ ['Guru Ghasidas Vishwavidyalaya','Bilaspur','Chhattisgarh','A++',3.62,'2024-04','u','arts science social policy edu',0,''],
+ ['University of Jammu','Jammu','Jammu and Kashmir','A++',3.72,'2024-12','u','arts science commerce law econ social',0,''],
+ ['University of Kashmir','Srinagar','Jammu and Kashmir','A++',3.68,'2025-06','u','arts science commerce law econ social',0,''],
+ ['Aligarh Muslim University','Aligarh','Uttar Pradesh','A+',3.35,'2022-05','u','arts science commerce law eng mgmt health media social edu econ',0,''],
+ ['Amity University Rajasthan','Jaipur','Rajasthan','A+',3.31,'2023-09','u','mgmt commerce law media psych eng cs design hosp science arts',0,'Other Amity campuses are assessed separately; check each one.'],
+ ['Chandigarh University','Mohali','Punjab','A+',3.28,'2019-09','u','eng cs data mgmt commerce finance law design hosp media science health arts psych edu',0,''],
+ ['Manipal University Jaipur','Jaipur','Rajasthan','A+',3.28,'2020-02','u','eng cs data mgmt commerce finance law design media hosp science arts',0,''],
+ ['Graphic Era (Deemed to be University)','Dehradun','Uttarakhand','A+',3.29,'2022-08','u','eng cs data mgmt law health science',0,''],
+ ['Delhi Technological University','New Delhi','Delhi','A+',3.47,'2025-06','u','eng cs data mgmt design science',0,''],
+ ['Jamia Hamdard','New Delhi','Delhi','A+',3.41,'2023-12','u','health science mgmt',0,''],
+ ['University of Rajasthan','Jaipur','Rajasthan','A+',3.40,'2025-06','u','arts science commerce law econ social',0,''],
+ ['Devi Ahilya Vishwavidyalaya','Indore','Madhya Pradesh','A+',3.30,'2019-11','u','arts science commerce law mgmt econ media',0,''],
+ ['Pt. Ravishankar Shukla University','Raipur','Chhattisgarh','A+',3.34,'2025-08','u','arts science commerce law econ edu',0,''],
+ ['University of Allahabad','Prayagraj','Uttar Pradesh','A',3.17,'2025-06','u','arts science law econ social',0,''],
+ ['National Law University Delhi','New Delhi','Delhi','A',3.10,'2023-04','u','law',0,'Law only.'],
+ ['Shiv Nadar University','Greater Noida','Uttar Pradesh','A',3.06,'2019-11','u','eng cs data science arts mgmt econ social',0,''],
+ ['UPES','Dehradun','Uttarakhand','A',3.02,'2021-03','u','eng cs data mgmt law design media science',0,''],
+
+ ['Loyola College (Autonomous)','Chennai','Tamil Nadu','A++',3.55,'2021-02','c','commerce mgmt econ arts science media social data cs',0,'Affiliated to the University of Madras.'],
+ ['St Joseph’s College of Commerce (Autonomous)','Bengaluru','Karnataka','A++',3.57,'2021-02','c','commerce finance mgmt',0,''],
+ ['Kristu Jayanti College','Bengaluru','Karnataka','A++',3.78,'2021-12','c','commerce mgmt arts science data cs media psych social',0,''],
+ ['Seshadripuram College','Bengaluru','Karnataka','A++',3.55,'2023-07','c','commerce arts science mgmt',0,''],
+ ['Mount Carmel College (Autonomous)','Bengaluru','Karnataka','A+',3.37,'2024-12','c','arts science commerce mgmt psych media social',1,'Women only.'],
+ ['Jyoti Nivas College (Autonomous)','Bengaluru','Karnataka','A+',3.43,'2021-03','c','arts science commerce psych media social',1,'Women only.'],
+ ['Stella Maris College (Autonomous)','Chennai','Tamil Nadu','A+',3.44,'2021-11','c','arts science commerce psych media social',1,'Women only.'],
+ ['Women’s Christian College','Chennai','Tamil Nadu','A+',3.49,'2025-05','c','arts science commerce social psych',1,'Women only.'],
+ ['Ethiraj College for Women (Autonomous)','Chennai','Tamil Nadu','A+',3.39,'2023-02','c','arts science commerce',1,'Women only.'],
+ ['PSG College of Arts and Science (Autonomous)','Coimbatore','Tamil Nadu','A++',3.51,'2022-04','c','arts science commerce data cs mgmt',0,''],
+ ['PSGR Krishnammal College for Women (Autonomous)','Coimbatore','Tamil Nadu','A++',3.71,'2021-08','c','arts science commerce data',1,'Women only.'],
+ ['Rajagiri College of Social Sciences','Kochi','Kerala','A++',3.83,'2021-03','c','social mgmt media psych',0,'Highest CGPA among A++ colleges in NAAC’s 2025 file.'],
+ ['St. Thomas College (Autonomous)','Thrissur','Kerala','A++',3.70,'2022-10','c','arts science commerce econ',0,''],
+ ['Loyola College of Social Sciences','Thiruvananthapuram','Kerala','A++',3.59,'2022-07','c','social mgmt media',0,''],
+ ['St. Joseph’s College (Autonomous), Devagiri','Kozhikode','Kerala','A++',3.65,'2024-10','c','arts science commerce',0,''],
+ ['Mar Ivanios College (Autonomous)','Thiruvananthapuram','Kerala','A++',3.56,'2024-08','c','arts science commerce econ',0,''],
+ ['B.M.S. College of Engineering','Bengaluru','Karnataka','A++',3.56,'2024-10','c','eng cs data',0,''],
+ ['R. V. College of Engineering','Bengaluru','Karnataka','A+',3.39,'2024-11','c','eng cs data',0,''],
+ ['Siddaganga Institute of Technology','Tumakuru','Karnataka','A++',3.76,'2023-04','c','eng cs',0,''],
+ ['PSG College of Technology','Coimbatore','Tamil Nadu','A+',3.43,'2024-10','c','eng cs data',0,''],
+ ['Thiagarajar College of Engineering','Madurai','Tamil Nadu','A++',3.56,'2024-09','c','eng cs',0,''],
+ ['Chaitanya Bharathi Institute of Technology','Hyderabad','Telangana','A++',3.59,'2023-06','c','eng cs data',0,''],
+ ['VNR Vignana Jyothi Institute of Engineering and Technology','Hyderabad','Telangana','A++',3.68,'2024-06','c','eng cs data',0,''],
+ ['Vasavi College of Engineering','Hyderabad','Telangana','A++',3.51,'2021-02','c','eng cs',0,''],
+ ['Gayatri Vidya Parishad College of Engineering','Visakhapatnam','Andhra Pradesh','A++',3.52,'2024-07','c','eng cs',0,''],
+ ['Mithibai College of Arts, Chauhan Institute of Science and Amrutben Jivanlal College of Commerce and Economics','Mumbai','Maharashtra','A++',3.55,'2024-11','c','commerce finance arts science econ',0,''],
+ ['Jai Hind College (Empowered Autonomous)','Mumbai','Maharashtra','A+',3.36,'2025-01','c','arts commerce science mgmt',0,''],
+ ['Vishwakarma Institute of Technology','Pune','Maharashtra','A++',3.65,'2024-05','c','eng cs data',0,''],
+ ['College of Engineering Pune (COEP)','Pune','Maharashtra','A+',3.44,'2023-01','c','eng cs',0,''],
+ ['Shri Ram College of Commerce (SRCC)','New Delhi','Delhi','A++',3.75,'2023-03','c','commerce finance econ',0,'University of Delhi college. Admission through CUET-UG.'],
+ ['Hansraj College','New Delhi','Delhi','A++',3.71,'2023-05','c','commerce econ arts science',0,'University of Delhi college. Admission through CUET-UG.'],
+ ['Hindu College','New Delhi','Delhi','A++',3.58,'2024-03','c','arts science econ commerce',0,'University of Delhi college. Admission through CUET-UG.'],
+ ['St. Stephen’s College','New Delhi','Delhi','A++',3.59,'2023-02','c','arts science econ',0,'University of Delhi college.'],
+ ['Miranda House','New Delhi','Delhi','A++',3.54,'2023-01','c','arts science econ social',1,'Women only. University of Delhi college; admission through CUET-UG.'],
+ ['Lady Shri Ram College for Women','New Delhi','Delhi','A++',3.53,'2022-07','c','commerce econ arts psych social science',1,'Women only. University of Delhi college.'],
+ ['Kirori Mal College','New Delhi','Delhi','A++',3.54,'2022-12','c','arts commerce econ science',0,'University of Delhi college.'],
+ ['Atma Ram Sanatan Dharma College','New Delhi','Delhi','A++',3.77,'2023-04','c','commerce arts science econ',0,'University of Delhi college.'],
+ ['Ramanujan College','New Delhi','Delhi','A++',3.71,'2022-05','c','commerce arts science',0,'University of Delhi college.'],
+ ['Shaheed Sukhdev College of Business Studies','New Delhi','Delhi','A+',3.46,'2022-04','c','mgmt finance commerce',0,'University of Delhi college.'],
+ ['Sri Venkateswara College','New Delhi','Delhi','A+',3.44,'2022-05','c','arts science commerce econ',0,'University of Delhi college.'],
+ ['Sri Guru Gobind Singh College of Commerce','New Delhi','Delhi','A++',3.51,'2022-05','c','commerce finance',0,'University of Delhi college.'],
+ ['Jesus and Mary College','New Delhi','Delhi','A+',3.35,'2021-11','c','arts science commerce social',1,'Women only. University of Delhi college.'],
+ ['Vivekananda Institute of Professional Studies (VIPS-TC)','New Delhi','Delhi','A++',3.58,'2023-01','c','law mgmt media econ cs eng',0,'GGSIPU-affiliated college.'],
+ ['Swami Keshvanand Institute of Technology, Management and Gramothan','Jaipur','Rajasthan','A++',3.67,'2022-05','c','eng cs mgmt',0,''],
+ ['Ajay Kumar Garg Engineering College','Ghaziabad','Uttar Pradesh','A++',3.53,'2023-05','c','eng cs',0,''],
+ ['Jaipuria Institute of Management','Lucknow','Uttar Pradesh','A+',3.45,'2023-08','c','mgmt',0,''],
+ ['Prestige Institute of Management and Research','Indore','Madhya Pradesh','A++',3.57,'2021-03','c','mgmt commerce',0,''],
+ ['Madhav Institute of Technology and Science','Gwalior','Madhya Pradesh','A++',3.53,'2023-08','c','eng cs',0,''],
+ ['Regional Institute of Education','Bhopal','Madhya Pradesh','A++',3.57,'2023-07','c','edu science',0,''],
+ ['St. Xavier’s College (Autonomous)','Kolkata','West Bengal','A++',3.53,'2024-11','c','arts commerce science media econ psych social',0,''],
+ ['Ramakrishna Mission Vivekananda Centenary College','Rahara (Kolkata)','West Bengal','A++',3.80,'2023-03','c','arts commerce science econ',0,''],
+ ['Ramakrishna Mission Vidyamandira','Belur (Howrah)','West Bengal','A++',3.58,'2021-09','c','arts science',0,''],
+ ['Ramakrishna Mission Residential College (Autonomous)','Narendrapur (Kolkata)','West Bengal','A+',3.46,'2021-10','c','arts science',0,''],
+ ['B. Borooah College','Guwahati','Assam','A++',3.62,'2023-10','c','arts science commerce',0,''],
+ ['Patna Women’s College','Patna','Bihar','A++',3.51,'2024-05','c','arts science commerce social media',1,'Women only.'],
+ ['Gandhi Institute for Technology (GIFT)','Bhubaneswar','Odisha','A++',3.80,'2022-04','c','eng cs mgmt',0,''],
+ ['King George’s Medical University','Lucknow','Uttar Pradesh','A++',3.67,'2025-08','u','med health',0,'Government medical university. MBBS admission is through NEET-UG counselling.'],
+ ['JSS Academy of Higher Education and Research','Mysuru','Karnataka','A++',3.61,'2024-10','u','med health pharm bio science',0,''],
+ ['Sumandeep Vidyapeeth','Vadodara','Gujarat','A++',3.61,'2022-01','u','med health pharm',0,''],
+ ['D. Y. Patil Deemed to be University','Navi Mumbai','Maharashtra','A++',3.59,'2022-11','u','med health pharm eng arch mgmt',0,''],
+ ['Sri Balaji Vidyapeeth','Puducherry','Puducherry','A++',3.58,'2021-12','u','med health pharm',0,''],
+ ['MGM Institute of Health Sciences','Navi Mumbai','Maharashtra','A++',3.55,'2022-07','u','med health pharm',0,''],
+ ['Chettinad Academy of Research and Education','Kelambakkam (Chennai)','Tamil Nadu','A++',3.71,'2022-06','u','med health pharm bio',0,''],
+ ['D. Y. Patil Education Society (Deemed to be University)','Kolhapur','Maharashtra','A++',3.53,'2023-12','u','med health pharm eng',0,''],
+ ['Maharishi Markandeshwar (Deemed to be University)','Mullana (Ambala)','Haryana','A++',3.53,'2021-12','u','med health pharm eng mgmt',0,''],
+ ['Meenakshi Academy of Higher Education and Research','Chennai','Tamil Nadu','A+',3.50,'2023-11','u','med health pharm',0,''],
+ ['Dr. M.G.R. Educational and Research Institute','Chennai','Tamil Nadu','A+',3.48,'2022-08','u','eng med health pharm mgmt',0,''],
+ ['Yenepoya (Deemed to be University)','Mangaluru','Karnataka','A+',3.47,'2022-08','u','med health pharm',0,''],
+ ['Nitte (Deemed to be University)','Mangaluru','Karnataka','A+',3.40,'2021-03','u','med health pharm eng mgmt',0,''],
+ ['Sri Siddhartha Academy of Higher Education','Tumakuru','Karnataka','A+',3.40,'2023-08','u','med health pharm eng',0,''],
+ ['KLE Academy of Higher Education and Research','Belagavi','Karnataka','A+',3.39,'2021-09','u','med health pharm',0,''],
+ ['Krishna Institute of Medical Sciences (Deemed to be University)','Karad','Maharashtra','A+',3.39,'2021-10','u','med health pharm',0,''],
+ ['Adichunchanagiri University','B G Nagara (Mandya)','Karnataka','A+',3.39,'2024-08','u','med health pharm eng',0,''],
+ ['Swami Rama Himalayan University','Dehradun','Uttarakhand','A+',3.27,'2024-10','u','med health pharm',0,''],
+ ['Delhi Pharmaceutical Sciences and Research University','New Delhi','Delhi','A',3.02,'2023-08','u','pharm health',0,''],
+ ['Teerthanker Mahaveer University','Moradabad','Uttar Pradesh','A',3.15,'2022-06','u','med health pharm eng',0,''],
+ ['Sikkim Manipal University','Gangtok','Sikkim','A+',3.28,'2022-08','u','eng med health mgmt',0,''],
+ ['Integral University','Lucknow','Uttar Pradesh','A+',3.40,'2023-05','u','eng pharm health mgmt',0,''],
+ ['Vels Institute of Science, Technology and Advanced Studies (VISTAS)','Chennai','Tamil Nadu','A++',3.52,'2024-10','u','eng pharm health mgmt law',0,''],
+ ['Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology','Chennai','Tamil Nadu','A++',3.53,'2023-02','u','eng cs data mgmt',0,''],
+ ['Kalasalingam Academy of Research and Education','Krishnankoil','Tamil Nadu','A++',3.51,'2024-02','u','eng cs data science',0,''],
+ ['Hindustan Institute of Technology and Science','Chennai','Tamil Nadu','A+',3.48,'2023-10','u','eng cs arch design mgmt',0,''],
+ ['Vignan’s Foundation for Science, Technology and Research','Vadlamudi (Guntur)','Andhra Pradesh','A+',3.49,'2021-10','u','eng cs pharm science',0,''],
+ ['Bennett University','Greater Noida','Uttar Pradesh','A+',3.48,'2025-01','u','eng cs data mgmt law media',0,''],
+ ['Indian Institute of Space Science and Technology (IIST)','Thiruvananthapuram','Kerala','A+',3.47,'2025-03','u','eng science',0,'Space science and technology institute. Admission through JEE Advanced.'],
+ ['GLA University','Mathura','Uttar Pradesh','A+',3.46,'2023-01','u','eng cs mgmt pharm',0,''],
+ ['Jawaharlal Nehru Technological University Kakinada','Kakinada','Andhra Pradesh','A+',3.45,'2023-05','u','eng cs',0,''],
+ ['Pondicherry University','Puducherry','Puducherry','A+',3.43,'2025-06','u','arts science eng mgmt social',0,''],
+ ['Jaypee University of Information Technology','Solan','Himachal Pradesh','A+',3.40,'2024-04','u','eng cs bio science',0,''],
+ ['Cochin University of Science and Technology','Kochi','Kerala','A+',3.39,'2022-10','u','eng science cs',0,''],
+ ['Guru Jambheshwar University of Science and Technology','Hisar','Haryana','A+',3.38,'2022-10','u','eng science',0,''],
+ ['Centurion University of Technology and Management','Bhubaneswar and Paralakhemundi','Odisha','A+',3.37,'2023-08','u','eng agri mgmt',0,''],
+ ['International Institute of Information Technology (IIIT) Bangalore','Bengaluru','Karnataka','A+',3.37,'2021-12','u','cs data eng',0,''],
+ ['B. S. Abdur Rahman Crescent Institute of Science and Technology','Chennai','Tamil Nadu','A+',3.33,'2021-02','u','eng cs mgmt law',0,''],
+ ['Karpagam Academy of Higher Education','Coimbatore','Tamil Nadu','A+',3.33,'2021-12','u','eng pharm health mgmt',0,''],
+ ['M. S. Ramaiah University of Applied Sciences','Bengaluru','Karnataka','A+',3.33,'2024-06','u','eng health pharm design mgmt',0,''],
+ ['Jawaharlal Nehru Technological University Hyderabad','Hyderabad','Telangana','A+',3.32,'2023-07','u','eng cs pharm',0,''],
+ ['Central University of Punjab','Bathinda','Punjab','A+',3.30,'2023-02','u','science bio arts',0,''],
+ ['Reva University','Bengaluru','Karnataka','A+',3.30,'2024-04','u','eng cs mgmt',0,''],
+ ['Shoolini University of Biotechnology and Management Sciences','Solan','Himachal Pradesh','A+',3.30,'2024-11','u','bio science pharm mgmt eng',0,''],
+ ['Dayananda Sagar University','Bengaluru','Karnataka','A+',3.31,'2024-03','u','eng health pharm mgmt',0,''],
+ ['University of Agricultural Sciences, Bangalore','Bengaluru','Karnataka','A+',3.27,'2025-02','u','agri bio science',0,''],
+ ['Charotar University of Science and Technology','Changa (Anand)','Gujarat','A+',3.26,'2022-07','u','eng pharm health science',0,''],
+ ['Chitkara University','Rajpura (Patiala)','Punjab','A+',3.26,'2021-09','u','eng cs mgmt health',0,''],
+ ['Gujarat Technological University','Ahmedabad','Gujarat','A+',3.26,'2023-02','u','eng cs pharm',0,''],
+ ['Jaypee University of Engineering and Technology','Guna','Madhya Pradesh','A+',3.26,'2023-03','u','eng cs',0,''],
+ ['Harcourt Butler Technical University','Kanpur','Uttar Pradesh','A+',3.29,'2023-06','u','eng cs',0,''],
+ ['Acharya Narendra Deva University of Agriculture and Technology','Ayodhya','Uttar Pradesh','A++',3.53,'2024-05','u','agri bio science',0,''],
+ ['Bihar Agricultural University','Bhagalpur (Sabour)','Bihar','A',3.08,'2025-06','u','agri bio science',0,''],
+ ['Sant Longowal Institute of Engineering and Technology','Longowal','Punjab','A',3.02,'2023-09','u','eng cs science',0,''],
+ ['LNM Institute of Information Technology','Jaipur','Rajasthan','A',3.03,'2023-03','u','cs eng data',0,''],
+ ['Jaypee Institute of Information Technology','Noida','Uttar Pradesh','A',3.10,'2023-01','u','eng cs data',0,''],
+ ['Madan Mohan Malaviya University of Technology','Gorakhpur','Uttar Pradesh','A',3.10,'2022-06','u','eng cs',0,''],
+ ['KLE Technological University','Hubballi','Karnataka','A',3.10,'2022-03','u','eng cs',0,''],
+ ['Dharmsinh Desai University','Nadiad','Gujarat','A',3.15,'2023-12','u','eng cs pharm science',0,''],
+ ['DIT University','Dehradun','Uttarakhand','A',3.19,'2023-07','u','eng cs mgmt',0,''],
+ ['Adamas University','Kolkata','West Bengal','A',3.01,'2025-02','u','eng cs science mgmt',0,''],
+ ['Bharathiar University','Coimbatore','Tamil Nadu','A++',3.63,'2023-03','u','science arts commerce bio',0,''],
+ ['Sri Krishna College of Engineering and Technology','Coimbatore','Tamil Nadu','A++',3.71,'2024-08','c','eng cs data',0,''],
+ ['Hindusthan College of Engineering and Technology','Coimbatore','Tamil Nadu','A++',3.69,'2023-10','c','eng cs',0,''],
+ ['Kumaraguru College of Technology','Coimbatore','Tamil Nadu','A++',3.62,'2022-08','c','eng cs data',0,''],
+ ['Sona College of Technology','Salem','Tamil Nadu','A++',3.65,'2024-05','c','eng cs',0,''],
+ ['Rajalakshmi Engineering College','Chennai','Tamil Nadu','A++',3.62,'2023-04','c','eng cs data',0,''],
+ ['Kongu Engineering College (Autonomous)','Perundurai (Erode)','Tamil Nadu','A++',3.52,'2022-03','c','eng cs',0,''],
+ ['K.S.R. College of Engineering','Tiruchengode','Tamil Nadu','A++',3.69,'2023-01','c','eng cs',0,''],
+ ['CMR Institute of Technology','Bengaluru','Karnataka','A++',3.71,'2022-10','c','eng cs data',0,''],
+ ['Atria Institute of Technology','Bengaluru','Karnataka','A++',3.54,'2023-07','c','eng cs',0,''],
+ ['DNR College of Engineering and Technology','Bhimavaram','Andhra Pradesh','A++',3.73,'2023-08','c','eng cs',0,''],
+ ['Potti Sriramulu Chalavadi Mallikarjuna Rao College of Engineering and Technology','Vijayawada','Andhra Pradesh','A++',3.68,'2023-04','c','eng cs',0,''],
+ ['Godavari Institute of Engineering and Technology','Rajahmundry','Andhra Pradesh','A++',3.58,'2024-04','c','eng cs',0,''],
+ ['Vignan Pharmacy College','Vadlamudi (Guntur)','Andhra Pradesh','A++',3.65,'2023-08','c','pharm health',0,''],
+ ['Vignan Institute of Pharmaceutical Technology','Visakhapatnam','Andhra Pradesh','A++',3.56,'2023-08','c','pharm health',0,''],
+ ['Vardhaman College of Engineering','Hyderabad','Telangana','A++',3.58,'2021-03','c','eng cs data',0,''],
+ ['Gokaraju Rangaraju Institute of Engineering and Technology','Hyderabad','Telangana','A++',3.55,'2021-02','c','eng cs data',0,''],
+ ['Mahatma Gandhi Institute of Technology','Hyderabad','Telangana','A++',3.53,'2023-11','c','eng cs',0,''],
+ ['Institute of Aeronautical Engineering','Hyderabad','Telangana','A++',3.62,'2023-12','c','eng cs',0,''],
+ ['Sri Venkateswara Dental College and Hospital','Chennai','Tamil Nadu','A++',3.57,'2023-03','c','med health',0,''],
+ ['Sibar Institute of Dental Sciences','Guntur','Andhra Pradesh','A++',3.56,'2024-02','c','med health',0,''],
+ ['BLDEA’s Shri Sanganabasava Mahaswamiji College of Pharmacy and Research Centre','Vijayapura','Karnataka','A++',3.51,'2022-06','c','pharm health',0,''],
+ ['St. Aloysius College (Autonomous)','Mangaluru','Karnataka','A++',3.67,'2023-01','c','arts science commerce bio',0,''],
+ ['Sri Dharmasthala Manjunatheshwara College (Autonomous), Ujire','Ujire','Karnataka','A++',3.56,'2023-02','c','arts science commerce bio',0,''],
+ ['K.L.E. Society’s P.C. Jabin Science College','Hubballi','Karnataka','A++',3.54,'2023-07','c','science bio',0,''],
+ ['Marian College','Kuttikkanam','Kerala','A++',3.71,'2023-04','c','science arts commerce',0,''],
+ ['Newman College','Thodupuzha','Kerala','A++',3.71,'2024-04','c','science arts commerce',0,''],
+ ['Dr. D. Y. Patil Institute of Pharmaceutical Sciences and Research','Pimpri (Pune)','Maharashtra','A++',3.77,'2022-12','c','pharm health',0,''],
+ ['Dr. D. Y. Patil Institute of Technology','Pimpri (Pune)','Maharashtra','A++',3.74,'2023-09','c','eng cs',0,''],
+ ['Modern College of Engineering','Pune','Maharashtra','A++',3.66,'2022-10','c','eng cs',0,''],
+ ['Pimpri Chinchwad College of Engineering and Research','Ravet (Pune)','Maharashtra','A++',3.54,'2023-05','c','eng cs',0,''],
+ ['MGM Dental College and Hospital','Navi Mumbai','Maharashtra','A++',3.70,'2023-03','c','med health',0,''],
+ ['Dr. Bhanuben Nanavati College of Pharmacy','Mumbai','Maharashtra','A++',3.64,'2024-03','c','pharm health',0,''],
+ ['G. H. Raisoni College of Engineering','Nagpur','Maharashtra','A++',3.55,'2023-06','c','eng cs',0,''],
+ ['Yeshwantrao Chavan College of Engineering','Nagpur','Maharashtra','A++',3.60,'2022-05','c','eng cs',0,''],
+ ['Rajarshi Chhatrapati Shahu College','Kolhapur','Maharashtra','A++',3.78,'2023-08','c','science arts commerce',0,''],
+ ['Yashavantrao Chavan Institute of Science','Satara','Maharashtra','A++',3.61,'2025-01','c','science bio',0,''],
+ ['Shri Manibhai Virani and Smt. Navalben Virani Science College','Rajkot','Gujarat','A++',3.65,'2024-02','c','science bio',0,''],
+ ['Bhaskaracharya College of Applied Sciences','New Delhi','Delhi','A++',3.60,'2023-07','c','science cs data',0,'University of Delhi college. Admission through CUET-UG.'],
+ ['Government Holkar (Model, Autonomous) Science College','Indore','Madhya Pradesh','A++',3.64,'2024-02','c','science bio',0,''],
+ ['Roorkee Institute of Technology','Roorkee','Uttarakhand','A++',3.62,'2023-08','c','eng cs',0,''],
+];
+const INSTITUTIONS=RAW.map(r=>({n:r[0],c:r[1],s:r[2],g:r[3],cg:r[4],d:r[5],k:r[6],tags:r[7].split(' '),women:!!r[8],note:r[9],r:STATE_REGION[r[2]]||'north'}));
+const TAG_ADD={
+ 'Manipal Academy of Higher Education (MAHE)':['med','pharm','bio'],'SRM Institute of Science and Technology':['med','pharm','bio'],'Amrita Vishwa Vidyapeetham':['med','pharm','bio'],
+ 'Saveetha Institute of Medical and Technical Sciences':['med','pharm'],'Sri Ramachandra Institute of Higher Education and Research':['med','pharm','bio'],
+ 'Datta Meghe Institute of Higher Education and Research':['med','pharm'],'Dr. D. Y. Patil Vidyapeeth':['med','pharm'],'Bharati Vidyapeeth (Deemed to be University)':['med','pharm'],
+ 'Jamia Hamdard':['med','pharm'],'Aligarh Muslim University':['med','pharm'],'Lovely Professional University (LPU)':['med','pharm','bio','agri'],
+ 'Chandigarh University':['pharm','bio'],'Manav Rachna International Institute of Research and Studies':['med','pharm'],'Karunya Institute of Technology and Sciences':['bio'],
+ 'Vellore Institute of Technology (VIT)':['bio'],'SASTRA Deemed University':['bio'],'KIIT (Kalinga Institute of Industrial Technology)':['med','pharm','bio'],
+ 'Siksha ‘O’ Anusandhan':['med','pharm','bio'],'Nirma University':['pharm'],'Institute of Chemical Technology (ICT)':['pharm','bio'],'Parul University':['med','pharm'],
+ 'Symbiosis International (Deemed University)':['med'],'Birla Institute of Technology and Science (BITS) Pilani':['pharm'],'Thapar Institute of Engineering and Technology':['bio'],
+ 'GITAM (Deemed to be University)':['med','pharm'],'Anna University':['bio'],'Jadavpur University':['pharm'],'Panjab University':['pharm'],'Andhra University':['pharm']
+};
+INSTITUTIONS.forEach(i=>{
+  (TAG_ADD[i.n]||[]).forEach(t=>{if(!i.tags.includes(t))i.tags.push(t);});
+  if(i.k==='u'&&i.tags.includes('arts')&&i.tags.includes('science')&&!i.tags.includes('bio'))i.tags.push('bio');
+});
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const declared=d=>{const p=d.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
+const isOld=d=>{const p=d.split('-').map(Number),n=new Date();return (n.getFullYear()-p[0])*12+(n.getMonth()+1-p[1])>60;};
+
+/* ---------- ADMISSIONS (checked 24 October 2026) ---------- */
+const ADM_CHECKED='24 October 2026';
+const CUET_ROUTE={st:'info',head:'Through CUET-UG',dl:'CUET-UG 2027 dates are not yet official. Registration is widely expected between January and February 2027, so watch the NTA site.',iso:null,route:'Register for CUET-UG with NTA first. After the results, follow the college or university’s own seat-allocation process on its official website.',url:'https://cuet.nta.nic.in/',label:'CUET-UG official site'};
+const CLAT_ROUTE={st:'open',head:'Closing soon',dl:'CLAT 2027 registration closes 31 Oct 2026, 11:59 pm.',iso:'2026-10-31',route:'CLAT 2027 (pen and paper) on 6 Dec 2026, 2 to 4 pm. Counselling is expected from late December 2026.',url:'https://consortiumofnlus.ac.in/',label:'Consortium of NLUs'};
+const ADM={
+ 'CHRIST (Deemed to be University)':{st:'open',head:'Applications open',dl:'25 Nov 2026, 5 pm for programmes with an entrance test; 6 Dec 2026, 5 pm for programmes without one.',iso:'2026-11-25',route:'Christ Entrance Test (online) on 5 Dec 2026, then a skills assessment, micro-presentation and interview on 11 to 13 Dec. Final selection list on 21 Dec 2026.',more:'This is the first selection round. A later round is usually held in spring; its 2027 dates are not announced. One form covers one programme.',url:'https://christuniversity.in/',label:'Christ University website'},
+ 'JAIN (Deemed-to-be University)':{st:'open',head:'Applications open',dl:'The sources we checked show no final UG closing date. One portal lists the first JET window as 5 to 31 Oct 2026, so apply early.',iso:null,route:'Jain Entrance Test (JET). The BBA test is online and remote-proctored; other programmes may add a group discussion or interview.',url:'https://www.jainuniversity.ac.in/',label:'Jain University website'},
+ 'SVKM’s NMIMS (Deemed-to-be University)':{st:'soon',head:'Expected to open soon',dl:'NPAT 2027 dates were not confirmed in the sources we checked. Registration is expected to start around December 2026 and run to about May 2027.',iso:null,route:'NMIMS NPAT, an online computer-based test, for BBA and similar programmes.',url:'https://www.nmims.edu/',label:'NMIMS website'},
+ 'Symbiosis International (Deemed University)':{st:'soon',head:'Expected to open soon',dl:'SET 2027 dates are not yet official. Registration is expected to open in December 2026 and close around April 2027, with the exam in May 2027.',iso:null,route:'Symbiosis Entrance Test (SET), online, followed by a personal interaction round for shortlisted candidates.',url:'https://set-test.org/',label:'SET official site'},
+ 'Vellore Institute of Technology (VIT)':{st:'open',head:'Applications open (B.Tech)',dl:'31 Mar 2027.',iso:'2027-03-31',route:'VITEEE 2027, online, tentatively 27 to 30 Apr 2027. The fee is paid online and is non-refundable. Check the VIT site for non-engineering programmes.',url:'https://viteee.vit.ac.in/',label:'VITEEE site'},
+ 'Manipal Academy of Higher Education (MAHE)':{st:'open',head:'Applications open',dl:'Phase 1 closes in March 2027. Sources give 15 or 31 March, so treat 15 Mar 2027 as the safe date.',iso:'2027-03-15',route:'Manipal Entrance Test (MET), computer-based, with the Phase 1 exam tentatively in April 2027. Some programmes use other routes, so check the course page.',url:'https://manipal.edu/',label:'MAHE website'},
+ 'SRM Institute of Science and Technology':{st:'soon',head:'Expected to open soon',dl:'SRMJEEE 2027 registration is expected to start around November 2026 and run in phases to about June 2027. Not yet confirmed.',iso:null,route:'SRMJEEE in phases (tentatively April, June and July 2027).',url:'https://www.srmist.edu.in/admission-india/',label:'SRM admissions'},
+ 'NALSAR University of Law':CLAT_ROUTE,
+ 'West Bengal National University of Juridical Sciences (NUJS)':CLAT_ROUTE,
+ 'Loyola College (Autonomous)':{st:'closed',head:'Closed for now',dl:'Admissions for 2026-27 have ended. Dates for the 2027-28 cycle are not announced.',iso:null,route:'Apply on the college’s admission portal when the new cycle opens.',url:'https://loyolacollege.edu/',label:'Loyola College website'},
+ 'Miranda House':Object.assign({},CUET_ROUTE,{site:'https://www.mirandahouse.ac.in/',siteLabel:'Miranda House website'}),
+ 'Kirori Mal College':Object.assign({},CUET_ROUTE,{site:'https://kmc.du.ac.in/',siteLabel:'Kirori Mal College website'})
+};
+function admFor(i){
+  if(ADM[i.n])return ADM[i.n];
+  if(i.n==='University of Delhi'||(i.note||'').includes('University of Delhi college'))return CUET_ROUTE;
+  return null;
+}
+const DEADLINES=[
+ {t:'CLAT 2027 (five-year law degrees at NLUs)',st:'open',when:'Closes 31 Oct 2026, 11:59 pm',iso:'2026-10-31',sub:'Exam on 6 Dec 2026. Covers national law universities such as NALSAR and NUJS Kolkata.',url:'https://consortiumofnlus.ac.in/',label:'Consortium of NLUs'},
+ {t:'CHRIST University (UG, first selection round)',st:'open',when:'25 Nov 2026 for entrance-test programmes; 6 Dec 2026 for others',iso:'2026-11-25',sub:'Entrance test on 5 Dec 2026. Final selection list on 21 Dec 2026.',url:'https://christuniversity.in/',label:'Christ University website'},
+ {t:'MAHE Manipal (MET, Phase 1)',st:'open',when:'15 Mar 2027 (some sources say 31 Mar)',iso:'2027-03-15',sub:'Computer-based test, Phase 1 tentatively in April 2027.',url:'https://manipal.edu/',label:'MAHE website'},
+ {t:'VIT (VITEEE for B.Tech)',st:'open',when:'31 Mar 2027',iso:'2027-03-31',sub:'Exam tentatively 27 to 30 Apr 2027.',url:'https://viteee.vit.ac.in/',label:'VITEEE site'},
+ {t:'JAIN University (JET)',st:'open',when:'Open now; UG closing date not announced',iso:null,sub:'Apply early. Admission is mainly through the Jain Entrance Test.',url:'https://www.jainuniversity.ac.in/',label:'Jain University website'},
+ {t:'SRM Institute (SRMJEEE)',st:'soon',when:'Registration expected from about Nov 2026',iso:null,sub:'Phased exams, tentatively April to July 2027.',url:'https://www.srmist.edu.in/admission-india/',label:'SRM admissions'},
+ {t:'CUET-UG 2027 (Delhi University colleges and many central universities)',st:'soon',when:'Not announced; expected Jan to Feb 2027',iso:null,sub:'Sources disagree on the opening month, so watch the NTA site. Exam expected in May 2027.',url:'https://cuet.nta.nic.in/',label:'CUET-UG official site'},
+ {t:'Symbiosis SET 2027',st:'soon',when:'Expected Dec 2026 to Apr 2027',iso:null,sub:'Exam expected in May 2027, in two online sessions.',url:'https://set-test.org/',label:'SET official site'},
+ {t:'NMIMS NPAT 2027',st:'soon',when:'Expected Dec 2026 to about May 2027',iso:null,sub:'Online computer-based test in several phases.',url:'https://www.nmims.edu/',label:'NMIMS website'}
+];
+const ST={open:['Applications open','st-open'],soon:['Opens soon (expected)','st-soon'],info:['Through an entrance exam','st-info'],closed:['Closed for now','st-closed']};
+function daysLeft(iso){const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(iso+'T00:00:00')-t)/86400000);}
+function dlText(iso){const n=daysLeft(iso);return n<0?'Deadline passed':n===0?'Closes today':n===1?'1 day left':n+' days left';}
+const extLink=(u,l,cls)=>`<a class="btn ${cls||''} small" href="${u}" target="_blank" rel="noopener noreferrer">${l}</a>`;
+function admBlock(i){
+  const a=admFor(i);
+  if(!a){
+    return `<div class="adm adm-none"><h4>Admissions</h4><p>We have not checked this institution’s admission status. Open its website, find the admissions page and confirm the dates before you apply.</p></div>`;
+  }
+  const left=a.iso?` <span class="left${daysLeft(a.iso)>=0&&daysLeft(a.iso)<=14?' urgent':''}">${dlText(a.iso)}</span>`:'';
+  return `<div class="adm"><h4>Admissions <span class="st ${ST[a.st][1]}">${a.head||ST[a.st][0]}</span></h4>
+    <p><strong>Deadline:</strong> ${a.dl}${left}</p>
+    <p><strong>How you get in:</strong> ${a.route}</p>
+    ${a.more?`<p class="hint">${a.more}</p>`:''}
+    <p class="links">${extLink(a.url,a.label)}${a.site?' '+extLink(a.site,a.siteLabel,'ghost'):''}</p>
+    <p class="hint">Last checked ${ADM_CHECKED} from education portals’ reports of official notices. Confirm on the official site.</p></div>`;
+}
+function deadlinesHTML(){
+  return `<div class="dls">`+DEADLINES.map(d=>{
+    const left=d.iso?` <span class="left${daysLeft(d.iso)>=0&&daysLeft(d.iso)<=14?' urgent':''}">${dlText(d.iso)}</span>`:'';
+    return `<div class="dl"><div class="dl-main"><h3>${d.t}</h3><p class="dl-when"><strong>${d.when}</strong>${left}</p><p class="dl-sub">${d.sub}</p></div><div class="dl-side"><span class="st ${ST[d.st][1]}">${ST[d.st][0]}</span>${extLink(d.url,d.label,'ghost')}</div></div>`;
+  }).join('')+`</div>`;
+}
+function closingBanner(){
+  const soon=DEADLINES.filter(d=>d.iso&&daysLeft(d.iso)>=0&&daysLeft(d.iso)<=14);
+  if(!soon.length)return '';
+  return `<div class="alert noprint" role="status"><strong>Closing soon:</strong> ${soon.map(d=>`${d.t}, ${dlText(d.iso).toLowerCase()} (${d.when})`).join('; ')}. See “Admission dates and deadlines” below.</div>`;
+}
+const HOW_TO=`<div class="how">
+ <details><summary>Before you start: documents and details to keep ready</summary>
+  <ul><li>Class 10 and Class 12 marksheets (or the latest predicted or school results if Class 12 is still running).</li>
+  <li>Aadhaar or another photo ID, and a recent passport-size photo and signature as scanned images.</li>
+  <li>Category or income certificates, if you are applying under a reserved category or for a scholarship.</li>
+  <li>A personal email address and a mobile number you will keep for the next year. Colleges send OTPs, admit cards and offers there.</li>
+  <li>A debit card, credit card or UPI for the application fee. Fees are usually non-refundable, so confirm eligibility first.</li></ul>
+ </details>
+ <details><summary>Step by step: how to fill an online application form</summary>
+  <ol>
+   <li><strong>Find the official admissions page.</strong> Start from the link on a card above or the college’s own main site. A real institution’s address usually ends in .ac.in, .edu.in or .edu. Never apply through an agent’s page.</li>
+   <li><strong>Check eligibility.</strong> Look at the Class 12 subjects, minimum marks and entrance test for your programme. Christ, for example, takes one form per programme.</li>
+   <li><strong>Register an account.</strong> Use your own email and mobile number, verify the OTP, and note your login ID and password.</li>
+   <li><strong>Fill in your details.</strong> Match your name, date of birth and marks to your marksheet and ID exactly. Choose the programme, campus and, where asked, the test city and date.</li>
+   <li><strong>Upload documents.</strong> Check the size and format limits on the page before uploading your photo, signature and marksheets.</li>
+   <li><strong>Pay the application fee online</strong> and save the receipt.</li>
+   <li><strong>Submit and download the confirmation page.</strong> Keep a PDF or screenshot. If the portal has a correction window, check your form again during it.</li>
+   <li><strong>Download your admit card</strong> when it is released, and take the test or interview on the date given.</li>
+   <li><strong>Watch your email and the portal</strong> for results, counselling and offers. Pay seat fees only on the official portal.</li>
+  </ol>
+  <p class="hint">Apply well before the deadline. Portals slow down in the last days, and late fixes are often not allowed.</p>
+ </details>
+ <details><summary>Exam and college specific notes</summary>
+  <ul>
+   <li><strong>CUET-UG (Delhi University colleges and many central universities).</strong> You register once with NTA, not with each college. You fill in your details, choose your subjects (a portal reports up to five, including one language), upload your photo and signature, pay a fee based on the number of subjects, and download the confirmation page. After the results you follow each university’s own admission or counselling process.</li>
+   <li><strong>CHRIST University.</strong> Apply on its admission portal, fill the programme form, pay the fee and upload your marks cards. Programmes with an entrance test use an online test on 5 Dec 2026, then a skills assessment and interview.</li>
+   <li><strong>JAIN University.</strong> Register, verify the OTP, fill in the form, upload documents and pay the fee on its website. Admission is mainly through the Jain Entrance Test.</li>
+   <li><strong>Symbiosis (SET).</strong> You apply for the exam at set-test.org, take SET in May 2027, then register for specific institutes and attend a personal interaction round. All dates are expected, not yet official.</li>
+   <li><strong>VIT (VITEEE) and Manipal (MET).</strong> Both are online applications for B.Tech. VIT’s closing date is 31 Mar 2027. Manipal’s Phase 1 closes in March 2027, and its fee covers an application part and a test part.</li>
+   <li><strong>Law (CLAT).</strong> Register on the Consortium of NLUs website, fill the form, upload documents and pay by 31 Oct 2026. A correction window usually follows the closing date.</li>
+  </ul>
+ </details>
+ <details><summary>Avoid mistakes and fake sites</summary>
+  <ul><li>Check that the college is on the UGC and NAAC lists before you pay anything.</li>
+  <li>No genuine college sells a “guaranteed seat” or asks you to pay the fee to a personal account.</li>
+  <li>Use one email and phone number for every form so nothing gets lost.</li>
+  <li>Set calendar reminders for the application deadline, the admit card date, and the seat-fee deadline.</li></ul>
+ </details>
+</div>`;
+
+const WEB={"JAIN (Deemed-to-be University)": ["https://www.jainuniversity.ac.in/", "c"], "CHRIST (Deemed to be University)": ["https://christuniversity.in/", "c"], "SASTRA Deemed University": ["https://www.sastra.edu/", "r"], "Bangalore University": ["https://bangaloreuniversity.ac.in/", "r"], "Andhra University": ["https://www.andhrauniversity.edu.in/", "r"], "Sathyabama Institute of Science and Technology": ["https://www.sathyabama.ac.in/", "r"], "Amrita Vishwa Vidyapeetham": ["https://www.amrita.edu/", "r"], "Vellore Institute of Technology (VIT)": ["https://vit.ac.in/", "c"], "Saveetha Institute of Medical and Technical Sciences": ["https://www.saveetha.com/", "r"], "Manipal Academy of Higher Education (MAHE)": ["https://manipal.edu/", "c"], "Avinashilingam Institute for Home Science and Higher Education for Women": ["https://www.avinuty.ac.in/", "r"], "University of Kerala": ["https://www.keralauniversity.ac.in/", "r"], "Mahatma Gandhi University": ["https://www.mgu.ac.in/", "r"], "University of Madras": ["https://www.unom.ac.in/", "r"], "SRM Institute of Science and Technology": ["https://www.srmist.edu.in/", "c"], "Anna University": ["https://www.annauniv.edu/", "r"], "GITAM (Deemed to be University)": ["https://www.gitam.edu/", "r"], "Sri Ramachandra Institute of Higher Education and Research": ["https://www.sriramachandra.edu.in/", "r"], "Karunya Institute of Technology and Sciences": ["https://www.karunya.edu/", "r"], "ICFAI Foundation for Higher Education (IFHE)": ["https://www.ifheindia.org/", "r"], "NALSAR University of Law": ["https://www.nalsar.ac.in/", "r"], "International Institute of Information Technology (IIIT) Hyderabad": ["https://www.iiit.ac.in/", "c"], "University of Hyderabad": ["https://uohyd.ac.in/", "r"], "KIIT (Kalinga Institute of Industrial Technology)": ["https://kiit.ac.in/", "r"], "Siksha ‘O’ Anusandhan": ["https://www.soa.ac.in/", "r"], "Ravenshaw University": ["https://www.ravenshawuniversity.ac.in/", "r"], "Central University of South Bihar": ["https://cusb.ac.in/", "r"], "Jadavpur University": ["https://jadavpuruniversity.in/", "r"], "Presidency University": ["https://www.presiuniv.ac.in/", "r"], "West Bengal National University of Juridical Sciences (NUJS)": ["https://www.nujs.edu/", "r"], "Tezpur University": ["https://www.tezu.ernet.in/", "r"], "Gauhati University": ["https://www.gauhati.ac.in/", "r"], "Cotton University": ["https://www.cottonuniversity.ac.in/", "r"], "Utkal University": ["https://www.utkaluniversity.ac.in/", "r"], "XIM University": ["https://xim.edu.in/", "r"], "Birla Institute of Technology (BIT) Mesra": ["https://www.bitmesra.ac.in/", "r"], "Mizoram University": ["https://www.mzu.edu.in/", "r"], "SVKM’s NMIMS (Deemed-to-be University)": ["https://www.nmims.edu/", "c"], "University of Mumbai": ["https://mu.ac.in/", "r"], "Dr. D. Y. Patil Vidyapeeth": ["https://dpu.edu.in/", "r"], "Bharati Vidyapeeth (Deemed to be University)": ["https://bvuniversity.edu.in/", "r"], "FLAME University": ["https://www.flame.edu.in/", "r"], "Symbiosis International (Deemed University)": ["https://www.siu.edu.in/", "c"], "Datta Meghe Institute of Higher Education and Research": ["https://www.dmiher.edu.in/", "r"], "Parul University": ["https://paruluniversity.ac.in/", "r"], "Nirma University": ["https://nirmauni.ac.in/", "r"], "Institute of Chemical Technology (ICT)": ["https://www.ictmumbai.edu.in/", "r"], "The Maharaja Sayajirao University of Baroda": ["https://msubaroda.ac.in/", "r"], "Tata Institute of Social Sciences (TISS)": ["https://www.tiss.edu/", "r"], "Ahmedabad University": ["https://ahduni.edu.in/", "r"], "Gujarat University": ["https://www.gujaratuniversity.ac.in/", "r"], "Goa University": ["https://www.unigoa.ac.in/", "r"], "DA-IICT": ["https://www.daiict.ac.in/", "r"], "MIT Art, Design and Technology University": ["https://mituniversity.ac.in/", "r"], "Somaiya Vidyavihar University": ["https://somaiya.edu/", "r"], "Jawaharlal Nehru University (JNU)": ["https://www.jnu.ac.in/", "r"], "Jamia Millia Islamia": ["https://www.jmi.ac.in/", "c"], "University of Delhi": ["https://www.du.ac.in/", "r"], "Guru Gobind Singh Indraprastha University": ["https://www.ipu.ac.in/", "r"], "Banasthali Vidyapith": ["https://www.banasthali.ac.in/", "r"], "Birla Institute of Technology and Science (BITS) Pilani": ["https://www.bits-pilani.ac.in/", "r"], "Thapar Institute of Engineering and Technology": ["https://www.thapar.edu/", "r"], "Panjab University": ["https://puchd.ac.in/", "r"], "Guru Nanak Dev University": ["https://gndu.ac.in/", "r"], "Lovely Professional University (LPU)": ["https://www.lpu.in/", "r"], "Manav Rachna International Institute of Research and Studies": ["https://www.mriirs.edu.in/", "r"], "University of Lucknow": ["https://www.lkouniv.ac.in/", "r"], "Jiwaji University": ["https://www.jiwaji.edu/", "r"], "Guru Ghasidas Vishwavidyalaya": ["https://www.ggu.ac.in/", "r"], "University of Jammu": ["https://www.jammuuniversity.ac.in/", "r"], "University of Kashmir": ["https://www.kashmiruniversity.net/", "r"], "Aligarh Muslim University": ["https://www.amu.ac.in/", "r"], "Amity University Rajasthan": ["https://www.amity.edu/jaipur/", "r"], "Chandigarh University": ["https://www.cuchd.in/", "r"], "Manipal University Jaipur": ["https://jaipur.manipal.edu/", "r"], "Graphic Era (Deemed to be University)": ["https://geu.ac.in/", "c"], "Delhi Technological University": ["https://www.dtu.ac.in/", "r"], "Jamia Hamdard": ["https://jamiahamdard.edu/", "r"], "University of Rajasthan": ["https://uniraj.ac.in/", "r"], "Devi Ahilya Vishwavidyalaya": ["https://www.dauniv.ac.in/", "r"], "Pt. Ravishankar Shukla University": ["https://www.prsu.ac.in/", "r"], "University of Allahabad": ["https://www.allduniv.ac.in/", "r"], "National Law University Delhi": ["https://nludelhi.ac.in/", "r"], "Shiv Nadar University": ["https://snu.edu.in/", "r"], "UPES": ["https://www.upes.ac.in/", "r"], "Loyola College (Autonomous)": ["https://loyolacollege.edu/", "c"], "St Joseph’s College of Commerce (Autonomous)": ["https://sjcc.edu.in/", "r"], "Kristu Jayanti College": ["https://www.kristujayanti.edu.in/", "r"], "Mount Carmel College (Autonomous)": ["https://www.mccblr.edu.in/", "r"], "Jyoti Nivas College (Autonomous)": ["https://jyotinivas.org/", "r"], "Stella Maris College (Autonomous)": ["https://stellamariscollege.edu.in/", "r"], "Women’s Christian College": ["https://www.wcc.edu.in/", "r"], "Ethiraj College for Women (Autonomous)": ["https://www.ethirajcollege.edu.in/", "r"], "PSG College of Arts and Science (Autonomous)": ["https://www.psgcas.ac.in/", "r"], "PSGR Krishnammal College for Women (Autonomous)": ["https://www.psgrkcw.ac.in/", "r"], "Rajagiri College of Social Sciences": ["https://rajagiri.edu/", "r"], "St. Thomas College (Autonomous)": ["https://www.stthomas.ac.in/", "r"], "St. Joseph’s College (Autonomous), Devagiri": ["https://www.devagiricollege.org/", "r"], "Mar Ivanios College (Autonomous)": ["https://www.mic.ac.in/", "r"], "B.M.S. College of Engineering": ["https://bmsce.ac.in/", "r"], "R. V. College of Engineering": ["https://rvce.edu.in/", "r"], "Siddaganga Institute of Technology": ["https://www.sit.ac.in/", "r"], "PSG College of Technology": ["https://www.psgtech.edu/", "r"], "Thiagarajar College of Engineering": ["https://www.tce.edu/", "r"], "Chaitanya Bharathi Institute of Technology": ["https://www.cbit.ac.in/", "r"], "VNR Vignana Jyothi Institute of Engineering and Technology": ["https://vnrvjiet.ac.in/", "r"], "Vasavi College of Engineering": ["https://vce.ac.in/", "r"], "Gayatri Vidya Parishad College of Engineering": ["https://www.gvpce.ac.in/", "r"], "Mithibai College of Arts, Chauhan Institute of Science and Amrutben Jivanlal College of Commerce and Economics": ["https://www.mithibai.ac.in/", "r"], "Jai Hind College (Empowered Autonomous)": ["https://www.jaihindcollege.com/", "r"], "Vishwakarma Institute of Technology": ["https://www.vit.edu/", "r"], "College of Engineering Pune (COEP)": ["https://www.coeptech.ac.in/", "r"], "Shri Ram College of Commerce (SRCC)": ["https://www.srcc.edu/", "r"], "Hansraj College": ["https://hansrajcollege.ac.in/", "r"], "Hindu College": ["https://www.hinducollege.ac.in/", "r"], "St. Stephen’s College": ["https://www.ststephens.edu/", "r"], "Miranda House": ["https://www.mirandahouse.ac.in/", "c"], "Lady Shri Ram College for Women": ["https://lsr.edu.in/", "r"], "Kirori Mal College": ["https://kmc.du.ac.in/", "c"], "Atma Ram Sanatan Dharma College": ["https://arsd.du.ac.in/", "r"], "Ramanujan College": ["https://www.ramanujancollege.ac.in/", "r"], "Shaheed Sukhdev College of Business Studies": ["https://www.sscbsdu.ac.in/", "r"], "Sri Venkateswara College": ["https://www.svc.ac.in/", "r"], "Sri Guru Gobind Singh College of Commerce": ["https://sggscc.ac.in/", "r"], "Jesus and Mary College": ["https://www.jmc.ac.in/", "r"], "Vivekananda Institute of Professional Studies (VIPS-TC)": ["https://vips.edu/", "r"], "Swami Keshvanand Institute of Technology, Management and Gramothan": ["https://www.skit.ac.in/", "r"], "Ajay Kumar Garg Engineering College": ["https://www.akgec.ac.in/", "r"], "Jaipuria Institute of Management": ["https://www.jaipuria.ac.in/", "r"], "Madhav Institute of Technology and Science": ["https://www.mitsgwalior.in/", "r"], "St. Xavier’s College (Autonomous)": ["https://www.sxccal.edu/", "r"], "Ramakrishna Mission Vivekananda Centenary College": ["https://www.rkmvccrahara.org/", "r"], "Ramakrishna Mission Vidyamandira": ["https://www.vidyamandira.ac.in/", "r"], "B. Borooah College": ["https://www.bborooahcollege.ac.in/", "r"], "Patna Women’s College": ["https://www.patnawomenscollege.in/", "r"], "Gandhi Institute for Technology (GIFT)": ["https://gift.edu.in/", "r"]};
+/* WEB[name] = [address, flag]. c = address seen on the institution’s own pages while researching; r = address recalled from general knowledge and not yet verified. */
+/* Addresses below are recalled from general knowledge and not yet verified. */
+Object.assign(WEB,{"Indian Institute of Space Science and Technology (IIST)": ["https://www.iist.ac.in/", "r"], "International Institute of Information Technology (IIIT) Bangalore": ["https://www.iiitb.ac.in/", "r"], "Jawaharlal Nehru Technological University Kakinada": ["https://www.jntuk.edu.in/", "r"], "Jawaharlal Nehru Technological University Hyderabad": ["https://jntuh.ac.in/", "r"], "Pondicherry University": ["https://www.pondiuni.edu.in/", "r"], "Cochin University of Science and Technology": ["https://www.cusat.ac.in/", "r"], "University of Agricultural Sciences, Bangalore": ["https://www.uasbangalore.edu.in/", "r"], "Chitkara University": ["https://www.chitkara.edu.in/", "r"], "Shoolini University of Biotechnology and Management Sciences": ["https://shooliniuniversity.com/", "r"], "Reva University": ["https://www.reva.edu.in/", "r"], "Dayananda Sagar University": ["https://www.dsu.edu.in/", "r"], "M. S. Ramaiah University of Applied Sciences": ["https://www.msruas.ac.in/", "r"], "Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology": ["https://www.veltech.edu.in/", "r"], "Hindustan Institute of Technology and Science": ["https://hindustanuniv.ac.in/", "r"], "Vignan’s Foundation for Science, Technology and Research": ["https://vignan.ac.in/", "r"], "Bennett University": ["https://www.bennett.edu.in/", "r"], "GLA University": ["https://www.gla.ac.in/", "r"], "Nitte (Deemed to be University)": ["https://www.nitte.edu.in/", "r"], "Yenepoya (Deemed to be University)": ["https://yenepoya.edu.in/", "r"], "KLE Academy of Higher Education and Research": ["https://www.kledeemeduniversity.edu.in/", "r"], "MGM Institute of Health Sciences": ["https://www.mgmuhs.com/", "r"], "Dr. M.G.R. Educational and Research Institute": ["https://www.drmgrdu.ac.in/", "r"], "Sri Balaji Vidyapeeth": ["https://www.sbvu.ac.in/", "r"], "Chettinad Academy of Research and Education": ["https://www.care.edu.in/", "r"], "JSS Academy of Higher Education and Research": ["https://jssuni.edu.in/", "r"], "Swami Rama Himalayan University": ["https://www.srhu.edu.in/", "r"], "Teerthanker Mahaveer University": ["https://www.tmu.ac.in/", "r"], "Integral University": ["https://www.iul.ac.in/", "r"], "Sikkim Manipal University": ["https://www.smu.edu.in/", "r"], "King George’s Medical University": ["https://kgmu.org/", "r"], "Bharathiar University": ["https://b-u.ac.in/", "r"], "Kalasalingam Academy of Research and Education": ["https://kalasalingam.ac.in/", "r"], "Karpagam Academy of Higher Education": ["https://kahedu.edu.in/", "r"], "B. S. Abdur Rahman Crescent Institute of Science and Technology": ["https://www.crescent.education/", "r"], "Gujarat Technological University": ["https://www.gtu.ac.in/", "r"], "Charotar University of Science and Technology": ["https://www.charusat.ac.in/", "r"], "Dharmsinh Desai University": ["https://www.ddu.ac.in/", "r"], "DIT University": ["https://www.dituniversity.edu.in/", "r"], "Jaypee University of Information Technology": ["https://www.juit.ac.in/", "r"], "Jaypee University of Engineering and Technology": ["https://www.juet.ac.in/", "r"], "Harcourt Butler Technical University": ["https://hbtu.ac.in/", "r"], "Madan Mohan Malaviya University of Technology": ["https://mmmut.ac.in/", "r"], "Jaypee Institute of Information Technology": ["https://www.jiit.ac.in/", "r"], "LNM Institute of Information Technology": ["https://www.lnmiit.ac.in/", "r"], "Sant Longowal Institute of Engineering and Technology": ["https://www.sliet.ac.in/", "r"], "Guru Jambheshwar University of Science and Technology": ["https://www.gjust.ac.in/", "r"], "Central University of Punjab": ["https://www.cup.edu.in/", "r"], "Acharya Narendra Deva University of Agriculture and Technology": ["https://nduat.org/", "r"], "Bihar Agricultural University": ["https://www.bausabour.ac.in/", "r"], "Centurion University of Technology and Management": ["https://cutm.ac.in/", "r"], "Adamas University": ["https://adamasuniversity.ac.in/", "r"], "Delhi Pharmaceutical Sciences and Research University": ["https://dpsru.edu.in/", "r"], "KLE Technological University": ["https://www.kletech.ac.in/", "r"], "Vels Institute of Science, Technology and Advanced Studies (VISTAS)": ["https://vistas.ac.in/", "r"], "Meenakshi Academy of Higher Education and Research": ["https://www.maher.ac.in/", "r"], "D. Y. Patil Deemed to be University": ["https://dypatil.edu/", "r"]});
+const host=u=>{try{return new URL(u).hostname.replace(/^www\./,'');}catch(e){return u;}};
+function webRow(i){
+  const w=WEB[i.n];
+  if(!w){
+    const q='https://www.google.com/search?q='+encodeURIComponent(i.n+' '+i.c+' official website');
+    return `<p class="web"><strong>Official website:</strong> not confirmed yet. ${extLink(q,'Search for it','ghost')}</p>`;
+  }
+  const ok=w[1]==='c';
+  return `<p class="web"><strong>Official website:</strong> <a href="${w[0]}" target="_blank" rel="noopener noreferrer">${host(w[0])}</a> <span class="vf ${ok?'vf-ok':'vf-chk'}">${ok?'Confirmed':'Check the address'}</span></p>${ok?'':'<p class="hint">We have not confirmed this address yet. Make sure it matches the college name and ends in .ac.in, .edu.in or .edu before you enter any details.</p>'}`;
+}
+function tableHTML(list){
+  const rows=list.map(i=>{
+    const a=admFor(i),w=WEB[i.n];
+    const adm=a?`<span class="st ${ST[a.st][1]}">${ST[a.st][0]}</span>${a.iso?`<br><span class="hint">${dlText(a.iso)}</span>`:''}`:'<span class="hint">Not checked</span>';
+    const web=w?`<a href="${w[0]}" target="_blank" rel="noopener noreferrer">${host(w[0])}</a><br><span class="vf ${w[1]==='c'?'vf-ok':'vf-chk'}">${w[1]==='c'?'Confirmed':'Check the address'}</span>`:'<span class="hint">Not found yet</span>';
+    return `<tr><td><strong>${i.n}</strong><br><span class="hint">${i.c}, ${i.s}. ${i.k==='u'?'University':'College'}${i.women?'. Women only':''}</span></td><td>${gradeChip(i.g)}<br><span class="hint">CGPA ${i.cg.toFixed(2)}</span></td><td>${adm}</td><td>${web}</td></tr>`;
+  }).join('');
+  return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+/* ---------- STATE ---------- */
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pctText=v=>Math.round(v*100)+'%';
+const regionLabel=()=>state.regions.includes('any')?'across India':'in '+state.regions.map(r=>REGIONS[r].short).join(', ');
+const gradeChip=g=>`<span class="g g${GR[g]}" title="NAAC grade as reported">NAAC ${g}</span>`;
+
+/* ---------- HEXAGON ---------- */
+function hexSVG(pct,top){
+  const cx=200,cy=170,r=100,lr=128;
+  const ang=k=>(-90+60*k)*Math.PI/180;
+  const pt=(k,s)=>[cx+Math.cos(ang(k))*r*s,cy+Math.sin(ang(k))*r*s];
+  const poly=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  let g='';
+  [1/3,2/3,1].forEach(s=>{g+=`<polygon class="hx-grid" points="${poly(ORDER.map((t,k)=>pt(k,s)))}"/>`;});
+  ORDER.forEach((t,k)=>{const p=pt(k,1);g+=`<line class="hx-axis" x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}"/>`;});
+  if(pct){
+    const sp=ORDER.map((t,k)=>pt(k,Math.max(pct[t],0.05)));
+    g+=`<g class="hx-shape"><polygon class="hx-fill" points="${poly(sp)}"/>`;
+    ORDER.forEach((t,k)=>{g+=`<circle class="hx-dot${top&&top.includes(t)?' top':''}" cx="${sp[k][0].toFixed(1)}" cy="${sp[k][1].toFixed(1)}" r="${top&&top.includes(t)?7:4.5}"/>`;});
+    g+='</g>';
+  }
+  ORDER.forEach((t,k)=>{
+    const c=Math.cos(ang(k)),s=Math.sin(ang(k));
+    const lx=cx+c*lr,ly=cy+s*lr;
+    const anchor=Math.abs(c)<0.2?'middle':(c>0?'start':'end');
+    const y1=ly+(s<-0.9?-20:(s>0.9?14:-2));
+    const sub=pct?pctText(pct[t]):TYPE[t].verb;
+    g+=`<text class="hx-name" x="${lx.toFixed(1)}" y="${y1.toFixed(1)}" text-anchor="${anchor}">${TYPE[t].name}</text><text class="hx-sub" x="${lx.toFixed(1)}" y="${(y1+16).toFixed(1)}" text-anchor="${anchor}">${sub}</text>`;
+  });
+  const label=pct?'Interest profile: '+ORDER.map(t=>TYPE[t].name+' '+pctText(pct[t])).join(', '):'The six interest types: '+ORDER.map(t=>TYPE[t].name).join(', ');
+  return `<svg viewBox="0 0 400 340" role="img" aria-label="${label}" style="width:100%;height:auto;display:block">${g}</svg>`;
+}
+
+/* ---------- SHARED PIECES ---------- */
+function regionChips(){
+  return Object.keys(REGIONS).map(k=>`<label class="chip"><input type="checkbox" name="region" value="${k}"${state.regions.includes(k)?' checked':''}><span>${REGIONS[k].label}<small>${REGIONS[k].long}</small></span></label>`).join('');
+}
+function fieldList(tags){
+  return tags.slice(0,6).map(t=>TAGLABEL[t]).filter(Boolean).join(', ');
+}
+function instCard(i){
+  const meta=[i.k==='u'?'University':'College'];
+  if(i.women)meta.push('Women only');
+  if(streamCore(i))meta.push('Strong match for your group');
+  const note=i.note&&i.note!=='Women only.'?`<p class="note2">${i.note.replace(/^Women only\. /,'')}</p>`:'';
+  return `<div class="inst"><div class="inst-top"><h3>${i.n}</h3>${gradeChip(i.g)}</div>
+    <p class="loc">${i.c}, ${i.s}. ${meta.join('. ')}.</p>
+    ${note}
+    <p class="fields">Fields: ${fieldList(i.tags)}${i.tags.length>6?' and more':''}</p>
+    ${admBlock(i)}
+    ${webRow(i)}
+    <p class="src">NAAC ${i.g}, CGPA ${i.cg.toFixed(2)}, declared ${declared(i.d)}.${isOld(i.d)?' <strong>Declared over five years ago, so confirm it is still valid.</strong>':''}</p></div>`;
+}
+function eligibleInst(useFocus){
+  const regs=state.regions.includes('any')?null:state.regions;
+  return INSTITUTIONS.filter(i=>GR[i.g]>=state.minGrade&&(state.kind==='all'||i.k===state.kind)&&(!regs||regs.includes(i.r))&&(!(useFocus&&state.focus&&STREAM_FIELDS[state.stream])||streamOverlap(i)>0));
+}
+function collegesFor(c){
+  return eligibleInst().map(i=>({i,o:i.tags.filter(t=>c.tags.includes(t)).length})).filter(x=>x.o>0)
+    .sort((a,b)=>b.o-a.o||GR[b.i.g]-GR[a.i.g]||b.i.cg-a.i.cg||a.i.n.localeCompare(b.i.n));
+}
+
+/* ---------- VIEWS ---------- */
+function welcome(){
+  const chips=Object.keys(STREAMS).map(k=>`<label class="chip"><input type="radio" name="stream" value="${k}"${state.stream===k?' checked':''}><span>${STREAMS[k].label}<small>${STREAMS[k].long}</small></span></label>`).join('');
+  return `<div class="hero">
+    <div>
+      <h1>Find courses that match what you enjoy</h1>
+      <p class="lead">Answer 30 quick questions about the things you like doing. The questions are picked for your subject group, so every student gets a different set. You get a profile of your interests, a ranked list of degrees and careers, and colleges and universities to explore in the regions you choose, all taken from NAAC’s records of A++, A+ and A grades.</p>
+      <form id="start" novalidate>
+        <div class="field"><label for="name">Your first name <span class="note">(optional, printed on your results)</span></label>
+          <input id="name" type="text" maxlength="30" autocomplete="given-name" value="${esc(state.name)}"></div>
+        <fieldset class="field"><legend>Your subject group in Class 11–12</legend>
+          <div class="chips">${chips}</div>
+          <p class="hint">CBSE students: choose the group closest to your subjects. Commerce with Maths and Economics is MEC.</p>
+          <p class="err" id="err" role="alert" hidden>Choose your subject group, or pick “Not sure yet”.</p>
+        </fieldset>
+        <fieldset class="field"><legend>Where would you study?</legend>
+          <div class="chips">${regionChips()}</div>
+          <p class="hint">Pick one or more regions. You can change this later on the results page.</p>
+        </fieldset>
+        <button class="btn" type="submit">Start the quiz</button>
+        <p class="hint">Takes about 6 minutes. There are no right or wrong answers.</p>
+      </form>
+    </div>
+    <div class="hero-art">${hexSVG(null)}</div>
+  </div>
+  ${brandFoot()}
+  <p class="disclaimer">Course Compass is a career guidance tool from Arohaanex Edvantage. It is a guide for starting a conversation, not a verdict, and it is not affiliated with any institution it lists.</p>`;
+}
+
+function quiz(){
+  const q=state.questions[state.i],n=state.questions.length,cur=state.answers[state.i];
+  const opts=ANSWERS.map((a,v)=>`<label class="opt"><input type="radio" name="ans" value="${v}"${cur===v?' checked':''}><span class="face"><b>${v+1}</b><span>${a}</span></span></label>`).join('');
+  return `<div class="quiz">
+    <div class="progress-line"><span>Question ${state.i+1} of ${n}</span><span>${Math.round(state.i/n*100)}% done</span></div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${state.i}"><i style="width:${state.i/n*100}%"></i></div>
+    <p class="q-stem">How much would you enjoy…</p>
+    <h2 class="q-text" id="qtext" tabindex="-1">${q.text}</h2>
+    <fieldset class="opts" aria-labelledby="qtext">${opts}</fieldset>
+    <div class="quiz-foot"><button class="linkbtn" id="back"${state.i===0?' disabled':''}>Back</button><span>Tip: press 1 to 5 on your keyboard</span></div>
+  </div>`;
+}
+
+function fit(n){return n>=0.8?['Excellent fit','top']:n>=0.6?['Strong fit','mid']:['Worth exploring','low'];}
+function li(a){return a.map(x=>`<li>${x}</li>`).join('');}
+function card(s){
+  const c=s.c,[label,cls]=fit(s.norm);
+  const open=c.streams==='all'?'Open to all subject groups':'Best with '+c.streams.map(x=>STREAMS[x].label).join(', ');
+  const cols=collegesFor(c),top=cols.slice(0,6);
+  const colBlock=top.length
+    ?`<ul>${top.map(x=>`<li><strong>${x.i.n}</strong>, ${x.i.c} ${gradeChip(x.i.g)}${x.i.women?' <span class="tag">Women only</span>':''}${(admFor(x.i)||{}).st==='open'?' <span class="st st-open">Applications open</span>':''}</li>`).join('')}</ul>
+      <p class="hint">Showing ${top.length} of ${cols.length} listed ${regionLabel()}. See the full list below for programmes and sources.</p>`
+    :`<p class="none">No institution in our list matches this field ${regionLabel()} with these filters. Try another region a lower minimum grade, or another type, or search for A, A+ and A++ colleges in your state on naac.gov.in.</p>`;
+  return `<details class="career"><summary>
+    <span class="c-main"><h3>${c.title}</h3><span class="c-sum">${c.summary}</span>
+      <span class="c-meta"><span class="chip-fit ${cls}">${label}</span><span class="tag">${open}</span>${c.math?'<span class="tag">Maths-heavy</span>':''}</span>
+      <span class="fit-bar" aria-hidden="true"><i style="width:${Math.round(30+70*s.norm)}%"></i></span></span>
+    <span class="chev" aria-hidden="true"></span></summary>
+    <div class="c-body">
+      <div><h4>Degrees and courses</h4><ul>${li(c.courses)}</ul></div>
+      <div><h4>How to get in</h4><p>${c.entry}</p></div>
+      <div><h4>Where it can lead</h4><ul>${li(c.paths)}</ul></div>
+      ${c.note?`<div class="c-wide c-note"><h4>Good to know</h4><p>${c.note}</p></div>`:''}
+      <div class="c-wide"><h4>Colleges to explore ${regionLabel()}</h4>${colBlock}</div>
+    </div></details>`;
+}
+
+function filtered(){
+  const f=state.filters;
+  return state.result.scored.filter(s=>{
+    if(f.only&&state.stream&&state.stream!=='unsure'&&!(s.c.streams==='all'||s.c.streams.includes(state.stream)))return false;
+    return true;
+  });
+}
+function listHTML(){
+  const items=filtered(),f=state.filters,shown=f.all?items:items.slice(0,8);
+  if(!items.length)return `<p class="empty">Nothing matches these filters. Turn off one of them to see more options.</p>`;
+  let h=`<p class="count">Showing ${shown.length} of ${items.length} options, best fit first.</p><div class="list">${shown.map(card).join('')}</div>`;
+  if(!f.all&&items.length>8)h+=`<p class="more"><button class="btn ghost" data-act="all">Show all ${items.length} options</button></p>`;
+  return h;
+}
+function collegesHTML(){
+  const items=eligibleInst(true).sort((a,b)=>(streamCore(b)-streamCore(a))||(streamOverlap(b)>0)-(streamOverlap(a)>0)||GR[b.g]-GR[a.g]||b.cg-a.cg||a.n.localeCompare(b.n));
+  const f=state.filters,shown=f.allC?items:items.slice(0,12);
+  if(!items.length)return `<p class="empty">No institution in our list matches this region and grade. Choose another region or lower the minimum grade, or search naac.gov.in for accredited colleges in your state.</p>`;
+  const tb=state.view2==='table';
+  let h=`<div class="toggle noprint" role="group" aria-label="Layout"><button class="btn small${tb?' ghost':''}" data-act="cards" aria-pressed="${!tb}">Cards</button> <button class="btn small${tb?'':' ghost'}" data-act="table" aria-pressed="${tb}">Table with website column</button></div><p class="count">Showing ${shown.length} of ${items.length} institutions ${regionLabel()}, highest grade first.</p>${tb?tableHTML(shown):`<div class="insts">${shown.map(instCard).join('')}</div>`}`;
+  if(!f.allC&&items.length>12)h+=`<p class="more"><button class="btn ghost" data-act="allc">Show all ${items.length} institutions</button></p>`;
+  return h;
+}
+
+function results(){
+  const r=state.result,top=r.ranked.slice(0,3);
+  const nm=state.name.trim();
+  const total=state.answers.reduce((a,b)=>a+b,0);
+  const date=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const streamOpts=Object.keys(STREAMS).map(k=>`<option value="${k}"${state.stream===k?' selected':''}>${STREAMS[k].label}</option>`).join('');
+  const gradeOpts=[[1,'A, A+ and A++'],[2,'A+ and A++'],[3,'A++ only']].map(o=>`<option value="${o[0]}"${state.minGrade===o[0]?' selected':''}>${o[1]}</option>`).join('');
+  const t3=top.map(t=>`<div class="t3"><h3>${TYPE[t].name} <span>${TYPE[t].full}, ${pctText(r.pct[t])}</span></h3><p>${TYPE[t].blurb}</p><p class="school">${TYPE[t].school}</p></div>`).join('');
+  return `<p class="print-only"><img src="${BRAND_MARK}" alt="" height="32"><strong>Arohaanex Edvantage</strong> | Course Compass. Prepared${nm?' for '+esc(nm):''} on ${date}</p>
+  <div class="res-head">
+    <div><h1>${nm?esc(nm)+'’s interest profile':'Your interest profile'}</h1>
+    <p class="lead">Your strongest interests are ${TYPE[top[0]].name}, ${TYPE[top[1]].name} and ${TYPE[top[2]].name}. The options below are ranked by how well they match that mix.</p></div>
+    <div class="actions noprint"><button class="btn" data-act="print">Print or save as PDF</button><button class="btn ghost" data-act="retake">Retake the quiz</button></div>
+  </div>
+  ${closingBanner()}
+  <div class="profile"><div>${hexSVG(r.pct,top)}</div><div class="top3">${t3}</div></div>
+  ${total<24?'<p class="low-note">Most of your answers were low, so this profile is less reliable. Try again and think about what you would choose to do in your free time.</p>':''}
+  <section class="block"><h2>Courses and careers that fit</h2>
+    <div class="filters">
+      <label class="f">Subject group <select id="f-stream">${streamOpts}</select></label>
+      <label class="f"><input class="plain" type="checkbox" id="f-only"${state.filters.only?' checked':''}> Only options open to my group</label>
+      <label class="f"><input class="plain" type="checkbox" id="f-focus"${state.focus?' checked':''}> Only colleges with programmes for my subject group</label>
+      <label class="f">NAAC grade of colleges <select id="f-grade">${gradeOpts}</select></label>
+      <label class="f">Show <select id="f-kind"><option value="all"${state.kind==='all'?' selected':''}>Colleges and universities</option><option value="u"${state.kind==='u'?' selected':''}>Universities only</option><option value="c"${state.kind==='c'?' selected':''}>Colleges only</option></select></label>
+      <div class="regions"><p class="filter-title">Regions to study in</p><div class="chips">${regionChips()}</div></div>
+    </div>
+    <div id="list">${listHTML()}</div>
+  </section>
+  <section class="block"><h2>Accredited colleges and universities</h2>
+    <p class="sub">Institutions from NAAC’s records that hold a grade of A, A+ or A++, filtered by the regions, type and minimum grade you chose above.</p>
+    <div class="naac-note"><h3>How to read these NAAC grades</h3>
+      <p>NAAC grades a whole institution out of 4.00: A++ is 3.51 to 4.00, A+ is 3.26 to 3.50 and A is 3.01 to 3.25. A grade does not approve a particular course, so also check UGC, AICTE, Bar Council or NMC approval where it applies.</p>
+      <p>NAAC announced in February 2025 that it is moving from letter grades to “Accredited” with maturity levels. Institutions already on their second cycle or later keep their current grade until the new system starts, so a newly assessed college may show a level instead of a letter.</p>
+      <p>Grades, CGPA scores and declaration dates come from NAAC’s own file of institutions with valid accreditation, dated 14 August 2025, as republished by CollegeJaancho.com. We could not open naac.gov.in directly, and NAAC updates its file, so confirm each college there before you apply. Colleges with a declaration date more than five years old are flagged.</p>
+      <p>Science and medical students: IITs, NITs, IIITs, IISERs and AIIMS are mostly assessed through other systems (such as NIRF and NBA), so they are mostly not in this list. They admit through JEE, NEET and their own counselling, so check their own sites.</p>
+      <p>This is a selection of well-known institutions, not every one: NAAC’s file has 313 universities and about 2,100 colleges with an A, A+ or A++ grade. If a college you like is missing, it may still be accredited, so search for it on naac.gov.in.</p>
+    </div>
+    <p class="hint" style="margin-top:1rem">Official website: “Confirmed” means we saw the address on the institution’s own pages while researching. “Check the address” means it comes from general knowledge and has not been confirmed yet, so check it matches the college name and ends in .ac.in, .edu.in or .edu. You can also cross-check any college on naac.gov.in and the UGC lists at ugc.gov.in.</p>
+    <div id="colleges" style="margin-top:.6rem">${collegesHTML()}</div>
+  </section>
+  <section class="block" id="dates"><h2>Admission dates and deadlines</h2>
+    <p class="sub">Admissions for the 2027 intake, last checked ${ADM_CHECKED}. These dates come from education portals reporting official notices; we could not open every official site directly, so confirm each date on the official link. “Expected” means the college has not published the date yet and the date is a projection from last year.</p>
+    ${deadlinesHTML()}
+    <p class="hint" style="margin-top:.8rem">Colleges not shown here still run their own admissions. Each college card above has an admissions box with an official link where we checked, or a search link where we did not.</p>
+  </section>
+  <section class="block"><h2>How to fill the application form online</h2>
+    <p class="sub">The steps are similar at most colleges, but each site has its own screens and rules. Read the instructions on the official page before you start.</p>
+    ${HOW_TO}
+  </section>
+  <section class="block"><h2>What to do next</h2>
+    <ol class="steps">
+      <li>Pick three options you would be happy to explore, not only the top one.</li>
+      <li>Check each college’s current NAAC status, eligibility, entrance exam and last date on its official website, and put every deadline in your calendar.</li>
+      <li>Talk to a teacher, a counsellor or someone who works in the field. Ask what a normal week looks like.</li>
+      <li>Try it before you commit: a short course, a small project or a day of shadowing.</li>
+    </ol>
+  </section>
+  ${brandFoot()}
+  <p class="disclaimer">This quiz shows what you enjoy, not what you are good at, and it is one input among many. Course lists, entrance exams, eligibility and accreditation change every year. Confirm everything on the official university, exam and NAAC websites before you apply. Course Compass is a career guidance tool from Arohaanex Edvantage and is not affiliated with any institution it lists.</p>`;
+}
+
+/* ---------- LOGIC ---------- */
+function compute(){
+  const sums={R:0,I:0,A:0,S:0,E:0,C:0};
+  state.questions.forEach((q,i)=>{sums[q.t]+=state.answers[i]||0;});
+  const pct={};ORDER.forEach(t=>pct[t]=sums[t]/20);
+  const ranked=[...ORDER].sort((a,b)=>pct[b]-pct[a]||ORDER.indexOf(a)-ORDER.indexOf(b));
+  const dots=CAREERS.map(c=>[3,2,1].reduce((d,w,k)=>d+w*pct[c.code[k]],0)/6);
+  const min=Math.min(...dots),max=Math.max(...dots);
+  const scored=CAREERS.map((c,i)=>({c,dot:dots[i],norm:max>min?(dots[i]-min)/(max-min):0.7}));
+  scored.sort((a,b)=>b.dot-a.dot||a.c.title.localeCompare(b.c.title));
+  state.result={pct,ranked,scored};
+}
+
+function render(){
+  app.innerHTML=state.view==='welcome'?welcome():state.view==='quiz'?quiz():results();
+}
+function refresh(){
+  document.getElementById('list').innerHTML=listHTML();
+  document.getElementById('colleges').innerHTML=collegesHTML();
+}
+function go(view){
+  state.view=view;render();window.scrollTo(0,0);
+  const target=view==='results'?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
+  if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
+}
+function answer(v){
+  state.answers[state.i]=v;
+  const idx=state.i;
+  setTimeout(()=>{
+    if(state.view!=='quiz'||state.i!==idx)return;
+    if(idx<state.questions.length-1){state.i++;render();const q=document.getElementById('qtext');if(q)q.focus({preventScroll:true});}
+    else{compute();go('results');}
+  },240);
+}
+function setRegions(t){
+  const boxes=[...app.querySelectorAll('input[name="region"]')];
+  if(t.value==='any'&&t.checked){state.regions=['any'];}
+  else{
+    const sel=boxes.filter(b=>b.checked&&b.value!=='any').map(b=>b.value);
+    state.regions=sel.length?sel:['any'];
+  }
+  boxes.forEach(b=>{b.checked=state.regions.includes(b.value);});
+}
+
+/* ---------- EVENTS ---------- */
+app.addEventListener('submit',e=>{
+  if(e.target.id!=='start')return;
+  e.preventDefault();
+  const sel=app.querySelector('input[name="stream"]:checked');
+  state.name=document.getElementById('name').value;
+  if(!sel){document.getElementById('err').hidden=false;return;}
+  state.stream=sel.value;state.answers=[];state.i=0;state.questions=buildQuestions(state.stream);
+  go('quiz');
+});
+app.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.name==='ans'){answer(parseInt(t.value,10));return;}
+  if(t.name==='stream'){const err=document.getElementById('err');if(err)err.hidden=true;return;}
+  if(t.name==='region'){setRegions(t);if(state.view==='results'){state.filters.allC=false;refresh();}return;}
+  if(t.id==='f-stream'){state.stream=t.value;}
+  else if(t.id==='f-only'){state.filters.only=t.checked;}
+  else if(t.id==='f-grade'){state.minGrade=parseInt(t.value,10);}
+  else if(t.id==='f-kind'){state.kind=t.value;}
+  else if(t.id==='f-focus'){state.focus=t.checked;}
+  else return;
+  state.filters.all=false;state.filters.allC=false;
+  refresh();
+});
+app.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='back'&&state.i>0){state.i--;render();const q=document.getElementById('qtext');if(q)q.focus({preventScroll:true});return;}
+  const act=b.dataset.act;
+  if(act==='all'){state.filters.all=true;refresh();}
+  else if(act==='allc'){state.filters.allC=true;refresh();}
+  else if(act==='cards'||act==='table'){state.view2=act;refresh();}
+  else if(act==='print'){window.print();}
+  else if(act==='retake'){state.answers=[];state.i=0;state.questions=[];state.result=null;state.filters={only:true,all:false,allC:false};go('welcome');}
+});
+document.addEventListener('keydown',e=>{
+  if(state.view!=='quiz'||e.ctrlKey||e.metaKey||e.altKey)return;
+  const n=parseInt(e.key,10);
+  if(n>=1&&n<=5){
+    const r=app.querySelector(`input[name="ans"][value="${n-1}"]`);
+    if(r){r.checked=true;answer(n-1);}
+  }
+});
+window.addEventListener('beforeprint',()=>{document.querySelectorAll('details.career').forEach(d=>{d.dataset.was=d.open?'1':'0';d.open=true;});});
+window.addEventListener('afterprint',()=>{document.querySelectorAll('details.career').forEach(d=>{d.open=d.dataset.was==='1';});});
+
+render();
+</script>
+</body>
+</html>
