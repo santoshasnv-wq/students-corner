@@ -321,6 +321,31 @@ details.career[open]::details-content{block-size:auto}
 .terms li{margin:.75rem 0}
 .hint a,.sub a,.consent a{color:var(--accent);font-weight:700}
 
+/* student corner menu and step-by-step study abroad */
+.menu{position:relative}
+.menu-list{position:absolute;z-index:40;top:calc(100% + .35rem);left:0;min-width:230px;margin:0;padding:.4rem;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.menu-list[hidden]{display:none}
+.topnav .menu-list button{width:100%;text-align:left;border:0;border-radius:10px;min-height:44px;background:transparent}
+.topnav .menu-list button:hover{background:var(--accent-soft);transform:none}
+.topnav .menu-list button[aria-current="page"]{background:var(--accent);color:var(--on-accent)}
+.crumb{font-size:.92rem;color:var(--muted);margin:0 0 .6rem}
+.ctys{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.9rem;margin-top:1rem}
+.cty{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;padding:1.1rem 1.2rem;border:2px solid var(--line);border-radius:16px;background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:inherit;transition:transform .2s ease,border-color .2s ease}
+.cty:hover{transform:translateY(-3px);border-color:var(--accent)}
+.cty .flag{font-size:2.2rem;line-height:1}
+.cty .hint{margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:1.4rem 0 1rem;border-bottom:2px solid var(--line)}
+.tab{min-height:46px;padding:.5rem 1.1rem;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:1.05rem;cursor:pointer;color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--mark)}
+.tab:hover{color:var(--text)}
+.tabpanel h3{font-size:1.15rem;margin:1.2rem 0 .5rem}
+.tabpanel ul{padding-left:1.2rem}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+.costgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;margin-top:.8rem}
+.cost{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.cost b{display:block;font-family:var(--font-display);font-size:1.45rem;margin:.2rem 0}
+.cost.total{border:2px solid var(--mark)}
+
 /* hexagon */
 .hx-grid{fill:none;stroke:var(--line);stroke-width:1.2}
 .hx-axis{stroke:var(--line);stroke-width:1}
@@ -350,7 +375,16 @@ details.career[open]::details-content{block-size:auto}
 <div class="wrap">
   <div class="site-head noprint">
     <div class="brand"><img id="brand-mark" class="brand-mark" alt="Arohaanex Edvantage logo, a gold mountain-shaped letter A" width="64" height="43"><span>Ascend Hub <small>by Arohaanex Edvantage</small></span></div>
-    <nav class="topnav" aria-label="Sections"><button type="button" id="nav-home" data-act="home">Career Guidance</button><button type="button" id="nav-abroad" data-act="abroad">Study Abroad</button><button type="button" id="nav-teachers" data-act="teachers">Educator Hub</button></nav>
+    <nav class="topnav" aria-label="Sections">
+      <div class="menu" id="menu-student">
+        <button type="button" id="nav-student" class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menu-student-list">Student Corner <span aria-hidden="true">▾</span></button>
+        <ul class="menu-list" id="menu-student-list" hidden>
+          <li><button type="button" id="nav-home" data-act="home">Career Guidance</button></li>
+          <li><button type="button" id="nav-abroad" data-act="abroad">Study Abroad</button></li>
+        </ul>
+      </div>
+      <button type="button" id="nav-teachers" data-act="teachers">Educator Hub</button>
+    </nav>
   </div>
   <noscript><p style="padding:2rem 0;font-family:sans-serif">Ascend Hub needs JavaScript. Please turn it on in your browser to use the quiz.</p></noscript>
   <main id="app"></main>
@@ -1025,7 +1059,7 @@ function tableHTML(list){
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 /* ---------- STATE ---------- */
-const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,abroadBudget:0,questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,abroadBudget:0,abMode:'pick',abId:'',abTab:'opp',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pctText=v=>Math.round(v*100)+'%';
@@ -1295,6 +1329,7 @@ function syncNav(){
   const ids={home:'nav-home',abroad:'nav-abroad',teachers:'nav-teachers'};
   const cur=state.view==='teachers'?'teachers':state.view==='abroad'?'abroad':'home';
   Object.keys(ids).forEach(k=>{const el=document.getElementById(ids[k]);if(el)el.setAttribute('aria-current',k===cur?'page':'false');});
+  const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',cur==='teachers'?'false':'page');
 }
 
 /* ---------- FILE UPLOAD (Educator Hub) ---------- */
@@ -1461,15 +1496,6 @@ const ABROAD_TESTS=[
  {t:'LNAT',d:'Admission test for law at Oxford, Cambridge and some other UK universities.',c:'Check lnat.ac.uk',n:'Booking for Oxford and Cambridge 2027 entry closed on 15 September 2026.'},
  {t:'Studienkolleg and APS (Germany)',d:'A one-year foundation course with an exam, and a document verification certificate for Indian applicants.',c:'Check DAAD and the APS India website',n:'Needed because Indian Class 12 is not enough on its own for most German degrees.'}
 ];
-const ABROAD_SCHOLARSHIPS=[
- {t:'Lester B. Pearson International Scholarship',w:'University of Toronto, Canada',c:'Full tuition, books, fees and residence for 4 years',n:'About 37 scholars worldwide each year. School nomination is needed, usually in autumn of Class 12.'},
- {t:'Cornell Tata Scholarship',w:'Cornell University, USA',c:'Full need-based tuition for admitted Indian undergraduates',n:'About 20 awards a year (reported). You apply to Cornell and show financial need.'},
- {t:'UBC International Scholars Program',w:'University of British Columbia, Canada',c:'Need-based funding that can cover the full cost',n:'Separate application. UBC also gives automatic entrance awards.'},
- {t:'Government of Ireland International Education Scholarship',w:'Ireland',c:'Full fees plus a €10,000 stipend for one year',n:'About 60 awards a year. The 2026 round closed on 12 March 2026.'},
- {t:'NUS and NTU merit scholarships',w:'Singapore',c:'Full tuition plus a living allowance',n:'For outstanding applicants, usually with a work bond in Singapore.'},
- {t:'MEXT (Japan), Global Korea Scholarship and France Excellence Charpak',w:'Japan, South Korea and France',c:'Government-funded awards that include undergraduate study',n:'Charpak pays about €860 a month. Each has its own eligibility and deadline.'},
- {t:'University merit awards',w:'Most countries',c:'Part of the fee, often automatic when you are admitted',n:'This is the most common type. Read each university’s scholarship page and note the deadlines.'}
-];
 function abroadTable(){
   const b=state.abroadBudget;
   const rows=ABROAD.map(c=>({c,min:lakhNum(c.cur,c.tuition[0]+c.living[0]),max:lakhNum(c.cur,c.tuition[1]+c.living[1])})).sort((x,y)=>x.min-y.min);
@@ -1480,63 +1506,136 @@ function abroadTable(){
   }).join('');
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Country</th><th scope="col">Tuition a year</th><th scope="col">Living a year</th><th scope="col">Total a year, in rupees</th></tr></thead><tbody>${body}</tbody></table></div>`;
 }
-function countryCard(c,i){
-  const tot=lakhRange(c.cur,c.tuition[0]+c.living[0],c.tuition[1]+c.living[1]);
-  return `<details class="career"><summary>
-    <span class="c-main"><h3><span class="ic" aria-hidden="true">${c.flag}</span>${c.name}</h3>
-    <span class="c-sum">Tuition ${money(c.cur,c.tuition[0])}–${money(c.cur,c.tuition[1])} and living ${money(c.cur,c.living[0])}–${money(c.cur,c.living[1])} a year</span>
-    <span class="c-meta"><span class="chip-fit mid">About ${tot} a year</span></span></span>
-    <span class="chev" aria-hidden="true"></span></summary>
-    <div class="c-body">
-      <div><h4>What it costs</h4><ul><li>${c.tuitionNote}</li><li>${c.livingNote}</li><li>${c.visaNote}</li></ul></div>
-      <div><h4>Tests and how to apply</h4><ul>${li(c.tests)}</ul><p class="hint">${c.entry}</p></div>
-      <div><h4>Working after study</h4><p>${c.work}</p></div>
-      <div><h4>Scholarships</h4><ul>${li(c.scholarships)}</ul></div>
-      <div class="c-wide c-note"><h4>Recent changes to watch</h4><ul>${li(c.watch)}</ul></div>
-      <div class="c-wide"><h4>Official sources</h4><p class="links">${c.sources.map(s=>extLink(s[1],s[0],'ghost')).join(' ')}</p></div>
-    </div></details>`;
+/* Extra, country-by-country content for the step-by-step Study Abroad pages. */
+const ABROAD_TEST_IDS=['sat','ielts','toefl','pte','duolingo','ucat','lnat','de'];
+ABROAD_TESTS.forEach((x,i)=>{x.id=ABROAD_TEST_IDS[i];});
+const ABROAD_EXTRA={
+ us:{known:'Flexible degrees, research and campus life',testIds:['sat','toefl','ielts','duolingo'],
+  opp:['A very wide choice of universities and courses. At many universities you can choose your major after the first year.','Popular with Indian students for computer science, engineering, business and data science (reported).','Strong research opportunities, internships and campus activities.','Bachelor’s degrees usually take 4 years.']},
+ uk:{known:'Shorter degrees and well-known universities',testIds:['ielts','pte','ucat','lnat'],
+  opp:['Bachelor’s degrees usually take 3 years in England, Wales and Northern Ireland and 4 years in Scotland, which can save a year of cost.','Well known for law, medicine, business, engineering, design and the arts.','A foundation year is available if your Class 12 marks fall short of the entry requirement.','Many courses offer a work placement year. Check each course.']},
+ ca:{known:'Co-op programmes and a work-permit route',testIds:['ielts','toefl','pte','duolingo'],
+  opp:['Many universities offer co-operative programmes that mix study with paid work terms. Check each course.','Graduates of eligible programmes can apply for a Post-Graduation Work Permit.','Popular with Indian students for engineering, computer science, business and health (reported).','Bachelor’s degrees usually take 3–4 years.']},
+ au:{known:'Health, engineering and business courses',testIds:['ielts','pte','toefl'],
+  opp:['Known for health sciences, engineering, IT, business and environmental studies.','Two main intakes, in February and July.','Indian graduates are reported to get longer post-study work stays than many other nationalities.','Bachelor’s degrees usually take 3 years, and 4 for some courses such as engineering.']},
+ de:{known:'Engineering and technical courses',testIds:['de','ielts'],
+  entry:'The foundation year (and often a German language course before it) adds time, but tuition is low.',
+  opp:['Known for engineering, technology and the sciences, with very low tuition at public universities.','Many Bachelor’s programmes are taught in German. English-taught programmes exist but are fewer, and learning German widens your choice.','Most Indian students need a one-year foundation course (Studienkolleg) before the degree.','Bachelor’s degrees usually take 3 years, so the route is about 4 years with the foundation year.']},
+ ie:{known:'English-speaking and in the EU',testIds:['ielts','toefl','pte','duolingo'],
+  opp:['English-speaking and in the European Union, with strong technology, pharmaceutical and business sectors.','Study cities include Dublin, Cork, Galway and Limerick.','Bachelor’s degrees usually take 3–4 years.','Post-study stay permission exists (Stamp 1G), and its length depends on your degree level.']},
+ nz:{known:'Safe, smaller cities',testIds:['ielts','toefl','pte'],
+  opp:['Known for agriculture, environment, health and science courses, in smaller cities with an outdoors lifestyle.','Two main intakes, in February and July.','Post Study Work Visa for 1–3 years depending on your qualification.','Bachelor’s degrees usually take 3 years.']},
+ sg:{known:'Engineering, computing and business in Asia',testIds:['ielts','toefl'],
+  opp:['Strong in engineering, computing, business and the sciences at NUS and NTU.','Only a few public universities (NUS, NTU, SMU, SUTD, SIT and SUSS), and entry is very competitive.','The Tuition Grant lowers fees but requires working in Singapore for 3 years after you graduate.','Close to India, with strong links across Asia.']},
+ ae:{known:'Close to India, with branch campuses',testIds:['ielts'],
+  opp:['Many branch campuses of Indian and UK universities, such as BITS Pilani Dubai, MAHE Dubai, Amity and Heriot-Watt.','Popular for business, engineering, hospitality and health courses.','Close to India, so it can feel like an easier first step abroad.','There is no permanent-residency route through study.']}
+};
+ABROAD.forEach(c=>Object.assign(c,ABROAD_EXTRA[c.id]));
+const AB_TABS=[['opp','Opportunities'],['exams','Entrance exams'],['money','Money']];
+const crumb=(...p)=>`<p class="crumb">${p.join(' › ')}</p>`;
+const abDisclaimer=`<p class="disclaimer">Ascend Hub is a guidance tool and not an admissions agent. We do not guarantee admission, a visa or a scholarship. The figures on these pages are estimates from public sources checked on ${ABROAD_CHECKED}, and prices, rules and dates change. Please confirm everything on the official websites before you apply or pay.</p>`;
+const AB_STEPS=`<ol class="flow">
+  <li><b>Class 10 and 11</b><span>Explore and build</span><span class="hint">Keep marks strong, because universities look at Class 11 and 12 results. Pick subjects that match your course (Maths for engineering, economics and data; science for medicine). Read about 3–4 countries and start a profile of projects, competitions and volunteering.</span></li>
+  <li><b>End of Class 11</b><span>Test and budget</span><span class="hint">Start English test practice and consider a first SAT if you are aiming at the US. Ask your family how much you can spend a year, and look at education loans.</span></li>
+  <li><b>Class 12, first term</b><span>Apply</span><span class="hint">Finalise 8–10 universities, finish tests, write essays and apply. Some deadlines are in autumn: for example UK medicine, Oxford and Cambridge close in mid-October, and scholarship nominations also fall in autumn.</span></li>
+  <li><b>After offers</b><span>Visa and money</span><span class="hint">Accept an offer, pay the deposit, arrange proof of funds, apply for the visa, book insurance and housing, and check travel and orientation dates.</span></li>
+</ol>`;
+function budgetSelect(){
+  const bud=[[0,'Show everything'],[20,'Up to ₹20 lakh a year'],[30,'Up to ₹30 lakh a year'],[45,'Up to ₹45 lakh a year'],[60,'Up to ₹60 lakh a year'],[100,'Up to ₹1 crore a year']].map(o=>`<option value="${o[0]}"${state.abroadBudget===o[0]?' selected':''}>${o[1]}</option>`).join('');
+  return `<label class="f">My yearly budget <select id="ab-budget">${bud}</select></label>`;
+}
+function abroadPick(){
+  const cty=c=>`<button type="button" class="cty" data-act="ab-pick" data-id="${c.id}"><span class="flag" aria-hidden="true">${c.flag}</span><strong>${c.name}</strong><span class="hint">${c.known}</span></button>`;
+  return `<div class="thead">${crumb('Student Corner','Study Abroad')}
+    <h1>Study abroad</h1>
+    <p class="lead">Choose a country. You will see the opportunities there, the entrance exams you may need and what it costs, one step at a time.</p></div>
+  <section class="block" style="margin-top:1.4rem"><h2>Which country?</h2>
+    <div class="ctys">${ABROAD.map(cty).join('')}</div>
+    <p class="hint" style="margin-top:1rem">Not sure yet? <button type="button" class="linkbtn" data-act="ab-compare">Compare countries by budget</button></p></section>
+  <section class="block"><h2>Good to know first</h2>
+    <div class="how">
+      <details><summary>Your plan, step by step</summary>${AB_STEPS}</details>
+      <details><summary>Before you decide</summary><ul>
+        <li>Visa rules, fees and work rights change quickly, and several countries tightened them in 2025 and 2026. Always confirm on the official site of the country and the university.</li>
+        <li>Use only official university websites to apply. Be careful with agents who promise a visa or a seat, or who ask for money to a personal account.</li>
+        <li>If you want to practise medicine in India after studying abroad, check the National Medical Commission rules first.</li>
+        <li>Check that the degree is recognised in India if you may return, for example by the Association of Indian Universities.</li></ul></details>
+    </div></section>
+  ${brandFoot()}
+  ${abDisclaimer}`;
+}
+function abroadCompare(){
+  return `<div class="thead">${crumb('Student Corner','Study Abroad','Compare by budget')}
+    <h1>Compare countries by budget</h1>
+    <p class="lead">Yearly tuition and living costs, with the approximate value in rupees. Choose a budget to see which countries fit.</p>
+    <p class="links noprint" style="margin-top:1rem"><button type="button" class="btn ghost small" data-act="ab-back">← All countries</button> ${budgetSelect()}</p></div>
+  <section class="block" style="margin-top:1.2rem">
+    <div id="ab-table">${abroadTable()}</div>
+    <p class="hint" style="margin-top:.8rem">Exchange rates: US$1 ≈ ₹${FX.USD}, £1 ≈ ₹${FX.GBP}, €1 ≈ ₹${FX.EUR}, CA$1 ≈ ₹${FX.CAD}, A$1 ≈ ₹${FX.AUD}, NZ$1 ≈ ₹${FX.NZD}, S$1 ≈ ₹${FX.SGD}, AED 1 ≈ ₹${FX.AED} (22–23 October 2026). Rates change daily. Do not forget extra costs: flights, health insurance, visa and application fees, test fees and deposits.</p>
+    <p class="hint">Pick a country above to see its opportunities, exams and money in detail: <button type="button" class="linkbtn" data-act="ab-back">choose a country</button></p></section>
+  ${brandFoot()}
+  ${abDisclaimer}`;
+}
+function oppPanel(c){
+  return `<div class="pgrid"><div><h3>Why students choose ${c.name}</h3><ul>${li(c.opp)}</ul></div>
+    <div><h3>Working after study</h3><p>${c.work}</p></div></div>
+    <div class="c-wide c-note" style="margin-top:1.2rem"><h4>Recent changes to watch</h4><ul>${li(c.watch)}</ul></div>
+    <p class="links noprint" style="margin-top:1.2rem"><button type="button" class="btn" data-act="ab-tab" data-tab="exams">Next: entrance exams</button></p>`;
+}
+function examsPanel(c){
+  const cards=ABROAD_TESTS.filter(x=>c.testIds.includes(x.id)).map(x=>`<div class="tsvc"><h3>${x.t}</h3><p>${x.d}</p><p><strong>${x.c}</strong></p><p class="hint">${x.n}</p></div>`).join('');
+  return `<h3>How to apply and what you may need</h3><ul>${li(c.tests)}</ul><p class="hint">${c.entry}</p>
+    <h3>Test details and fees in India</h3><div class="tgrid">${cards}</div>
+    <p class="hint" style="margin-top:.8rem">Which tests you need depends on the university and the course, so check each university’s page.</p>
+    <p class="links noprint" style="margin-top:1.2rem"><button type="button" class="btn" data-act="ab-tab" data-tab="money">Next: money</button></p>`;
+}
+function moneyPanel(c){
+  const mn=lakhNum(c.cur,c.tuition[0]+c.living[0]),mx=lakhNum(c.cur,c.tuition[1]+c.living[1]),b=state.abroadBudget;
+  const fitTag=!b?'':mx<=b?'<span class="st st-open">Fits your budget</span>':mn<=b?'<span class="st st-soon">Possible at the lower end</span>':'<span class="st st-closed">Above your budget</span>';
+  return `<div class="filters noprint">${budgetSelect()} ${fitTag}</div>
+    <h3>What it costs each year</h3>
+    <div class="costgrid">
+      <div class="cost"><span class="hint">Tuition</span><b>${money(c.cur,c.tuition[0])}–${money(c.cur,c.tuition[1])}</b><span class="hint">${lakhRange(c.cur,c.tuition[0],c.tuition[1])}</span></div>
+      <div class="cost"><span class="hint">Living</span><b>${money(c.cur,c.living[0])}–${money(c.cur,c.living[1])}</b><span class="hint">${lakhRange(c.cur,c.living[0],c.living[1])}</span></div>
+      <div class="cost total"><span class="hint">Total a year, about</span><b>₹${lf(mn)}–${lf(mx)} lakh</b><span class="hint">Most bachelor’s degrees take 3–4 years</span></div>
+    </div>
+    <ul style="margin-top:1rem"><li>${c.tuitionNote}</li><li>${c.livingNote}</li></ul>
+    <h3>Visa and proof of funds</h3><p>${c.visaNote}</p>
+    <h3>Scholarships</h3><ul>${li(c.scholarships)}</ul>
+    <h3>Paying for it</h3><ul>
+      <li>Many Indian banks and finance companies offer education loans for study abroad. Ask early about the amount, security needed, interest and repayment.</li>
+      <li>Add extra costs: flights, health insurance, visa and application fees, test fees, deposits and winter clothes.</li>
+      <li>Part-time work can help with daily expenses but will not pay tuition.</li>
+      <li>Rupee values use US$1 ≈ ₹${FX.USD}, £1 ≈ ₹${FX.GBP}, €1 ≈ ₹${FX.EUR}, CA$1 ≈ ₹${FX.CAD}, A$1 ≈ ₹${FX.AUD}, NZ$1 ≈ ₹${FX.NZD}, S$1 ≈ ₹${FX.SGD} and AED 1 ≈ ₹${FX.AED} (22–23 October 2026). Rates change daily.</li></ul>`;
+}
+function countryBody(){
+  const c=ABROAD.find(x=>x.id===state.abId),tab=state.abTab;
+  const tabs=AB_TABS.map(t=>`<button type="button" role="tab" id="ab-tab-${t[0]}" class="tab" aria-selected="${tab===t[0]}" data-act="ab-tab" data-tab="${t[0]}">${t[1]}</button>`).join('');
+  const panel=tab==='exams'?examsPanel(c):tab==='money'?moneyPanel(c):oppPanel(c);
+  return `<div class="tabs noprint" role="tablist" aria-label="${c.name}">${tabs}</div>
+    <div class="tabpanel" role="tabpanel" aria-labelledby="ab-tab-${tab}"><p class="print-only"><strong>${AB_TABS.find(t=>t[0]===tab)[1]}</strong></p>${panel}</div>
+    <p class="links noprint" style="margin-top:1.4rem"><strong>Official sources:</strong> ${c.sources.map(s=>extLink(s[1],s[0],'ghost')).join(' ')}</p>`;
+}
+function abroadCountry(){
+  const c=ABROAD.find(x=>x.id===state.abId);
+  const sw=ABROAD.map(x=>`<option value="${x.id}"${x.id===c.id?' selected':''}>${x.flag} ${x.name}</option>`).join('');
+  return `<div class="thead">${crumb('Student Corner','Study Abroad',c.name)}
+    <h1>${c.flag} ${c.name}</h1>
+    <p class="links noprint" style="margin-top:1rem"><button type="button" class="btn ghost small" data-act="ab-back">← All countries</button> <label class="f">Switch country <select id="ab-switch">${sw}</select></label> <button type="button" class="btn ghost small" data-act="print">Print or save as PDF</button></p></div>
+  <div id="ab-view">${countryBody()}</div>
+  ${brandFoot()}
+  ${abDisclaimer}`;
 }
 function abroad(){
-  const bud=[[0,'Show everything'],[20,'Up to ₹20 lakh a year'],[30,'Up to ₹30 lakh a year'],[45,'Up to ₹45 lakh a year'],[60,'Up to ₹60 lakh a year'],[100,'Up to ₹1 crore a year']].map(o=>`<option value="${o[0]}"${state.abroadBudget===o[0]?' selected':''}>${o[1]}</option>`).join('');
-  const tests=ABROAD_TESTS.map(x=>`<div class="tsvc"><h3>${x.t}</h3><p>${x.d}</p><p><strong>${x.c}</strong></p><p class="hint">${x.n}</p></div>`).join('');
-  const sch=ABROAD_SCHOLARSHIPS.map(x=>`<div class="tsvc"><h3>${x.t}</h3><p class="hint">${x.w}</p><p><strong>${x.c}</strong></p><p class="hint">${x.n}</p></div>`).join('');
-  return `<div class="thead">
-    <h1>Study abroad</h1>
-    <p class="lead">Compare nine countries for undergraduate study after Class 11 and 12: costs, tests, work rights and scholarships. Figures are estimates for Indian students, checked on ${ABROAD_CHECKED}.</p>
-    <p class="links" style="margin-top:1.2rem"><button class="btn ghost noprint" data-act="print">Print or save as PDF</button></p>
-  </div>
-  <section class="block"><h2>Your plan, step by step</h2>
-    <ol class="flow">
-      <li><b>Class 10 and 11</b><span>Explore and build</span><span class="hint">Keep marks strong, because universities look at Class 11 and 12 results. Pick subjects that match your course (Maths for engineering, economics and data; science for medicine). Read about 3–4 countries and start a profile of projects, competitions and volunteering.</span></li>
-      <li><b>End of Class 11</b><span>Test and budget</span><span class="hint">Start English test practice and consider a first SAT if you are aiming at the US. Ask your family how much you can spend a year, and look at education loans.</span></li>
-      <li><b>Class 12, first term</b><span>Apply</span><span class="hint">Finalise 8–10 universities, finish tests, write essays and apply. Some deadlines are in autumn: for example, UK medicine, Oxford and Cambridge close in mid-October, and scholarship nominations also fall in autumn.</span></li>
-      <li><b>After offers</b><span>Visa and money</span><span class="hint">Accept an offer, pay the deposit, arrange proof of funds, apply for the visa, book insurance and housing, and check travel and orientation dates.</span></li>
-    </ol></section>
-  <section class="block"><h2>Compare costs</h2>
-    <p class="sub">Yearly tuition and living costs in local currency, with the approximate value in rupees. Choose a budget to see which countries fit. Exchange rates: US$1 ≈ ₹${FX.USD}, £1 ≈ ₹${FX.GBP}, €1 ≈ ₹${FX.EUR}, CA$1 ≈ ₹${FX.CAD}, A$1 ≈ ₹${FX.AUD}, NZ$1 ≈ ₹${FX.NZD}, S$1 ≈ ₹${FX.SGD}, AED 1 ≈ ₹${FX.AED} (22–23 October 2026). Rates change daily.</p>
-    <div class="filters noprint"><label class="f">My budget <select id="ab-budget">${bud}</select></label></div>
-    <div id="ab-table">${abroadTable()}</div>
-    <p class="hint" style="margin-top:.8rem">Do not forget extra costs: flights, health insurance, visa and application fees, test fees, deposits and warm clothes. Part-time work can help with daily expenses but will not pay tuition.</p></section>
-  <section class="block"><h2>Country guides</h2>
-    <p class="sub">Open a country for costs, tests, work rights after study, scholarships and the latest changes.</p>
-    <div class="list">${ABROAD.map(countryCard).join('')}</div></section>
-  <section class="block"><h2>Tests you may need</h2>
-    <p class="sub">There is no single entrance exam for studying abroad. Which tests you need depends on the country and the course.</p>
-    <div class="tgrid" style="margin-top:1rem">${tests}</div></section>
-  <section class="block"><h2>Scholarships for Indian undergraduates</h2>
-    <p class="sub">Full scholarships are rare and very competitive. Most students get a part of the fee through merit awards, so apply to several universities and read their scholarship pages early.</p>
-    <div class="tgrid" style="margin-top:1rem">${sch}</div></section>
-  <section class="block"><h2>Before you decide</h2>
-    <ul class="steps">
-      <li>Visa rules, fees and work rights change quickly, and several countries tightened them in 2025 and 2026. Always confirm on the official site of the country and the university.</li>
-      <li>Use only official university websites to apply. Be careful with agents who promise a visa or a seat, or who ask for money to a personal account.</li>
-      <li>If you want to practise medicine in India after studying abroad, check the National Medical Commission rules first.</li>
-      <li>Plan the whole degree, not only the first year. Ask what the fees will be in years two to four.</li>
-      <li>Check that the degree is recognised in India if you may return, for example by the Association of Indian Universities.</li>
-    </ul></section>
-  ${brandFoot()}
-  <p class="disclaimer">Ascend Hub is a guidance tool and not an admissions agent. We do not guarantee admission, a visa or a scholarship. The figures on this page are estimates from public sources checked on ${ABROAD_CHECKED}, and prices, rules and dates change. Please confirm everything on the official websites before you apply or pay.</p>`;
+  if(state.abMode==='country'&&ABROAD.find(c=>c.id===state.abId))return abroadCountry();
+  if(state.abMode==='compare')return abroadCompare();
+  return abroadPick();
 }
+function refreshAb(){
+  const v=document.getElementById('ab-view');
+  if(v){v.innerHTML=countryBody();const t=document.getElementById('ab-tab-'+state.abTab);if(t)t.focus({preventScroll:true});}
+}
+
 const abroadCTA=(who)=>`<section class="block noprint"><h2>Thinking of studying abroad?</h2>
     <p class="sub">${who==='10'?'If you may want to study abroad after Class 12, start early: marks, subjects and English matter from now.':'Compare nine countries on cost, tests and scholarships, with the latest visa changes.'}</p>
     <p class="links" style="margin-top:.8rem"><button class="btn" data-act="abroad">Explore study abroad</button></p></section>
@@ -1724,6 +1823,7 @@ function welcome(){
         </fieldset>`;
   return `<div class="hero">
     <div>
+      <p class="crumb">Student Corner › Career Guidance</p>
       <h1>Find courses that match what you enjoy</h1>
       <p class="lead">${lead}</p>
       <form id="start" novalidate>
@@ -1941,7 +2041,8 @@ app.addEventListener('submit',e=>{
 });
 app.addEventListener('change',e=>{
   const t=e.target;
-  if(t.id==='ab-budget'){state.abroadBudget=parseInt(t.value,10)||0;const tb=document.getElementById('ab-table');if(tb)tb.innerHTML=abroadTable();return;}
+  if(t.id==='ab-budget'){state.abroadBudget=parseInt(t.value,10)||0;const tb=document.getElementById('ab-table');if(tb)tb.innerHTML=abroadTable();else refreshAb();return;}
+  if(t.id==='ab-switch'){state.abId=t.value;render();return;}
   if(t.name==='level'){const nm=document.getElementById('name');if(nm)state.name=nm.value;state.level=t.value;render();return;}
   if(t.id==='t-files'){
     const arr=Array.from(t.files||[]),errs=checkFiles(arr),box=document.getElementById('t-files-err'),list=document.getElementById('t-files-list');
@@ -1968,7 +2069,11 @@ app.addEventListener('click',e=>{
   else if(act==='allc'){state.filters.allC=true;refresh();}
   else if(act==='cards'||act==='table'){state.view2=act;refresh();}
   else if(act==='teachers')go('teachers');
-  else if(act==='abroad')go('abroad');
+  else if(act==='abroad'){state.abMode='pick';go('abroad');}
+  else if(act==='ab-pick'){state.abMode='country';state.abId=b.dataset.id;state.abTab='opp';render();window.scrollTo(0,0);const h=app.querySelector('h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+  else if(act==='ab-back'){state.abMode='pick';render();window.scrollTo(0,0);}
+  else if(act==='ab-compare'){state.abMode='compare';render();window.scrollTo(0,0);}
+  else if(act==='ab-tab'){state.abTab=b.dataset.tab;refreshAb();}
   else if(act==='home')go('welcome');
   else if(act==='share')shareCard();
   else if(act==='copy')copyRequest(b);
@@ -1988,7 +2093,18 @@ document.addEventListener('keydown',e=>{
 window.addEventListener('beforeprint',()=>{document.querySelectorAll('[data-count]').forEach(el=>{el.textContent=el.dataset.count+'%';});document.querySelectorAll('details.career').forEach(d=>{d.dataset.was=d.open?'1':'0';d.open=true;});});
 window.addEventListener('afterprint',()=>{document.querySelectorAll('details.career').forEach(d=>{d.open=d.dataset.was==='1';});});
 
-document.querySelector('.site-head').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.act==='teachers')go('teachers');else if(b.dataset.act==='abroad')go('abroad');else if(b.dataset.act==='home')go('welcome');});
+const menuBtn=document.getElementById('nav-student'),menuList=document.getElementById('menu-student-list');
+const closeMenu=()=>{if(menuList)menuList.hidden=true;if(menuBtn)menuBtn.setAttribute('aria-expanded','false');};
+document.querySelector('.site-head').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='nav-student'){const open=menuList.hidden;menuList.hidden=!open;menuBtn.setAttribute('aria-expanded',String(open));return;}
+  closeMenu();
+  if(b.dataset.act==='teachers')go('teachers');
+  else if(b.dataset.act==='abroad'){state.abMode='pick';go('abroad');}
+  else if(b.dataset.act==='home')go('welcome');
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.menu'))closeMenu();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuList&&!menuList.hidden){closeMenu();if(menuBtn)menuBtn.focus();}});
 window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');});
 if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';
 document.getElementById('brand-mark').src=BRAND_MARK;
