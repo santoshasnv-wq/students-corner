@@ -1059,7 +1059,7 @@ function tableHTML(list){
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 /* ---------- STATE ---------- */
-const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,abroadBudget:0,abMode:'pick',abId:'',abTab:'opp',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,attemptId:'',abroadBudget:0,abMode:'pick',abId:'',abTab:'opp',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pctText=v=>Math.round(v*100)+'%';
@@ -1641,6 +1641,56 @@ const abroadCTA=(who)=>`<section class="block noprint"><h2>Thinking of studying 
     <p class="links" style="margin-top:.8rem"><button class="btn" data-act="abroad">Explore study abroad</button></p></section>
   `;
 
+/* ---------- QUIZ COUNTS AND OPTIONAL RESULT SHARING ---------- */
+/* Anonymous counts: only class, subject group, top interests and scores are sent. No name or contact details.
+   Students can also choose to share their result with their name and contact, with consent. Both need CONTACT.endpoint. */
+const newAttemptId=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+const groupLabel=()=>state.level==='after10'?'Class 10':(STREAMS[state.stream]||{label:'Not sure yet'}).label;
+const levelLabel=()=>state.level==='after10'?'Class 10':'Class 11 or 12';
+function quizSummary(){
+  const r=state.result,top=r.ranked.slice(0,3),pct={};
+  ORDER.forEach(t=>{pct[t]=Math.round(r.pct[t]*100);});
+  const best=state.level==='after10'?r.paths.slice(0,3).map(x=>x.p.title).join('; '):filtered().slice(0,5).map(x=>x.c.title).join('; ');
+  return {level:levelLabel(),group:groupLabel(),top:top.map(t=>TYPE[t].name),pct,scoresText:ORDER.map(t=>TYPE[t].name+' '+pct[t]+'%').join(', '),best};
+}
+function sendToScript(payload){
+  if(!CONTACT.endpoint)return Promise.resolve(false);
+  return fetch(CONTACT.endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(()=>true);
+}
+function trackQuiz(stage){
+  if(!CONTACT.endpoint||!state.attemptId)return;
+  try{
+    const base={kind:'quiz',stage,attempt:state.attemptId,level:levelLabel(),group:groupLabel()};
+    sendToScript(stage==='completed'?Object.assign(base,quizSummary()):base).catch(()=>{});
+  }catch(e){}
+}
+function leadForm(){
+  return `<section class="block noprint" id="share"><h2>Share your result with a counsellor (optional)</h2>
+    <p class="sub">Your result is private by default. If you would like Arohaanex Edvantage to look at your result and contact you, you can share it here. Nothing is sent unless you press the button.</p>
+    <form id="leadform" class="tform" aria-label="Share my result">
+      <div><label for="l-name">Your name *</label><input id="l-name" name="name" type="text" required autocomplete="name" value="${esc(state.name)}"></div>
+      <div><label for="l-mobile">Your mobile number</label><input id="l-mobile" name="mobile" type="tel" autocomplete="tel"></div>
+      <div><label for="l-email">Your email</label><input id="l-email" name="email" type="email" autocomplete="email"></div>
+      <div><label for="l-age">Your age *</label><select id="l-age" name="age" required><option value="">Choose</option><option value="18+">18 or older</option><option value="Under 18">Under 18</option></select></div>
+      <div class="full"><label for="l-guardian">Parent or guardian’s mobile number (needed if you are under 18)</label><input id="l-guardian" name="guardian" type="tel"></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <div class="full"><label class="consent"><input type="checkbox" name="consent" required> <span>I agree that Arohaanex Edvantage may store my name, contact details and quiz result to contact me about career guidance. If I am under 18, my parent or guardian knows about this and agrees.</span></label></div>
+      <div class="full"><button class="btn" type="submit" id="l-btn">Share my result</button><span class="hint" id="l-status" role="status" style="margin-left:.8rem"></span></div>
+    </form></section>
+  `;
+}
+function submitLead(form){
+  const fd=new FormData(form),g=k=>String(fd.get(k)||'').trim(),digits=v=>v.replace(/\D/g,'');
+  const st=document.getElementById('l-status'),say=m=>{if(st)st.textContent=m;};
+  if(g('website'))return;
+  if(!digits(g('mobile'))&&!g('email')){say('Please give a mobile number or an email.');return;}
+  if(g('mobile')&&digits(g('mobile')).length<10){say('Please check your mobile number.');return;}
+  if(g('age')==='Under 18'&&digits(g('guardian')).length<10){say('Please add a parent or guardian’s mobile number.');return;}
+  if(!CONTACT.endpoint){say('Sharing is not switched on yet.');return;}
+  const payload=Object.assign({kind:'lead',name:g('name'),mobile:g('mobile'),email:g('email'),age:g('age'),guardian:g('guardian'),consent:!!fd.get('consent')},quizSummary());
+  say('Sending…');
+  sendToScript(payload).then(()=>{say('Thank you. Your result has been shared with Arohaanex Edvantage.');const b=document.getElementById('l-btn');if(b)b.disabled=true;}).catch(()=>say('We could not send it. Please try again, or contact us on WhatsApp.'));
+}
 /* ---------- AFTER CLASS 10 PATHWAYS ---------- */
 const PATHS=[
  {id:'mpc',streams:['mpc'],title:'Science with Maths (MPC)',duration:'2 years, Class 11–12',code:'IRC',w:{math:3,phy:3,chem:2,comp:1},
@@ -1788,7 +1838,7 @@ function results10(){
       <li><b>Step 3</b><span>Then study</span><span class="hint">${best.p.after.slice(0,2).join('; ')}</span></li>
       <li><b>Step 4</b><span>Careers</span><span class="hint">${bc.need.slice(0,3).join('; ')}</span></li>
     </ol></section>
-  ${abroadCTA('10')}
+  ${leadForm()}${abroadCTA('10')}
   <section class="block"><h2>Keeping your options open</h2>
     <ul class="steps">
       <li>Science usually keeps the most options open. Moving from Science to Commerce or Humanities after Class 11 or 12 is usually possible, but moving the other way usually is not.</li>
@@ -1828,11 +1878,12 @@ function welcome(){
       <p class="lead">${lead}</p>
       <form id="start" novalidate>
         <fieldset class="field"><legend>Which class are you in?</legend><div class="chips">${lv}</div></fieldset>
-        <div class="field"><label for="name">Your first name <span class="note">(optional, printed on your results)</span></label>
+        <div class="field"><label for="name">Your first name <span class="note">(optional, stays on your device and is printed on your results)</span></label>
           <input id="name" type="text" maxlength="30" autocomplete="given-name" value="${esc(state.name)}"></div>
         ${extra}
         <button class="btn" type="submit">Start the quiz</button>
         <p class="hint">Takes about ${a10?'8':'6'} minutes. There are no right or wrong answers.</p>
+        <p class="hint">We count how many students take the quiz and which interests are common, without any name or contact details. You can choose to share your result at the end.</p>
         <p class="hint" style="margin-top:1rem">Are you a teacher? <button type="button" class="linkbtn" data-act="teachers">Visit Educator Hub</button></p>
         <div class="alert" style="margin-top:1.2rem"><strong>Thinking of studying abroad?</strong> Compare nine countries on cost, tests, work rights and scholarships. <button type="button" class="linkbtn" data-act="abroad">Explore Study Abroad</button></div>
       </form>
@@ -1953,7 +2004,7 @@ function results(){
     <p class="sub">The steps are similar at most colleges, but each site has its own screens and rules. Read the instructions on the official page before you start.</p>
     ${HOW_TO}
   </section>
-  ${abroadCTA('12')}
+  ${leadForm()}${abroadCTA('12')}
   <section class="block"><h2>What to do next</h2>
     <ol class="steps">
       <li>Pick three options you would be happy to explore, not only the top one.</li>
@@ -2002,7 +2053,7 @@ function answer(v){
   setTimeout(()=>{
     if(state.view!=='quiz'||state.i!==idx)return;
     if(idx<state.questions.length-1){state.i++;render();const q=document.getElementById('qtext');if(q)q.focus({preventScroll:true});}
-    else{compute();state.view='loading';render();window.scrollTo(0,0);setTimeout(()=>{if(state.view==='loading')go('results');},reducedMotion()?250:1500);}
+    else{compute();trackQuiz('completed');state.view='loading';render();window.scrollTo(0,0);setTimeout(()=>{if(state.view==='loading')go('results');},reducedMotion()?250:1500);}
   },240);
 }
 function setRegions(t){
@@ -2024,6 +2075,7 @@ app.addEventListener('submit',e=>{
     if(box){box.textContent=errs.join(' ');box.hidden=!errs.length;}
     if(errs.length)return;
     showRequest(new FormData(e.target),files);return;}
+  if(e.target.id==='leadform'){e.preventDefault();submitLead(e.target);return;}
   if(e.target.id!=='start')return;
   e.preventDefault();
   const lv=app.querySelector('input[name="level"]:checked');
@@ -2037,6 +2089,7 @@ app.addEventListener('submit',e=>{
     state.stream=sel.value;state.questions=buildQuestions(state.stream);
   }
   state.answers=[];state.i=0;
+  state.attemptId=newAttemptId();trackQuiz('started');
   go('quiz');
 });
 app.addEventListener('change',e=>{
