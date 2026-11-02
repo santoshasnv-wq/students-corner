@@ -346,6 +346,9 @@ details.career[open]::details-content{block-size:auto}
 .cost b{display:block;font-family:var(--font-display);font-size:1.45rem;margin:.2rem 0}
 .cost.total{border:2px solid var(--mark)}
 
+.chkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem 1.2rem;margin-top:.4rem}
+.chkgrid .consent{margin:0}
+
 /* hexagon */
 .hx-grid{fill:none;stroke:var(--line);stroke-width:1.2}
 .hx-axis{stroke:var(--line);stroke-width:1}
@@ -384,6 +387,7 @@ details.career[open]::details-content{block-size:auto}
         </ul>
       </div>
       <button type="button" id="nav-teachers" data-act="teachers">Educator Hub</button>
+      <button type="button" id="nav-schools" data-act="schools">For Schools</button>
     </nav>
   </div>
   <noscript><p style="padding:2rem 0;font-family:sans-serif">Ascend Hub needs JavaScript. Please turn it on in your browser to use the quiz.</p></noscript>
@@ -1222,7 +1226,8 @@ function teachers(){
     <h1>Educator Hub</h1>
     <p class="lead">Tell us what you need and our team will prepare it and share the finished documents with you within 24 hours.</p>
     <p class="links" style="margin-top:1.2rem"><a class="btn" href="#treq" data-act="jump">Send a request</a> <a class="btn ghost" href="https://wa.me/${CONTACT.whatsapp}" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></p>
-    <p class="hint" style="margin-top:.8rem">Prefer to talk? Call <a href="tel:${PHONE_TEL}">${PHONE_SHOWN}</a> or email <a href="mailto:${CONTACT.email}">${CONTACT.email}</a>.</p>
+    <p class="hint" style="margin-top:.8rem">Running a school? <button type="button" class="linkbtn" data-act="schools">See how we support whole schools</button></p>
+    <p class="hint" style="margin-top:.4rem">Prefer to talk? Call <a href="tel:${PHONE_TEL}">${PHONE_SHOWN}</a> or email <a href="mailto:${CONTACT.email}">${CONTACT.email}</a>.</p>
   </div>
   <section class="block"><h2>What we can prepare</h2><div class="tgrid" style="margin-top:1rem">${svc}</div></section>
   ${plansHTML()}
@@ -1326,10 +1331,10 @@ function copyRequest(btn){
   else{const ta=document.createElement('textarea');ta.value=state.treq.text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
 }
 function syncNav(){
-  const ids={home:'nav-home',abroad:'nav-abroad',teachers:'nav-teachers'};
-  const cur=state.view==='teachers'?'teachers':state.view==='abroad'?'abroad':'home';
+  const ids={home:'nav-home',abroad:'nav-abroad',teachers:'nav-teachers',schools:'nav-schools'};
+  const cur=state.view==='teachers'?'teachers':state.view==='schools'?'schools':state.view==='abroad'?'abroad':'home';
   Object.keys(ids).forEach(k=>{const el=document.getElementById(ids[k]);if(el)el.setAttribute('aria-current',k===cur?'page':'false');});
-  const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',cur==='teachers'?'false':'page');
+  const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',(cur==='home'||cur==='abroad')?'page':'false');
 }
 
 /* ---------- FILE UPLOAD (Educator Hub) ---------- */
@@ -1691,6 +1696,114 @@ function submitLead(form){
   say('Sending…');
   sendToScript(payload).then(()=>{say('Thank you. Your result has been shared with Arohaanex Edvantage.');const b=document.getElementById('l-btn');if(b)b.disabled=true;}).catch(()=>say('We could not send it. Please try again, or contact us on WhatsApp.'));
 }
+/* ---------- FOR SCHOOLS ---------- */
+const SCHOOL_GAPS=[
+ {ic:'📖',t:'Weak reading and maths foundations',d:['Baseline tests for Classes 3 to 8','Grouping children by level, with a daily remedial block and ready worksheets','Re-testing every 6 to 8 weeks to show progress']},
+ {ic:'👩‍🏫',t:'Teacher quality and training',d:['A standard lesson plan format and model lessons','Short monthly training sessions','An observation rubric and coaching visits']},
+ {ic:'🚪',t:'Dropout in Classes 8 to 10',d:['An early-warning list built from attendance and marks','Counselling support','Career guidance for Classes 9 to 12 through Ascend Hub']},
+ {ic:'📝',t:'Exam and assessment pressure',d:['An assessment policy and blueprints','Competency-based question banks','Paper review and mark analysis after each exam']},
+ {ic:'🗂️',t:'Paperwork and compliance',d:['An academic calendar and record templates','A compliance checklist, checked against your board’s current rules']},
+ {ic:'🧪',t:'Limited resources',d:['Project ideas and activity plans built around what your school already has','Support to plan exhibitions and science fairs']},
+ {ic:'🧩',t:'Learning differences and wellbeing',d:['Screening checklists and differentiated worksheets','A referral process, and child-safety and wellbeing policies','Specialist help always comes from qualified professionals']},
+ {ic:'👨‍👩‍👧',t:'Parent communication',d:['Report card comments and parent meeting formats','Short workshops for parents']},
+ {ic:'🧭',t:'Weak management systems',d:['Regular review meetings and simple dashboards','Clear job descriptions and routines']}
+];
+const SCHOOL_PACKS=[
+ {t:'Academic Health Check',s:'A clear picture of where your school stands',d:['A review of academic records','Baseline tests in sampled classes','Classroom observation','A written report','A 90-day action plan']},
+ {t:'Academic Partner',s:'Steady support through the school year',d:['Monthly planning support','Lesson plans, question papers, PPTs and assessments','Teacher training sessions','Analysis after every exam','A quarterly review with your leadership team']},
+ {t:'Whole-School Programme',s:'Deeper support over several years',d:['Everything in Academic Partner','On-site coaching','A remedial programme for foundational skills','A parent programme','Career guidance for Classes 9 to 12 and leadership mentoring']}
+];
+function schoolsPage(){
+  const gaps=SCHOOL_GAPS.map(g=>`<details class="career"><summary><span class="c-main"><h3><span class="ic" aria-hidden="true">${g.ic}</span>${g.t}</h3></span><span class="chev" aria-hidden="true"></span></summary><div class="c-body"><div class="c-wide"><h4>How we help</h4><ul>${li(g.d)}</ul></div></div></details>`).join('');
+  const packs=SCHOOL_PACKS.map(p=>`<div class="plan"><h3>${p.t}</h3><p class="hint">${p.s}</p><ul>${li(p.d)}</ul><a class="btn ghost" href="#school-enquiry" data-act="school-pick" data-p="${p.t}">Ask about this</a></div>`).join('');
+  const helpBoxes=SCHOOL_GAPS.map(g=>`<label class="consent"><input type="checkbox" name="help" value="${g.t}"> <span>${g.t}</span></label>`).join('');
+  const interest=['Not sure yet'].concat(SCHOOL_PACKS.map(p=>p.t),['A short pilot in one or two classes']).map(x=>`<option>${x}</option>`).join('');
+  return `<div class="thead">${crumb('For Schools')}
+    <h1>Academic support for schools</h1>
+    <p class="lead">Arohaanex Edvantage works with schools to understand where learning is falling short, plan the fix, equip and train teachers, and track progress.</p>
+    <p class="links" style="margin-top:1.2rem"><a class="btn" href="#school-enquiry" data-act="school-pick" data-p="">Talk to us about your school</a></p>
+  </div>
+  <section class="block"><h2>How we work</h2>
+    <ol class="flow">
+      <li><b>Step 1</b><span>Understand</span><span class="hint">We look at your records, run baseline tests and observe classes, so we start from facts.</span></li>
+      <li><b>Step 2</b><span>Plan</span><span class="hint">We agree a clear 90-day plan with your leadership team.</span></li>
+      <li><b>Step 3</b><span>Equip and train</span><span class="hint">Your teachers get ready-to-use plans, papers and worksheets, and training to use them.</span></li>
+      <li><b>Step 4</b><span>Track and review</span><span class="hint">We re-test, review results with you and adjust the plan.</span></li>
+    </ol></section>
+  <section class="block"><h2>Where we can help</h2>
+    <p class="sub">Open any area to see how we support it.</p>
+    <div class="list">${gaps}</div></section>
+  <section class="block"><h2>Ways to work with us</h2>
+    <p class="sub">Every school is different. Tell us about yours and we will suggest what fits.</p>
+    <div class="plans">${packs}</div>
+    <p class="hint" style="margin-top:1rem">Not sure where to begin? We can start with a short pilot in one or two classes, with a baseline test, a remedial block and teacher coaching, and a clear before-and-after.</p></section>
+  <section class="block"><h2>How we measure progress</h2>
+    <ul class="steps">
+      <li>Baseline and end-of-year scores on the same test.</li>
+      <li>How many children move up a reading or maths level.</li>
+      <li>Teacher observation scores and the quality of exam papers.</li>
+      <li>Attendance and dropout, and the time teachers save on planning.</li>
+    </ul>
+    <p class="hint">We aim to improve how the school teaches and checks learning. We do not promise board results.</p></section>
+  <section class="block"><h2>How we work responsibly</h2>
+    <ul class="steps">
+      <li><strong>Qualified teachers review our work.</strong> We use AI tools to speed up preparation, and a qualified subject teacher checks every document before it reaches your school.</li>
+      <li><strong>Student privacy.</strong> We ask for roll numbers or codes, not names, and only with your school’s written permission.</li>
+      <li><strong>Original content.</strong> We create our own material and fit it to your board and syllabus.</li>
+      <li><strong>Specialist needs.</strong> For learning difficulties and counselling, we refer to qualified professionals.</li>
+    </ul></section>
+  <section class="block" id="school-enquiry"><h2>Tell us about your school</h2>
+    <p class="sub">Share a few details and we will get in touch to understand your school better.</p>
+    <form id="schoolform" class="tform" aria-label="School enquiry form">
+      <div><label for="s-school">School name *</label><input id="s-school" name="school" type="text" required></div>
+      <div><label for="s-name">Your name *</label><input id="s-name" name="name" type="text" required autocomplete="name"></div>
+      <div><label for="s-role">Your role</label><input id="s-role" name="role" type="text" placeholder="For example, Principal or Owner"></div>
+      <div><label for="s-city">City and state *</label><input id="s-city" name="city" type="text" required></div>
+      <div><label for="s-board">Board</label><select id="s-board" name="board"><option value="">Choose</option><option>CBSE</option><option>ICSE or ISC</option><option>State board</option><option>Cambridge</option><option>IB</option><option>Other</option></select></div>
+      <div><label for="s-classes">Classes</label><input id="s-classes" name="classes" type="text" placeholder="For example, Nursery to Class 10"></div>
+      <div><label for="s-students">Number of students</label><select id="s-students" name="students"><option value="">Choose</option><option>Under 200</option><option>200 to 500</option><option>500 to 1,000</option><option>Over 1,000</option></select></div>
+      <div><label for="s-interest">What interests you?</label><select id="s-interest" name="interest">${interest}</select></div>
+      <div class="full"><label>What would you like help with?</label><div class="chkgrid">${helpBoxes}</div></div>
+      <div><label for="s-phone">Phone or WhatsApp *</label><input id="s-phone" name="phone" type="tel" required autocomplete="tel"></div>
+      <div><label for="s-email">Email</label><input id="s-email" name="email" type="email" autocomplete="email"></div>
+      <div class="full"><label for="s-msg">Anything else we should know?</label><textarea id="s-msg" name="message"></textarea></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <div class="full"><label class="consent"><input type="checkbox" name="consent" required> <span>I agree that Arohaanex Edvantage may store these details and contact me about working with my school.</span></label></div>
+      <div class="full"><button class="btn" type="submit">Prepare my enquiry</button><span class="hint" style="margin-left:.8rem">Next you will check it and send it.</span></div>
+    </form>
+    <div id="sch-out" aria-live="polite"></div></section>
+  ${brandFoot()}
+  <p class="disclaimer">Ascend Hub is a service of Arohaanex Edvantage. Descriptions on this page explain what we offer. The scope of work for each school is agreed in writing before work begins.</p>`;
+}
+function buildSchoolEnquiry(fd){
+  const g=k=>String(fd.get(k)||'').trim();
+  const help=(fd.getAll?fd.getAll('help'):[]).map(String);
+  const d=new Date(),id='AS-'+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+Math.floor(1000+Math.random()*9000);
+  const lines=['Ascend Hub school enquiry '+id,'School: '+g('school'),'Contact: '+g('name')+(g('role')?' ('+g('role')+')':''),'City and state: '+g('city'),
+    'Board: '+(g('board')||'-')+' | Classes: '+(g('classes')||'-')+' | Students: '+(g('students')||'-'),
+    'Help needed: '+(help.length?help.join('; '):'-'),'Interested in: '+(g('interest')||'-'),
+    'Phone: '+(g('phone')||'-')+' | Email: '+(g('email')||'-'),'Message: '+(g('message')||'-'),'Consent to store details and be contacted: '+(fd.get('consent')?'Yes':'No')];
+  const data={kind:'school',id,school:g('school'),name:g('name'),role:g('role'),city:g('city'),board:g('board'),classes:g('classes'),students:g('students'),help,interest:g('interest'),phone:g('phone'),email:g('email'),message:g('message'),consent:!!fd.get('consent'),hp:g('website'),text:lines.join('\n')};
+  return {id,text:lines.join('\n'),data};
+}
+function showSchoolEnquiry(fd){
+  if(String(fd.get('website')||'').trim())return;
+  const r=buildSchoolEnquiry(fd);state.treq=r;
+  const enc=encodeURIComponent(r.text),btns=[];
+  if(CONTACT.whatsapp)btns.push(extLink('https://wa.me/'+CONTACT.whatsapp+'?text='+enc,'Send on WhatsApp'));
+  if(CONTACT.email)btns.push('<a class="btn small ghost" href="mailto:'+CONTACT.email+'?subject='+encodeURIComponent('School enquiry '+r.id)+'&body='+enc+'">Send by email</a>');
+  btns.push('<button type="button" class="btn small ghost" data-act="copy">Copy enquiry</button>');
+  const auto=!!CONTACT.endpoint;
+  const out=document.getElementById('sch-out');
+  out.innerHTML='<div class="tout"><h3 id="sch-h">'+(auto?'Sending your enquiry: ':'Your enquiry is ready: ')+r.id+'</h3><p id="sch-p">'+(auto?'We are saving it for our team. You can also send it yourself below if you prefer.':'Check it, then send it. Quote the reference number in any follow-up.')+'</p><pre class="tpre">'+esc(r.text)+'</pre><p class="links">'+btns.join(' ')+'</p></div>';
+  out.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'nearest'});
+  if(auto){
+    const setStatus=(h,p)=>{const a=document.getElementById('sch-h'),b=document.getElementById('sch-p');if(a)a.textContent=h;if(b)b.textContent=p;};
+    sendToScript(r.data)
+      .then(()=>setStatus('Enquiry sent: '+r.id,'Thank you. We will get in touch to understand your school better. Quote this reference number in any follow-up.'))
+      .catch(()=>setStatus('We could not send it automatically: '+r.id,'Please use WhatsApp, email or Copy enquiry below to send it yourself.'));
+  }
+}
 /* ---------- AFTER CLASS 10 PATHWAYS ---------- */
 const PATHS=[
  {id:'mpc',streams:['mpc'],title:'Science with Maths (MPC)',duration:'2 years, Class 11–12',code:'IRC',w:{math:3,phy:3,chem:2,comp:1},
@@ -2033,7 +2146,7 @@ function compute(){
 
 function render(){
   const v=state.view;
-  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():(state.level==='after10'?results10():results());
+  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='schools'?schoolsPage():(state.level==='after10'?results10():results());
   syncNav();
 }
 function refresh(){
@@ -2042,8 +2155,8 @@ function refresh(){
 }
 function go(view){
   state.view=view;render();window.scrollTo(0,0);
-  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
-  const target=(view==='results'||view==='teachers'||view==='abroad')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
+  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='schools'?'#schools':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#schools')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='schools')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
   if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
   if(view==='results')animateCounts();
 }
@@ -2075,6 +2188,7 @@ app.addEventListener('submit',e=>{
     if(box){box.textContent=errs.join(' ');box.hidden=!errs.length;}
     if(errs.length)return;
     showRequest(new FormData(e.target),files);return;}
+  if(e.target.id==='schoolform'){e.preventDefault();showSchoolEnquiry(new FormData(e.target));return;}
   if(e.target.id==='leadform'){e.preventDefault();submitLead(e.target);return;}
   if(e.target.id!=='start')return;
   e.preventDefault();
@@ -2122,6 +2236,8 @@ app.addEventListener('click',e=>{
   else if(act==='allc'){state.filters.allC=true;refresh();}
   else if(act==='cards'||act==='table'){state.view2=act;refresh();}
   else if(act==='teachers')go('teachers');
+  else if(act==='schools')go('schools');
+  else if(act==='school-pick'){const f=document.getElementById('s-interest');if(f&&b.dataset.p)f.value=b.dataset.p;const fm=document.getElementById('schoolform');if(fm){fm.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'start'});const n=document.getElementById('s-school');if(n)n.focus({preventScroll:true});}}
   else if(act==='abroad'){state.abMode='pick';go('abroad');}
   else if(act==='ab-pick'){state.abMode='country';state.abId=b.dataset.id;state.abTab='opp';render();window.scrollTo(0,0);const h=app.querySelector('h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
   else if(act==='ab-back'){state.abMode='pick';render();window.scrollTo(0,0);}
@@ -2154,12 +2270,13 @@ document.querySelector('.site-head').addEventListener('click',e=>{
   closeMenu();
   if(b.dataset.act==='teachers')go('teachers');
   else if(b.dataset.act==='abroad'){state.abMode='pick';go('abroad');}
+  else if(b.dataset.act==='schools')go('schools');
   else if(b.dataset.act==='home')go('welcome');
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.menu'))closeMenu();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuList&&!menuList.hidden){closeMenu();if(menuBtn)menuBtn.focus();}});
-window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');});
-if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';
+window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');else if(location.hash==='#schools'&&state.view!=='schools')go('schools');});
+if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';else if(location.hash==='#schools')state.view='schools';
 document.getElementById('brand-mark').src=BRAND_MARK;
 render();
 </script>
