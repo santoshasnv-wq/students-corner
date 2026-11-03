@@ -357,6 +357,33 @@ details.career[open]::details-content{block-size:auto}
 @media (max-width:560px){.cdl{grid-template-columns:1fr;gap:.1rem}.cdl dd{margin-bottom:.7rem}}
 .footnav{margin-top:.2rem}
 
+/* academic health check */
+.chk{max-width:780px}
+.chkq{margin:0 0 1.1rem;padding:1rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.chkq legend{font-weight:700;padding:0 .4rem;line-height:1.45}
+.chkq-ev{background:var(--accent-soft)}
+.chkopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.5rem;margin-top:.6rem}
+.chkopts-col{grid-template-columns:1fr}
+.chkopt{position:relative;display:block;cursor:pointer}
+.chkopt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chkopt span{display:block;padding:.65rem .85rem;border:2px solid var(--line);border-radius:10px;background:var(--surface);transition:border-color .15s,background .15s}
+.chkopt:hover span{border-color:var(--accent)}
+.chkopt input:checked+span{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.chkopt input:focus-visible+span{outline:3px solid var(--mark);outline-offset:2px}
+.abars{display:grid;gap:.8rem;margin-top:1rem}
+.abar{display:grid;grid-template-columns:minmax(150px,270px) 1fr 52px 150px;gap:.8rem;align-items:center}
+.abar .an{font-weight:700}
+.abar .av{text-align:right;font-weight:700}
+.abar .bar{height:12px}
+@media (max-width:640px){.abar{grid-template-columns:1fr 52px;row-gap:.25rem}.abar .an{grid-column:1/-1}.abar .st{grid-column:1/-1;justify-self:start}}
+.pt{border-collapse:collapse;width:100%;margin:.8rem 0}
+.pt th,.pt td{border:1px solid var(--line);padding:.55rem .6rem;vertical-align:middle;text-align:left}
+.pt th.bx,.pt td.bx{text-align:center;width:92px;font-size:.85rem}
+.pt td.n,.pt th.n{width:44px;text-align:center}
+.pt .box{display:inline-block;width:20px;height:20px;border:2px solid var(--text);border-radius:4px}
+.pb{break-before:page}
+@media print{.chkq,.abar,.pt tr{break-inside:avoid}}
+
 /* hexagon */
 .hx-grid{fill:none;stroke:var(--line);stroke-width:1.2}
 .hx-axis{stroke:var(--line);stroke-width:1}
@@ -1342,7 +1369,7 @@ function copyRequest(btn){
 }
 function syncNav(){
   const ids={home:'nav-home',abroad:'nav-abroad',teachers:'nav-teachers',schools:'nav-schools',about:'nav-about'};
-  const cur=['teachers','schools','about','abroad'].includes(state.view)?state.view:'home';
+  const cur=(state.view==='check'||state.view==='pulse')?'schools':(['teachers','schools','about','abroad'].includes(state.view)?state.view:'home');
   Object.keys(ids).forEach(k=>{const el=document.getElementById(ids[k]);if(el)el.setAttribute('aria-current',k===cur?'page':'false');});
   const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',(cur==='home'||cur==='abroad')?'page':'false');
 }
@@ -1731,8 +1758,11 @@ function schoolsPage(){
   return `<div class="thead">${crumb('For Schools')}
     <h1>Academic support for schools</h1>
     <p class="lead">Arohaanex Edvantage works with schools to understand where learning is falling short, plan the fix, equip and train teachers, and track progress.</p>
-    <p class="links" style="margin-top:1.2rem"><a class="btn" href="#school-enquiry" data-act="school-pick" data-p="">Talk to us about your school</a></p>
+    <p class="links" style="margin-top:1.2rem"><button type="button" class="btn" data-act="chk-open">Take the Academic Health Check</button> <a class="btn ghost" href="#school-enquiry" data-act="school-pick" data-p="">Talk to us about your school</a></p>
   </div>
+  <section class="block"><h2>Start with the Academic Health Check</h2>
+    <p class="sub">A private check for school owners and leaders: forty questions in eight areas, about 10 minutes. You get a score for each area, your strengths, where to look first, and a one-page report you can print.</p>
+    <p class="links" style="margin-top:.8rem"><button type="button" class="btn" data-act="chk-open">Take the Academic Health Check</button></p></section>
   <section class="block"><h2>How we work</h2>
     <ol class="flow">
       <li><b>Step 1</b><span>Understand</span><span class="hint">We look at your records, run baseline tests and observe classes, so we start from facts.</span></li>
@@ -1856,6 +1886,235 @@ function aboutPage(){
     <div class="alert" style="margin-top:1.4rem"><strong>Next step:</strong> write or message us with your school’s name, board and classes. We will suggest where to begin, which could be a short pilot in one or two classes. <button type="button" class="linkbtn" data-act="schools">Or fill in the school enquiry form</button></div></section>
   ${brandFoot()}
   <p class="disclaimer">Ascend Hub is a service of Arohaanex Edvantage.</p>`;
+}
+/* ---------- ACADEMIC HEALTH CHECK (online, for school owners and leaders) ---------- */
+const CHECK_SCALE=['Not true','A little true','Mostly true','Fully true'];
+const CHECK_EVID=[['Yes, against records or work samples',2],['Yes, by talking to teachers',1],['No, these are my own view',0]];
+const CHECK_AREAS=[
+ {n:'Understanding before coverage',s:'Does the school give children’s understanding priority over syllabus pace?',
+  q:[['L1','Teachers have time to reteach a topic before moving on when children have not understood it.'],
+     ['L2','The year plan includes buffer weeks for revision and reteaching.'],
+     ['L3','Teachers are not pushed to finish chapters by a fixed date regardless of how their class is doing.'],
+     ['L4','Lessons start from examples and ideas that children recognise, before formulas or rules.'],
+     ['L5','When syllabus pace and children’s understanding conflict, which usually wins?',[['Mostly pace',1],['Understanding',3],['Pace',0],['Mostly understanding',2]]]],
+  steps:'Add two buffer weeks a term to the year plan. Let teachers mark topics as not yet understood and reteach them. In monthly reviews, ask what children understood, not how many chapters were finished.',
+  ask:'Ask two teachers: “Last month, did you have time to reteach a topic that children had not understood?”',
+  pulse:'I have enough time to reteach a topic when children have not understood it.'},
+ {n:'Assessment that guides learning',s:'Do assessments help teachers decide what to do next for each child?',
+  q:[['L6','Short checks before and after a chapter show what each child has understood.'],
+     ['L7','Test results lead to specific action: reteaching, support or extension.'],
+     ['L8','Students get feedback on written work within a few days, with a clear next step.'],
+     ['L9','Question papers test understanding and application, not only memory.'],
+     ['L10','What are test results mainly used for?',[['To rank students and classes',0],['To plan the next step for each child',3],['To report marks to parents and management',1],['To plan teaching for groups and topics',2]]]],
+  steps:'Add a five-question check before and after each chapter. After each test, list the three weakest topics and plan the reteach. Return marked work with feedback within three days.',
+  ask:'Ask a teacher to show how the last test’s results changed what they taught next.',
+  pulse:'I use short checks before and after a chapter to see what each child has understood.'},
+ {n:'Teacher culture and support',s:'Do teachers feel safe, supported and fairly appraised?',
+  q:[['L11','Teachers feel safe to say that a class is behind or that a plan is not working.'],
+     ['L12','Monthly reviews with teachers are collaborative and aimed at adjusting plans and helping.'],
+     ['L13','New teachers get an induction and a mentor in their first term.'],
+     ['L14','Teachers have paid time during the year for planning and training.'],
+     ['L15','What does teacher appraisal mainly reward?',[['How well a teacher presents to management',0],['A balance of growth and results',2],['Students’ growth and learning',3],['Exam results and syllabus completion',1]]]],
+  steps:'In monthly reviews, ask each teacher to bring one problem and one request. Stop ranking teachers by speed of coverage. Give every new teacher a mentor.',
+  ask:'Ask three teachers, privately: “What do you think your appraisal mainly rewards?”',
+  pulse:'I feel safe telling leadership that my class is behind or that a plan is not working.'},
+ {n:'Student support',s:'Do children who struggle, and children who are ahead, get the help they need?',
+  q:[['L16','Children who struggle are identified early, using more than one signal, such as tests, attendance and teacher observation.'],
+     ['L17','Struggling children get regular remedial help in school time, with a clear plan.'],
+     ['L18','Stronger children get real enrichment, not only extra worksheets.'],
+     ['L19','There is a clear route to refer a child for a learning difficulty or for counselling.'],
+     ['L20','Children who are absent for long are followed up quickly.']],
+  steps:'Each month, list the children who need help from tests, attendance and teacher notes. Start a 30-minute remedial slot in school time. Write down a clear referral route.',
+  ask:'Ask for the list of children getting remedial help, and check how one child has progressed.',
+  pulse:'I know which children in my classes are struggling, and I have a plan for them.'},
+ {n:'Student voice and wellbeing',s:'Are students heard, safe, and free of unnecessary pressure?',
+  q:[['L21','Students are asked, at least once a year, how they find lessons, homework and school life.'],
+     ['L22','Homework load is checked across subjects so that it does not pile up.'],
+     ['L23','Every child has a trusted adult in school to talk to about problems.'],
+     ['L24','Written policies on bullying and child safety exist, and both staff and students know them.'],
+     ['L25','In the weeks before exams, which is closest to what happens?',[['Revision with some pressure',2],['Pressure to protect the school’s image',0],['Extra support and calm routines',3],['Heavy pressure and many extra tests',1]]]],
+  steps:'Run a short anonymous student survey each term. Review homework by class and subject. Name a trusted adult for every class.',
+  ask:'Ask a class: “Who can you talk to at school if you have a problem?”',
+  pulse:'Children can tell me that they do not understand without fear.'},
+ {n:'Leadership priorities',s:'Do leaders put children’s learning first when decisions pull in different directions?',
+  q:[['L26','Academic decisions start with the question of what is best for the children’s learning.'],
+     ['L27','Leaders spend regular time in classrooms and look at student work, not only at paperwork.'],
+     ['L28','A meaningful share of the budget goes to teacher training and learning resources.'],
+     ['L29','Class sizes allow teachers to know each child.'],
+     ['L30','When a decision helps income but may not help learning, what usually happens?',[['We lean to income',1],['Learning comes first',3],['Income decides',0],['We look for a balance that leans to learning',2]]]],
+  steps:'Put one learning question on every leadership agenda. Schedule classroom visits and reviews of student work. Create a budget line for training.',
+  ask:'Ask teachers: “When did a leader last look at your students’ work and give you feedback?”',
+  pulse:'Leaders visit my classroom, look at student work and give useful feedback.'},
+ {n:'Planning and systems',s:'Are plans, calendars and records clear, and are they used?',
+  q:[['L31','An academic calendar is fixed before the year starts.'],
+     ['L32','Every subject has a year plan and unit plans prepared with its teachers.'],
+     ['L33','A standard lesson plan format exists, and plans are reviewed.'],
+     ['L34','Attendance, marks and remarks are kept in one consistent record.'],
+     ['L35','A written assessment policy exists, and teachers know it.']],
+  steps:'Fix the academic calendar before the year starts. Prepare year and unit plans with teachers. Adopt one lesson plan format and one record system.',
+  ask:'Ask a teacher to show their year plan and their last lesson plan.',
+  pulse:'I have a clear year plan and unit plans that I helped to prepare.'},
+ {n:'Parents as partners',s:'Do parents hear about their child’s learning, and can they help?',
+  q:[['L36','Parent meetings talk about the child’s learning, not only fees and marks.'],
+     ['L37','Parents of children who struggle get simple, practical steps to help at home.'],
+     ['L38','Parents have an easy way to raise a concern and get a reply.'],
+     ['L39','Parents get clear information on the syllabus, assessment dates and expectations early in the year.'],
+     ['L40','What do parents hear most from the school?',[['Marks and rankings',1],['Fees and events',0],['Specific information about their child’s learning',3],['General progress updates',2]]]],
+  steps:'Begin parent meetings with evidence of learning. Give parents two simple practices for home. Set a response time for concerns.',
+  ask:'Ask a parent what they heard most at the last parent meeting.',
+  pulse:'Parent meetings let me share how a child is learning.'}
+];
+const newCheck=()=>({stage:'intro',sec:0,ans:{},evd:{},info:{role:'',board:'',classes:'',students:''},attempt:''});
+const bandOf=p=>p>=75?['Strong','st-open']:p>=50?['Developing','st-soon']:['Needs attention','st-closed'];
+function checkCompute(){
+  const c=state.chk;
+  const areas=CHECK_AREAS.map((a,i)=>{
+    const pts=a.q.reduce((t,q)=>t+(c.ans[q[0]]||0),0),pct=Math.round(pts/(a.q.length*3)*100),b=bandOf(pct);
+    return {i,n:a.n,pct,band:b[0],cls:b[1],evd:c.evd[i]===undefined?0:c.evd[i]};
+  });
+  const total=CHECK_AREAS.reduce((t,a)=>t+a.q.reduce((s,q)=>s+(c.ans[q[0]]||0),0),0);
+  const overall=Math.round(total/120*100);
+  const byHigh=[...areas].sort((x,y)=>y.pct-x.pct||x.i-y.i),byLow=[...areas].sort((x,y)=>x.pct-y.pct||x.i-y.i);
+  const flagged=areas.filter(a=>(a.pct>=60&&a.evd<2)||a.i===2||a.i===5);
+  return {areas,overall,band:bandOf(overall),strong:byHigh.slice(0,3),low:byLow.slice(0,3),flagged,unchecked:areas.filter(a=>a.evd===0).length};
+}
+function checkIntro(){
+  const sel=(id,label,opts,v)=>`<div><label for="${id}">${label}</label><select id="${id}"><option value="">Choose</option>${opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('')}</select></div>`;
+  const i=state.chk.info;
+  return `<div class="thead">${crumb('For Schools','Academic Health Check')}
+    <h1>Academic Health Check</h1>
+    <p class="lead">A private check for school owners and leaders. Forty questions in eight areas, about 10 minutes. You get a score for each area, your strengths, where to look first, and a one-page report you can print.</p></div>
+  <section class="block"><h2>Before you start</h2>
+    <ul class="steps">
+      <li><strong>Answer as things are today</strong>, not as you wish they were. There are no right answers to impress anyone.</li>
+      <li><strong>It asks whether academic decisions start from what the child needs.</strong> The wording is neutral, and the aim is to find where to start.</li>
+      <li><strong>Your answers stay on this device.</strong> We count how many checks are completed and the average scores, without your school’s name. You can choose to share your result at the end.</li>
+      <li><strong>It is an indicator, not an audit.</strong> It uses your own answers, so it is best followed by a look at records and a talk with teachers.</li>
+    </ul>
+    <form id="chkstart" class="tform" style="margin-top:1.4rem" aria-label="About you">
+      ${sel('c-role','Your role',['Owner or trustee','Principal','Academic head or coordinator','Other'],i.role)}
+      ${sel('c-board','Board',['CBSE','ICSE or ISC','State board','Cambridge','IB','Other'],i.board)}
+      <div><label for="c-classes">Classes</label><input id="c-classes" type="text" placeholder="For example, Nursery to Class 10" value="${esc(i.classes)}"></div>
+      ${sel('c-students','Number of students',['Under 200','200 to 500','500 to 1,000','Over 1,000'],i.students)}
+      <div class="full"><button class="btn" type="submit">Start the check</button><span class="hint" style="margin-left:.8rem">These details are optional.</span></div>
+    </form></section>
+  ${brandFoot()}
+  <p class="disclaimer">The Academic Health Check is a service of Arohaanex Edvantage. It gives guidance based on the answers you give, and it is not an inspection or a rating of your school.</p>`;
+}
+function checkQuestions(){
+  const c=state.chk,a=CHECK_AREAS[c.sec];
+  const radio=(name,v,label,checked)=>`<label class="chkopt"><input type="radio" name="${name}" value="${v}"${checked?' checked':''}><span>${label}</span></label>`;
+  const qs=a.q.map((q,k)=>{
+    const cur=c.ans[q[0]];
+    const opts=q[2]?q[2].map(o=>radio('chk-'+q[0],o[1],o[0],cur===o[1])).join(''):CHECK_SCALE.map((l,v)=>radio('chk-'+q[0],v,l,cur===v)).join('');
+    return `<fieldset class="chkq"><legend>${k+1}. ${q[1]}</legend><div class="chkopts${q[2]?' chkopts-col':''}">${opts}</div></fieldset>`;
+  }).join('');
+  const ev=CHECK_EVID.map(o=>radio('chk-evd-'+c.sec,o[1],o[0],c.evd[c.sec]===o[1])).join('');
+  return `<div class="thead">${crumb('For Schools','Academic Health Check')}
+    <div class="progress-line"><span>Section ${c.sec+1} of 8</span><span>${c.sec===7?'Last section':'Keep going'}</span></div>
+    <div class="bar" aria-hidden="true"><i style="width:${Math.round(c.sec/8*100)}%"></i></div>
+    <h1 id="chk-h" style="margin-top:1.2rem">${a.n}</h1><p class="lead">${a.s}</p></div>
+  <div class="chk">${qs}
+    <fieldset class="chkq chkq-ev"><legend>Have you checked your answers in this section against records, work samples or by talking to teachers in the last year?</legend><div class="chkopts chkopts-col">${ev}</div></fieldset>
+    <p class="err" id="chk-err" role="alert" hidden>Please answer every question in this section.</p>
+    <p class="links" style="margin-top:1.2rem">${c.sec>0?'<button type="button" class="btn ghost" data-act="chk-back">Back</button> ':''}<button type="button" class="btn" data-act="chk-next">${c.sec===7?'See my result':'Next section'}</button></p></div>`;
+}
+function checkResult(){
+  const r=checkCompute(),c=state.chk,date=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const bars=r.areas.map(a=>`<div class="abar"><span class="an">${a.n}</span><span class="bar" aria-hidden="true"><i style="width:${a.pct}%"></i></span><span class="av">${a.pct}%</span><span class="st ${a.cls}">${a.band}</span></div>`).join('');
+  const lowIds=r.low.map(a=>a.i);
+  const stepsFor=a=>`<div class="tsvc"><h3>${a.n} <span class="st ${a.cls}">${a.band}, ${a.pct}%</span></h3><p>${CHECK_AREAS[a.i].steps}</p></div>`;
+  const focus=r.low.filter(a=>a.pct<75),others=r.areas.filter(a=>a.pct<75&&!lowIds.includes(a.i));
+  const checkList=r.flagged.map(a=>{
+    const why=a.i===2||a.i===5?'Leaders and teachers often see this area differently.':'You scored this area well, but have not checked it against records.';
+    return `<li><strong>${a.n}.</strong> ${why} ${CHECK_AREAS[a.i].ask}</li>`;
+  }).join('');
+  const who=[c.info.role,c.info.board,c.info.classes].filter(Boolean).map(esc).join(', ');
+  const sentence=r.overall>=75?'Most areas are working well. Use the list below to check what you cannot yet see.':r.overall>=50?'Several areas are partly in place. Start with the three lowest areas below.':'Many areas need attention. That is a useful starting point. Begin with the three lowest areas below.';
+  return `<p class="print-only"><img src="${BRAND_MARK}" alt="" height="32"><strong>Arohaanex Edvantage</strong> | Academic Health Check. Prepared on ${date}${who?'. '+who:''}</p>
+  <div class="res-head"><div>${crumb('For Schools','Academic Health Check')}<h1>Your Academic Health Check</h1>
+    <p class="lead">Overall score: <strong>${r.overall}%</strong> <span class="st ${r.band[1]}">${r.band[0]}</span>. ${sentence}</p></div>
+    <div class="actions noprint"><button class="btn" data-act="chk-print">Print or save as PDF</button><button class="btn ghost" data-act="chk-restart">Start again</button></div></div>
+  <section class="block"><h2>Your eight areas</h2><p class="sub">Strong is 75% or more, Developing is 50 to 74%, and Needs attention is below 50%.</p><div class="abars">${bars}</div></section>
+  <section class="block"><h2>Strengths and where to look first</h2>
+    <div class="pgrid"><div><h3>Strongest areas</h3><ul>${r.strong.map(a=>`<li>${a.n} (${a.pct}%)</li>`).join('')}</ul></div>
+    <div><h3>Lowest areas</h3><ul>${r.low.map(a=>`<li>${a.n} (${a.pct}%)</li>`).join('')}</ul></div></div></section>
+  <section class="block"><h2>First steps</h2>
+    ${focus.length?`<p class="sub">Start with your lowest areas.</p><div class="tgrid" style="margin-top:1rem">${focus.map(stepsFor).join('')}</div>`:'<p class="sub">All eight areas score 75% or more. Keep these routines, and check them against records and with teachers.</p>'}
+    ${others.length?`<div class="how" style="margin-top:1rem"><details><summary>First steps for the other areas below 75%</summary><div class="tgrid" style="margin-top:1rem">${others.map(stepsFor).join('')}</div></details></div>`:''}</section>
+  <section class="block"><h2>Worth checking with your teachers</h2>
+    <p class="sub">Your own answers can look better than what teachers and children experience. Check these areas first. ${r.unchecked>0?'You said '+r.unchecked+' of the 8 sections had not been checked against records or with teachers.':''}</p>
+    <ul class="steps">${checkList}</ul></section>
+  <section class="block noprint"><h2>Teacher check: eight questions</h2>
+    <p class="sub">Print a short anonymous check, one question for each area, to use at a staff meeting. It has a tally sheet for you to read the results.</p>
+    <p class="links"><button class="btn" data-act="chk-pulse">Open the printable teacher check</button></p></section>
+  <section class="block noprint"><h2>Next step</h2>
+    <p class="sub">The full Academic Health Check adds a review of records, classroom observation, and anonymous teacher and student surveys, so you can see where leaders and teachers differ.</p>
+    <p class="links"><button class="btn" data-act="chk-talk">Talk to us about a full Academic Health Check</button></p>
+    <form id="checkshare" class="tform" style="margin-top:1.4rem" aria-label="Share my result">
+      <div class="full"><strong>Optional: share this result with Arohaanex Edvantage.</strong> Nothing is sent unless you press the button.</div>
+      <div><label for="k-school">School name *</label><input id="k-school" name="school" type="text" required></div>
+      <div><label for="k-name">Your name *</label><input id="k-name" name="name" type="text" required autocomplete="name"></div>
+      <div><label for="k-phone">Phone or WhatsApp</label><input id="k-phone" name="phone" type="tel" autocomplete="tel"></div>
+      <div><label for="k-email">Email</label><input id="k-email" name="email" type="email" autocomplete="email"></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <div class="full"><label class="consent"><input type="checkbox" name="consent" required> <span>I agree that Arohaanex Edvantage may store my school’s result and my contact details, and contact me about it.</span></label></div>
+      <div class="full"><button class="btn ghost" type="submit" id="k-btn">Share my result</button><span class="hint" id="k-status" role="status" style="margin-left:.8rem"></span></div>
+    </form></section>
+  ${brandFoot()}
+  <p class="disclaimer">The Academic Health Check gives guidance from the answers you gave. It is an indicator and not an audit, an inspection or a rating of your school.</p>`;
+}
+function pulseView(){
+  const rows=CHECK_AREAS.map((a,i)=>`<tr><td class="n">${i+1}</td><td>${a.pulse}</td>${[0,1,2,3].map(()=>'<td class="bx"><span class="box"></span></td>').join('')}</tr>`).join('');
+  const heads=CHECK_SCALE.map(l=>`<th class="bx">${l}</th>`).join('');
+  const tally=CHECK_AREAS.map((a,i)=>`<tr><td class="n">${i+1}</td><td>${a.n}</td>${[0,1,2,3].map(()=>'<td class="bx"></td>').join('')}<td class="bx"></td></tr>`).join('');
+  return `<div class="thead noprint">${crumb('For Schools','Academic Health Check','Teacher check')}
+    <h1>Teacher check: eight questions</h1>
+    <p class="lead">Print this page. Give the first sheet to each teacher, and keep the tally sheet for yourself.</p>
+    <p class="links"><button class="btn" data-act="chk-print">Print</button> <button class="btn ghost" data-act="chk-result">Back to my result</button></p></div>
+  <section class="block pulse"><h2>Teacher check (anonymous)</h2>
+    <p>Think about this school over the last term. Tick one box for each statement. <strong>Please do not write your name.</strong></p>
+    <table class="pt"><thead><tr><th class="n">No.</th><th>Statement</th>${heads}</tr></thead><tbody>${rows}</tbody></table>
+    <p class="hint">Thank you. Your honest answers help the school, and nobody will know who gave them.</p></section>
+  <section class="block pulse pb"><h2>Tally sheet for the school leader</h2>
+    <p>For each statement, count how many teachers ticked each box and write the numbers below. Then work out the average: add up (0 × the count in the first box, 1 × the second, 2 × the third and 3 × the fourth) and divide by the number of teachers.</p>
+    <table class="pt"><thead><tr><th class="n">No.</th><th>Area</th>${heads}<th class="bx">Average</th></tr></thead><tbody>${tally}</tbody></table>
+    <p><strong>How to read the average.</strong> 2.25 or more is strong. From 1.5 to 2.24 is developing. Below 1.5 needs attention. Compare each average with your own score for the same area in your Academic Health Check. A gap of more than about 0.6 is worth talking about with your teachers.</p>
+    <p class="hint">Show results only if at least five teachers have answered, so that nobody can be identified.</p></section>
+  ${brandFoot()}`;
+}
+function trackCheck(stage){
+  if(!CONTACT.endpoint||!state.chk||!state.chk.attempt)return;
+  try{
+    const c=state.chk,base={kind:'check',stage,attempt:c.attempt,role:c.info.role,board:c.info.board,students:c.info.students};
+    if(stage==='completed'){const r=checkCompute();Object.assign(base,{overall:r.overall,scores:r.areas.map(a=>a.pct),unchecked:r.unchecked});}
+    sendToScript(base).catch(()=>{});
+  }catch(e){}
+}
+function submitCheckShare(form){
+  const fd=new FormData(form),g=k=>String(fd.get(k)||'').trim(),digits=v=>v.replace(/\D/g,'');
+  const st=document.getElementById('k-status'),say=m=>{if(st)st.textContent=m;};
+  if(g('website'))return;
+  if(!digits(g('phone'))&&!g('email')){say('Please give a phone number or an email.');return;}
+  if(g('phone')&&digits(g('phone')).length<10){say('Please check the phone number.');return;}
+  if(!CONTACT.endpoint){say('Sharing is not switched on yet.');return;}
+  const c=state.chk,r=checkCompute();
+  const payload={kind:'checkshare',school:g('school'),name:g('name'),phone:g('phone'),email:g('email'),role:c.info.role,board:c.info.board,classes:c.info.classes,students:c.info.students,
+    overall:r.overall,scoresText:r.areas.map(a=>a.n+' '+a.pct+'%').join(', '),weakest:r.low.map(a=>a.n).join('; '),consent:!!fd.get('consent')};
+  say('Sending…');
+  sendToScript(payload).then(()=>{say('Thank you. Your result has been shared with Arohaanex Edvantage.');const b=document.getElementById('k-btn');if(b)b.disabled=true;}).catch(()=>say('We could not send it. Please try again, or contact us on WhatsApp.'));
+}
+function chkNext(){
+  const c=state.chk,a=CHECK_AREAS[c.sec];
+  const ok=a.q.every(q=>c.ans[q[0]]!==undefined)&&c.evd[c.sec]!==undefined;
+  const err=document.getElementById('chk-err');
+  if(!ok){if(err)err.hidden=false;return;}
+  if(c.sec<7){c.sec++;render();window.scrollTo(0,0);}
+  else{c.stage='result';trackCheck('completed');state.view='check';render();window.scrollTo(0,0);}
+}
+function checkView(){
+  if(!state.chk)state.chk=newCheck();
+  return state.chk.stage==='intro'?checkIntro():state.chk.stage==='q'?checkQuestions():checkResult();
 }
 /* ---------- AFTER CLASS 10 PATHWAYS ---------- */
 const PATHS=[
@@ -2199,7 +2458,7 @@ function compute(){
 
 function render(){
   const v=state.view;
-  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='schools'?schoolsPage():v==='about'?aboutPage():(state.level==='after10'?results10():results());
+  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='schools'?schoolsPage():v==='about'?aboutPage():v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
   syncNav();
 }
 function refresh(){
@@ -2208,8 +2467,8 @@ function refresh(){
 }
 function go(view){
   state.view=view;render();window.scrollTo(0,0);
-  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='schools'?'#schools':view==='about'?'#about':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#schools'||location.hash==='#about'||location.hash==='#contact')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
-  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='schools'||view==='about')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
+  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='schools'?'#schools':view==='about'?'#about':(view==='check'||view==='pulse')?'#check':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#schools'||location.hash==='#about'||location.hash==='#contact'||location.hash==='#check')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='schools'||view==='about'||view==='check'||view==='pulse')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
   if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
   if(view==='results')animateCounts();
 }
@@ -2241,6 +2500,11 @@ app.addEventListener('submit',e=>{
     if(box){box.textContent=errs.join(' ');box.hidden=!errs.length;}
     if(errs.length)return;
     showRequest(new FormData(e.target),files);return;}
+  if(e.target.id==='chkstart'){
+    e.preventDefault();const c=state.chk||(state.chk=newCheck()),v=id=>(document.getElementById(id)||{}).value||'';
+    c.info={role:v('c-role'),board:v('c-board'),classes:v('c-classes'),students:v('c-students')};
+    c.stage='q';c.sec=0;c.ans={};c.evd={};c.attempt=newAttemptId();trackCheck('started');render();window.scrollTo(0,0);return;}
+  if(e.target.id==='checkshare'){e.preventDefault();submitCheckShare(e.target);return;}
   if(e.target.id==='schoolform'){e.preventDefault();showSchoolEnquiry(new FormData(e.target));return;}
   if(e.target.id==='leadform'){e.preventDefault();submitLead(e.target);return;}
   if(e.target.id!=='start')return;
@@ -2261,6 +2525,10 @@ app.addEventListener('submit',e=>{
 });
 app.addEventListener('change',e=>{
   const t=e.target;
+  if(t.name&&t.name.indexOf('chk-')===0&&state.chk){
+    const v=parseInt(t.value,10);
+    if(t.name.indexOf('chk-evd-')===0)state.chk.evd[parseInt(t.name.slice(8),10)]=v;else state.chk.ans[t.name.slice(4)]=v;
+    const er=document.getElementById('chk-err');if(er)er.hidden=true;return;}
   if(t.id==='ab-budget'){state.abroadBudget=parseInt(t.value,10)||0;const tb=document.getElementById('ab-table');if(tb)tb.innerHTML=abroadTable();else refreshAb();return;}
   if(t.id==='ab-switch'){state.abId=t.value;render();return;}
   if(t.name==='level'){const nm=document.getElementById('name');if(nm)state.name=nm.value;state.level=t.value;render();return;}
@@ -2291,6 +2559,13 @@ app.addEventListener('click',e=>{
   else if(act==='teachers')go('teachers');
   else if(act==='schools')go('schools');
   else if(act==='about')go('about');
+  else if(act==='chk-open'||act==='chk-restart'){state.chk=newCheck();go('check');}
+  else if(act==='chk-next')chkNext();
+  else if(act==='chk-back'){state.chk.sec=Math.max(0,state.chk.sec-1);render();window.scrollTo(0,0);}
+  else if(act==='chk-print')window.print();
+  else if(act==='chk-pulse')go('pulse');
+  else if(act==='chk-result')go('check');
+  else if(act==='chk-talk'){go('schools');setTimeout(()=>{const f=document.getElementById('s-interest');if(f)f.value='Academic Health Check';const fm=document.getElementById('schoolform');if(fm)fm.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'start'});},60);}
   else if(act==='contact'){go('about');scrollToContact();}
   else if(act==='school-pick'){const f=document.getElementById('s-interest');if(f&&b.dataset.p)f.value=b.dataset.p;const fm=document.getElementById('schoolform');if(fm){fm.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'start'});const n=document.getElementById('s-school');if(n)n.focus({preventScroll:true});}}
   else if(act==='abroad'){state.abMode='pick';go('abroad');}
@@ -2331,8 +2606,8 @@ document.querySelector('.site-head').addEventListener('click',e=>{
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.menu'))closeMenu();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuList&&!menuList.hidden){closeMenu();if(menuBtn)menuBtn.focus();}});
-window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');else if(location.hash==='#schools'&&state.view!=='schools')go('schools');else if(location.hash==='#about'&&state.view!=='about')go('about');else if(location.hash==='#contact'){go('about');scrollToContact();}});
-if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';else if(location.hash==='#schools')state.view='schools';else if(location.hash==='#about'||location.hash==='#contact')state.view='about';
+window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');else if(location.hash==='#schools'&&state.view!=='schools')go('schools');else if(location.hash==='#about'&&state.view!=='about')go('about');else if(location.hash==='#contact'){go('about');scrollToContact();}else if(location.hash==='#check'&&state.view!=='check'&&state.view!=='pulse'){state.chk=newCheck();go('check');}});
+if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';else if(location.hash==='#schools')state.view='schools';else if(location.hash==='#about'||location.hash==='#contact')state.view='about';else if(location.hash==='#check')state.view='check';
 document.getElementById('brand-mark').src=BRAND_MARK;
 render();
 if(location.hash==='#contact')scrollToContact();
