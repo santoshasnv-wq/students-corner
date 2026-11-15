@@ -334,6 +334,11 @@ details.career[open]::details-content{block-size:auto}
 .cty:hover{transform:translateY(-3px);border-color:var(--accent)}
 .cty .flag{font-size:2.2rem;line-height:1}
 .cty .hint{margin:0}
+.chipbtn{min-height:44px;padding:.45rem .9rem;border:2px solid var(--line);border-radius:999px;background:var(--surface);font:inherit;font-weight:700;line-height:1.25;color:inherit;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.chipbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.chipbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chipbtn small{font-weight:400;color:var(--muted);margin-left:.4rem}
+.chipbtn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:1.4rem 0 1rem;border-bottom:2px solid var(--line)}
 .tab{min-height:46px;padding:.5rem 1.1rem;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;background:transparent;font-family:var(--font-display);font-weight:600;font-size:1.05rem;cursor:pointer;color:var(--muted)}
 .tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--mark)}
@@ -419,6 +424,7 @@ details.career[open]::details-content{block-size:auto}
         <ul class="menu-list" id="menu-student-list" hidden>
           <li><button type="button" id="nav-home" data-act="home">Career Guidance</button></li>
           <li><button type="button" id="nav-abroad" data-act="abroad">Study Abroad</button></li>
+          <li><button type="button" id="nav-exams" data-act="exams">Competitive Exams</button></li>
         </ul>
       </div>
       <button type="button" id="nav-teachers" data-act="teachers">Educator Hub</button>
@@ -1100,7 +1106,7 @@ function tableHTML(list){
   return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">Institution</th><th scope="col">NAAC grade</th><th scope="col">Admissions, 2027 intake</th><th scope="col">Official website</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 /* ---------- STATE ---------- */
-const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,attemptId:'',abroadBudget:0,abMode:'pick',abId:'',abTab:'opp',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
+const state={view:'welcome',name:'',stream:'',regions:['any'],minGrade:1,kind:'all',view2:'cards',focus:true,level:'after12',treq:null,attemptId:'',abroadBudget:0,abMode:'pick',abId:'',abTab:'opp',exMode:'pick',exGoal:'',exId:'',exTab:'about',cuet:[],cuF:'all',cuMsg:'',questions:[],answers:[],i:0,result:null,filters:{only:true,all:false,allC:false}};
 const app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pctText=v=>Math.round(v*100)+'%';
@@ -1368,10 +1374,10 @@ function copyRequest(btn){
   else{const ta=document.createElement('textarea');ta.value=state.treq.text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
 }
 function syncNav(){
-  const ids={home:'nav-home',abroad:'nav-abroad',teachers:'nav-teachers',schools:'nav-schools',about:'nav-about'};
-  const cur=(state.view==='check'||state.view==='pulse')?'schools':(['teachers','schools','about','abroad'].includes(state.view)?state.view:'home');
+  const ids={home:'nav-home',abroad:'nav-abroad',exams:'nav-exams',teachers:'nav-teachers',schools:'nav-schools',about:'nav-about'};
+  const cur=(state.view==='check'||state.view==='pulse')?'schools':(['teachers','schools','about','abroad','exams'].includes(state.view)?state.view:'home');
   Object.keys(ids).forEach(k=>{const el=document.getElementById(ids[k]);if(el)el.setAttribute('aria-current',k===cur?'page':'false');});
-  const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',(cur==='home'||cur==='abroad')?'page':'false');
+  const st=document.getElementById('nav-student');if(st)st.setAttribute('aria-current',(cur==='home'||cur==='abroad'||cur==='exams')?'page':'false');
 }
 
 /* ---------- FILE UPLOAD (Educator Hub) ---------- */
@@ -1683,6 +1689,310 @@ const abroadCTA=(who)=>`<section class="block noprint"><h2>Thinking of studying 
     <p class="links" style="margin-top:.8rem"><button class="btn" data-act="abroad">Explore study abroad</button></p></section>
   `;
 
+/* ---------- COMPETITIVE EXAMS (Student Corner) ---------- */
+/* Details were collected from public sources on EX_CHECKED. Exam bodies change patterns, dates and fees every year, so each exam page says how well we could check it.
+   level: 'official'  = read from the official bulletin
+          'secondary' = news and coaching-site summaries, official 2027 notice not out yet
+          'general'   = a general description only: the pattern and dates were not checked
+   To update an exam, edit its entry below and change EX_CHECKED. */
+const EX_CHECKED='15 November 2026';
+const EX_LEVEL={official:['top','Checked against the official bulletin'],secondary:['mid','Checked against news summaries'],general:['low','General description only']};
+const EX_GOALS=[
+ {id:'eng',ico:'⚙️',t:'Engineering',d:'JEE Main, JEE Advanced and state and private engineering tests'},
+ {id:'med',ico:'🩺',t:'Medicine and health',d:'NEET UG for MBBS, BDS and AYUSH courses'},
+ {id:'law',ico:'⚖️',t:'Law',d:'CLAT and law tests of private universities'},
+ {id:'des',ico:'🎨',t:'Design and architecture',d:'UCEED, NID, NIFT and NATA'},
+ {id:'mgt',ico:'📈',t:'Management after Class 12',d:'IPMAT, NPAT, SET and CUET for BBA'},
+ {id:'pvt',ico:'🏫',t:'Private university tests',d:'BITSAT, VITEEE, SRMJEEE, MET, KIITEE and more'},
+ {id:'state',ico:'📍',t:'Andhra Pradesh and Telangana',d:'EAPCET for engineering, agriculture and pharmacy'}
+];
+const EX_ORDER=['cuet','jeemain','jeeadv','neet','clat','apeap','tgeap','nata','uceed','nid','nift','ipmat','bitsat','viteee','srmjeee','met','kiitee','aeee','npat','set','upes','lpunest','snusat'];
+const GEN_DATES='Dates change every year. Watch the official website for the notification, the last date to apply and the exam dates. We have not checked this exam’s 2027 dates.';
+const GEN_PATTERN='The number of questions, marks, sections and the exam mode change from year to year. Read the current official brochure or bulletin before you plan.';
+const EXAMS=[
+ {id:'cuet',name:'CUET (UG)',full:'Common University Entrance Test (Undergraduate)',level:'official',goals:['mgt'],body:'National Testing Agency (NTA)',
+  who:'Students who have passed or are appearing in Class 12 and want an undergraduate course (BA, BSc, BCom, BBA, BCA and others) in central universities and in many state, deemed and private universities that accept CUET scores.',
+  mode:'Computer-based test, all multiple-choice, held in several shifts.',
+  pattern:['You may choose up to 5 papers in all. Languages, domain subjects and the General Aptitude Test are counted together.','Each paper has 50 compulsory questions and lasts 60 minutes.','Marking: 5 marks for a correct answer, minus 1 for a wrong answer, and nothing for an unanswered question.','Your papers do not have to match your Class 12 subjects, but every university lists the papers it needs for each course.','The 2026 bulletin has 37 papers: 13 languages, 23 domain subjects and the General Aptitude Test. See the Subject-wise tab.'],
+  subj:'Subject-wise tab',
+  dates:['The 2027 information bulletin was not out when we checked on 15 November 2026. It is published on cuet.nta.nic.in.','In 2026 the bulletin came out in January and the exam began in May. A similar schedule is likely for 2027, but it is not confirmed.','In October 2026 news reports said UGC and NTA were discussing changes, such as fewer papers per candidate and grouped papers. These were proposals and not decisions. Read the 2027 bulletin before you plan.','Eligibility: Class 12 passed or appearing. CUET has no upper age limit, but a university may set its own.','Appearing in CUET does not guarantee a seat. Each university sets its own cut-offs and course rules.'],
+  tip:'Check the programme page of every university you like. It tells you exactly which CUET papers it needs.',
+  official:[['CUET (UG) website','https://cuet.nta.nic.in/'],['NTA','https://nta.ac.in/']]},
+ {id:'jeemain',name:'JEE Main',full:'Joint Entrance Examination (Main)',level:'secondary',goals:['eng'],body:'National Testing Agency (NTA)',
+  who:'Students with Physics, Chemistry and Mathematics in Class 12 who want B.E. or B.Tech at the NITs, IIITs and other centrally funded institutes, and at many state and private colleges. It is also the first step to JEE Advanced for the IITs. A separate paper covers B.Arch and B.Planning.',
+  mode:'Mostly computer-based. The drawing test for B.Arch is on paper.',
+  pattern:['Subjects for the B.E. and B.Tech paper: Physics, Chemistry and Mathematics.','The exam is held in two sessions a year. Read the bulletin to see how the two sessions count.',GEN_PATTERN],
+  subj:'Physics, Chemistry and Mathematics',
+  dates:['The revised NTA calendar of September 2026 (tentative) puts Session 1 in the second half of January 2027 and Session 2 in early April 2027.','Watch jeemain.nta.nic.in for the 2027 bulletin and registration dates.'],
+  tip:'Class 11 and 12 NCERT Physics, Chemistry and Maths are the base. Build them first, then practise past papers.',
+  official:[['JEE Main website','https://jeemain.nta.nic.in/']]},
+ {id:'jeeadv',name:'JEE Advanced',full:'Joint Entrance Examination (Advanced)',level:'general',goals:['eng'],body:'One of the IITs, in rotation each year',
+  who:'Students who qualify through JEE Main (a limited number of top scorers) and want a seat in the IITs.',
+  mode:'Computer-based. Check the brochure for this year.',
+  pattern:['Subjects: Physics, Chemistry and Mathematics.','There are two papers, and the brochure says how they are held.','There are limits on how many times and in which years you can attempt it. Check the current brochure.'],
+  subj:'Physics, Chemistry and Mathematics',
+  dates:['It is usually held in May or June, after JEE Main Session 2.','The organising IIT publishes the dates and eligibility rules each year. We have not checked the 2027 dates.'],
+  tip:'Qualifying for JEE Advanced depends on your JEE Main performance, so plan for both together.',
+  official:[['JEE Advanced website','https://jeeadv.ac.in/']]},
+ {id:'neet',name:'NEET (UG)',full:'National Eligibility cum Entrance Test (Undergraduate)',level:'secondary',goals:['med'],body:'National Testing Agency (NTA)',
+  who:'Students with Physics, Chemistry, Biology (or Biotechnology) and English in Class 12 who want MBBS, BDS, AYUSH and other health courses that use NEET scores.',
+  mode:'Traditionally pen-and-paper (OMR). Some reports say NTA may move to computer-based testing. The 2027 bulletin will confirm.',
+  pattern:['180 questions from Physics, Chemistry and Biology (Botany and Zoology), for 720 marks.','4 marks for a correct answer and minus 1 for a wrong answer. Unanswered questions score 0.','The exam lasts about 3 hours. Confirm in the bulletin.'],
+  subj:'Physics, Chemistry and Biology (Botany and Zoology)',
+  dates:['The 2027 notification was not out when we checked. Guides expect it between December 2026 and February 2027, and the exam around early May 2027. These are estimates.','Eligibility reported: age 17 or more by 31 December of the year of admission, and Class 12 with Physics, Chemistry, Biology or Biotechnology and English. The minimum marks are 50 percent for the General category and lower for reserved categories.','Seats in Andhra Pradesh and Telangana medical colleges are filled through NEET scores and counselling. Check each state’s counselling notice.'],
+  tip:'NCERT Biology, Chemistry and Physics of Classes 11 and 12 are the core. Practise full papers under timed conditions.',
+  official:[['NEET (UG) website','https://neet.nta.nic.in/']]},
+ {id:'clat',name:'CLAT (UG)',full:'Common Law Admission Test (Undergraduate)',level:'secondary',goals:['law'],body:'Consortium of National Law Universities',
+  who:'Students who have passed or are appearing in Class 12 and want a 5-year integrated law degree (such as BA LLB) at the National Law Universities and at other law schools that accept the score.',
+  mode:'Check the Consortium’s notification for this year’s mode. It can change.',
+  pattern:['120 multiple-choice questions in 2 hours.','1 mark for a correct answer and minus 0.25 for a wrong answer.','Sections: English Language, Current Affairs including General Knowledge, Legal Reasoning, Logical Reasoning and Quantitative Techniques.','The Consortium said there was no change in the syllabus or pattern for CLAT 2027.'],
+  subj:'English, current affairs, legal reasoning, logical reasoning and quantitative techniques',
+  dates:['CLAT 2027 (for admission in 2027) was scheduled for early December 2026, and registration closed on 31 October 2026. Reports give 6 and 7 December, so confirm the date on the official site.','If you are in Class 11 now, you will usually take CLAT in December of Class 12. The notification for the next cycle is expected around the middle of the year.','Eligibility reported: Class 12 passed or appearing, with at least 45 percent (40 percent for SC and ST). No age limit was reported.'],
+  tip:'Read a newspaper every day and practise reading passages. Most of the paper tests reading and reasoning, not recall.',
+  official:[['Consortium of NLUs (CLAT)','https://consortiumofnlus.ac.in/']]},
+ {id:'apeap',name:'AP EAPCET',full:'Andhra Pradesh Engineering, Agriculture and Pharmacy Common Entrance Test',level:'secondary',goals:['state','eng'],body:'APSCHE, conducted by a university each year (JNTU Kakinada in the reports we saw)',
+  who:'Students applying for B.E. or B.Tech, agriculture and pharmacy courses in Andhra Pradesh colleges. Check the local-area rules and quotas in the official notice.',
+  mode:'Online, computer-based, multiple-choice. Question papers in English and Telugu.',
+  pattern:['160 questions of 1 mark each, in 3 hours. There was no negative marking in the reports we saw.','Engineering: Mathematics 80, Physics 40, Chemistry 40.','Agriculture and Pharmacy: Botany 40, Zoology 40, Physics 40, Chemistry 40.'],
+  subj:'Engineering: Mathematics, Physics, Chemistry. Agriculture and Pharmacy: Botany, Zoology, Physics, Chemistry',
+  dates:['The 2027 notification was not out when we checked. Guides expect it around March 2027, with the exam in May 2027 and results in June. These are estimates.','Eligibility reported from earlier years: Class 12 with Maths, Physics and Chemistry for engineering, or Biology, Physics and Chemistry for pharmacy; at least 45 percent for the General category and 40 percent for SC and ST.'],
+  tip:'Class 12 Intermediate (state board) syllabus is the base. Practise previous EAPCET papers.',
+  official:[['AP EAPCET website','https://cets.apsche.ap.gov.in/EAPCET/']]},
+ {id:'tgeap',name:'TG EAPCET',full:'Telangana Engineering, Agriculture and Pharmacy Common Entrance Test',level:'general',goals:['state','eng'],body:'Telangana State Council of Higher Education, with a university conducting it each year',
+  who:'Students applying for B.E. or B.Tech, agriculture and pharmacy courses in Telangana colleges. Students from Andhra Pradesh should check the local and non-local rules.',
+  mode:'Check the official notification for this year’s mode.',
+  pattern:[GEN_PATTERN],subj:'Mathematics, Physics and Chemistry for engineering; Biology, Physics and Chemistry for agriculture and pharmacy',
+  dates:[GEN_DATES],tip:'The Class 12 Intermediate syllabus is the base. Practise previous papers.',
+  official:[['TG EAPCET website','https://eapcet.tgche.ac.in/']]},
+ {id:'nata',name:'NATA',full:'National Aptitude Test in Architecture',level:'general',goals:['des'],body:'Council of Architecture',
+  who:'Students who want a 5-year B.Arch degree. B.Arch seats also accept JEE Main Paper 2, so check which score each college takes.',
+  mode:'Check the brochure. It has a drawing part and a part with questions.',pattern:[GEN_PATTERN],subj:'Drawing, observation and design sensitivity, and mathematics and reasoning',
+  dates:[GEN_DATES],tip:'Start a sketchbook now. Draw from real objects every day.',official:[['NATA website','https://www.nata.in/']]},
+ {id:'uceed',name:'UCEED',full:'Undergraduate Common Entrance Examination for Design',level:'general',goals:['des'],body:'IIT Bombay on behalf of the participating institutes',
+  who:'Students who want a Bachelor of Design (B.Des) at the IITs and at some other institutes that use the UCEED score.',
+  mode:'Computer-based, with a drawing section. Check the brochure.',pattern:[GEN_PATTERN],subj:'Visual and design aptitude, drawing, reasoning and general awareness',
+  dates:[GEN_DATES],tip:'Build a portfolio of sketches and small design projects, and practise quick sketching.',official:[['UCEED website','https://www.uceed.iitb.ac.in/']]},
+ {id:'nid',name:'NID DAT',full:'National Institute of Design Design Aptitude Test',level:'general',goals:['des'],body:'National Institute of Design',
+  who:'Students who want a B.Des at NID. The test has a prelims stage and a studio and interview stage.',
+  mode:'Check the NID admissions page for the stages and mode.',pattern:[GEN_PATTERN],subj:'Creativity, drawing, observation and design thinking',
+  dates:[GEN_DATES],tip:'Keep a notebook of ideas, drawings and observations. NID looks at how you think.',official:[['NID admissions','https://admissions.nid.edu/']]},
+ {id:'nift',name:'NIFT entrance',full:'National Institute of Fashion Technology entrance',level:'general',goals:['des'],body:'National Institute of Fashion Technology',
+  who:'Students who want a B.Des (fashion, accessory, textile and other design streams) or B.FTech at NIFT.',
+  mode:'Check the NIFT website for the stages and mode.',pattern:[GEN_PATTERN],subj:'Creative ability, general ability, communication and situation or studio tests',
+  dates:[GEN_DATES],tip:'Practise creative drawing and read about trends, materials and culture.',official:[['NIFT website','https://www.nift.ac.in/']]},
+ {id:'ipmat',name:'IPMAT',full:'Integrated Program in Management Aptitude Test',level:'general',goals:['mgt'],body:'IIM Indore and other participating IIMs',
+  who:'Students who want a 5-year integrated management programme after Class 12, such as at IIM Indore and IIM Rohtak.',
+  mode:'Check the IIM website for the mode and stages.',pattern:[GEN_PATTERN],subj:'Quantitative ability, verbal ability and logical reasoning',
+  dates:[GEN_DATES],tip:'Build your Maths and reading skills early. They carry most of the paper.',official:[['IIM Indore (IPMAT)','https://www.iimidr.ac.in/']]},
+ {id:'bitsat',name:'BITSAT',full:'BITS Admission Test',level:'secondary',goals:['pvt','eng'],body:'BITS Pilani',
+  who:'Students with Physics, Chemistry and Mathematics in Class 12 who want B.E. at the BITS Pilani, Goa and Hyderabad campuses.',
+  mode:'Check the BITS admission site for the mode and sections.',pattern:[GEN_PATTERN],subj:'Physics, Chemistry, Mathematics, English and logical reasoning',
+  dates:['The 2027 dates were still to be announced when we checked.','Eligibility reported: at least 75 percent in Class 12 Physics, Chemistry and Mathematics together, and at least 60 percent in each subject.'],
+  tip:'Check how the test and the Class 12 marks both count for your course.',official:[['BITS admissions','https://www.bitsadmission.com/']]},
+ {id:'viteee',name:'VITEEE',full:'VIT Engineering Entrance Examination',level:'secondary',goals:['pvt','eng'],body:'Vellore Institute of Technology',
+  who:'Students who want B.Tech at the VIT campuses (Vellore, Chennai, Bhopal and Andhra Pradesh).',
+  mode:'Check the VIT website for the mode and sections.',pattern:[GEN_PATTERN],subj:'Mathematics or Biology, Physics, Chemistry, English and aptitude',
+  dates:['Reports expect the exam in the last week of April 2027. This is not confirmed.','Eligibility reported: at least 60 percent in Class 12 Physics, Chemistry and Mathematics together (50 percent for SC, ST and North-Eastern candidates).'],
+  tip:'Apply early. Rank decides your campus and course choices.',official:[['VITEEE website','https://viteee.vit.ac.in/']]},
+ {id:'srmjeee',name:'SRMJEEE',full:'SRM Joint Engineering Entrance Examination',level:'secondary',goals:['pvt','eng'],body:'SRM Institute of Science and Technology',
+  who:'Students who want B.Tech at the SRM campuses.',
+  mode:'Check the SRM website for the mode and phases.',pattern:[GEN_PATTERN],subj:'Physics, Mathematics and one more core subject, with English and aptitude',
+  dates:['SRM holds the exam in several phases. In 2026 the last phase was in July. Check the 2027 phase dates.','Eligibility reported: at least 60 percent in Class 12 Physics, Mathematics and one optional core science subject.'],
+  tip:'Apply in an early phase if you want more time to compare other colleges.',official:[['SRM admissions','https://www.srmist.edu.in/admission-india/']]},
+ {id:'met',name:'MET (Manipal)',full:'Manipal Entrance Test',level:'secondary',goals:['pvt','eng'],body:'Manipal Academy of Higher Education',
+  who:'Students who want B.Tech and several other courses at Manipal.',
+  mode:'Check the Manipal website for the mode and phases.',pattern:[GEN_PATTERN],subj:'Physics, Mathematics and one optional subject',
+  dates:['The 2027 dates were still to be announced when we checked.','Eligibility reported: at least 50 percent in Class 12 Physics, Mathematics and one optional subject together.'],
+  tip:'Check the fee, scholarship and hostel details for each course before you pay.',official:[['Manipal admissions','https://manipal.edu/']]},
+ {id:'kiitee',name:'KIITEE',full:'KIIT Entrance Examination',level:'secondary',goals:['pvt','eng'],body:'KIIT, Bhubaneswar',
+  who:'Students who want B.Tech at KIIT. Students appearing in Class 12 can apply.',
+  mode:'In 2026 the later phase was remote-proctored (taken from home with online monitoring). Check this year’s rules.',pattern:[GEN_PATTERN],subj:'Physics, Chemistry and Mathematics',
+  dates:['KIITEE is held in phases. In 2026 the third phase was on 3 and 4 July. Check the 2027 phase dates.','Eligibility reported: at least 60 percent in Class 12 Physics, Chemistry and Mathematics together.'],
+  tip:'If the exam is taken from home, test your computer, camera and internet before the day.',official:[['KIIT admissions','https://kiit.ac.in/']]},
+ {id:'aeee',name:'AEEE',full:'Amrita Entrance Examination (Engineering)',level:'general',goals:['pvt','eng'],body:'Amrita Vishwa Vidyapeetham',
+  who:'Students who want B.Tech at the Amrita campuses.',mode:'Check the Amrita website for the mode.',pattern:[GEN_PATTERN],subj:'Physics, Chemistry and Mathematics',
+  dates:[GEN_DATES],tip:'Compare the cost and the course structure with other colleges before you decide.',official:[['Amrita','https://www.amrita.edu/']]},
+ {id:'npat',name:'NPAT',full:'NMIMS National Performance Assessment Test',level:'general',goals:['pvt','mgt','law'],body:'SVKM’s NMIMS',
+  who:'Students who want programmes such as management, commerce, law and others at NMIMS. Check which programmes use the test.',
+  mode:'Check the NMIMS website for the mode.',pattern:[GEN_PATTERN],subj:'Check the programme page. Papers differ by programme.',
+  dates:[GEN_DATES],tip:'Read the programme page. Some programmes accept other scores, so check before you register.',official:[['NMIMS admissions','https://www.nmims.edu/']]},
+ {id:'set',name:'SET (Symbiosis)',full:'Symbiosis Entrance Test',level:'general',goals:['pvt','law','mgt'],body:'Symbiosis International (Deemed University)',
+  who:'Students who want undergraduate programmes such as law and management at Symbiosis. Different programmes may use different tests.',
+  mode:'Check the Symbiosis website for the mode.',pattern:[GEN_PATTERN],subj:'Check the programme page. Papers differ by programme.',
+  dates:[GEN_DATES],tip:'List the programmes you want, then check the test, the dates and the fees for each one.',official:[['Symbiosis admissions','https://www.siu.edu.in/']]},
+ {id:'upes',name:'UPES entrance',full:'UPES entrance test',level:'general',goals:['pvt','eng'],body:'UPES, Dehradun',
+  who:'Students who want engineering and other programmes at UPES. The university may also take other scores.',
+  mode:'Check the UPES website.',pattern:[GEN_PATTERN],subj:'Check the UPES brochure.',dates:[GEN_DATES],tip:'Check which scores UPES accepts and whether scholarships depend on your rank.',official:[['UPES','https://www.upes.ac.in/']]},
+ {id:'lpunest',name:'LPUNEST',full:'LPU National Eligibility and Scholarship Test',level:'general',goals:['pvt','eng'],body:'Lovely Professional University',
+  who:'Students who want admission or a scholarship at LPU. Check which programmes use it.',
+  mode:'Check the LPU website.',pattern:[GEN_PATTERN],subj:'Check the LPU brochure.',dates:[GEN_DATES],tip:'Ask the university in writing exactly how the scholarship works and for how many years it lasts.',official:[['LPU','https://www.lpu.in/']]},
+ {id:'snusat',name:'SNUSAT',full:'Shiv Nadar University entrance test',level:'general',goals:['pvt'],body:'Shiv Nadar University',
+  who:'Students who want undergraduate programmes at Shiv Nadar University. Check which programmes use the test.',
+  mode:'Check the university website.',pattern:[GEN_PATTERN],subj:'Check the university brochure.',dates:[GEN_DATES],tip:'Read the programme page for the test, the dates and the scholarships.',official:[['Shiv Nadar University','https://snu.edu.in/']]}
+];
+
+/* CUET (UG) 2026 bulletin: 13 languages, 23 domain subjects and the General Aptitude Test. area: sci, com, hum, oth. */
+const CU_LANG=['English','Hindi','Assamese','Bengali','Gujarati','Kannada','Malayalam','Marathi','Odia','Punjabi','Tamil','Telugu','Urdu'].map((n,i)=>({id:'l'+i,name:n,group:'lang'}));
+const CU_DOM=[
+ [301,'Accountancy / Book Keeping','com','B.Com, BBA and BMS programmes'],
+ [302,'Agriculture','sci','B.Sc programmes in agriculture and related areas, where the university uses CUET'],
+ [303,'Anthropology','hum','BA or B.Sc Anthropology'],
+ [304,'Biology / Biological Science / Biotechnology / Biochemistry','sci','B.Sc in life sciences, biotechnology, zoology, botany and related programmes'],
+ [305,'Business Studies','com','B.Com, BBA and BMS programmes'],
+ [306,'Chemistry','sci','B.Sc Chemistry and other B.Sc programmes, often with Physics and Mathematics'],
+ [307,'Environmental Science','sci','B.Sc Environmental Science and related programmes'],
+ [308,'Computer Science / Information Practices','sci','BCA, B.Sc Computer Science, data science and IT programmes'],
+ [309,'Economics / Business Economics','com','BA Economics, B.Com, BBA and finance programmes'],
+ [312,'Fine Arts / Visual Arts / Commercial Arts','oth','BFA and visual arts programmes'],
+ [313,'Geography / Geology','hum','BA or B.Sc Geography and Geology'],
+ [314,'History','hum','BA History and other humanities programmes'],
+ [315,'Home Science','oth','B.Sc Home Science and nutrition programmes'],
+ [316,'Knowledge Tradition: Practices in India','hum','BA programmes in Indian knowledge systems and related humanities'],
+ [318,'Mass Media / Mass Communication','hum','BA Journalism and Mass Communication, and media studies'],
+ [319,'Mathematics / Applied Mathematics','sci','B.Sc Mathematics, Statistics, Physics and Data Science, BCA and BA Economics'],
+ [320,'Performing Arts (Dance, Drama, Music)','oth','BA or BPA in music, dance and drama'],
+ [321,'Physical Education (Yoga, Sports)','oth','B.P.Ed and sports science programmes'],
+ [322,'Physics','sci','B.Sc Physics, Electronics and other science programmes'],
+ [323,'Political Science','hum','BA Political Science, public policy and international relations'],
+ [324,'Psychology','hum','BA or B.Sc Psychology'],
+ [325,'Sanskrit','hum','BA Sanskrit and Indology'],
+ [326,'Sociology','hum','BA Sociology and social work']
+].map(a=>({id:'d'+a[0],code:a[0],name:a[1],group:'dom',area:a[2],fit:a[3]}));
+const CU_GAT={id:'gat',name:'General Aptitude Test',group:'gat',fit:'Many BBA, BMS, BA and B.Com programmes ask for it. Check each course. It covers general knowledge, current affairs, mental ability, numerical ability, quantitative reasoning and logical and analytical reasoning.'};
+const CU_ALL=CU_LANG.concat(CU_DOM,[CU_GAT]);
+const CU_AREAS=[['all','All'],['sci','Science'],['com','Commerce'],['hum','Humanities'],['oth','Arts and skills']];
+const CU_MAX=5;
+/* Example combinations only. Every university sets its own papers for each course. */
+const CU_EXAMPLES=[
+ ['B.Com or BBA',['l0','d301','d305','d309','gat']],
+ ['B.Sc (Physics, Chemistry, Maths)',['l0','d322','d306','d319']],
+ ['B.Sc (life sciences)',['l0','d304','d306','d322']],
+ ['BA (humanities)',['l0','d314','d323','d326','gat']],
+ ['BCA or B.Sc Computer Science',['l0','d319','d308','gat']]
+];
+const cuById=id=>CU_ALL.find(x=>x.id===id);
+const cuFee=n=>n<=3?1000:1000+400*(n-3);
+
+const exById=id=>EXAMS.find(e=>e.id===id);
+const goalById=id=>EX_GOALS.find(g=>g.id===id);
+const exTabs=e=>[['about','Overview'],['pattern','Pattern and subjects']].concat(e.id==='cuet'?[['subjects','Subject-wise']]:[],[['dates','Dates and apply']]);
+const exLevelTag=e=>`<span class="chip-fit ${EX_LEVEL[e.level][0]}">${EX_LEVEL[e.level][1]}</span>`;
+const exDisclaimer=`<p class="disclaimer">Ascend Hub is a guidance tool and not an admissions or coaching agency. Exam patterns, dates, fees and eligibility change every year. The details on these pages were collected from public sources on ${EX_CHECKED}, and each exam page says how well we could check it. The official notification of each exam always comes first. Please confirm everything on the official website before you register or pay.</p>`;
+function exCard(e){return `<button type="button" class="cty" data-act="ex-pick" data-id="${e.id}"><strong>${e.name}</strong><span class="hint">${e.full}</span><span class="hint">${e.body}</span></button>`;}
+function examsPick(){
+  const jump=`<label class="f">Go straight to an exam <select id="ex-jump"><option value="">Choose an exam</option>${EX_ORDER.map(id=>{const e=exById(id);return `<option value="${e.id}">${e.name}</option>`;}).join('')}</select></label>`;
+  return `<div class="thead">${crumb('Student Corner','Competitive Exams')}
+    <h1>Competitive exams</h1>
+    <p class="lead">Choose what you are aiming for. You will see the exams that lead there, then the pattern, subjects, dates and official websites, one step at a time.</p></div>
+  <section class="block" style="margin-top:1.4rem"><h2>Start with CUET</h2>
+    <div class="ctys"><button type="button" class="cty" data-act="ex-pick" data-id="cuet"><span class="flag" aria-hidden="true">🎓</span><strong>CUET (UG), subject by subject</strong><span class="hint">Plan your papers for BA, BSc, BCom, BBA and more</span></button></div></section>
+  <section class="block"><h2>Or choose your goal</h2>
+    <div class="ctys">${EX_GOALS.map(g=>`<button type="button" class="cty" data-act="ex-goal" data-id="${g.id}"><span class="flag" aria-hidden="true">${g.ico}</span><strong>${g.t}</strong><span class="hint">${g.d}</span></button>`).join('')}</div>
+    <p class="filters noprint" style="margin-top:1.2rem">${jump}</p></section>
+  <section class="block"><h2>Good to know first</h2>
+    <div class="how">
+      <details><summary>Your plan, step by step</summary><ol class="flow">
+        <li><b>Class 9 and 10</b><span>Build the base</span><span class="hint">Strong Maths, science and reading skills help for every exam. Look at the stream you may choose, and see which exams it opens.</span></li>
+        <li><b>Class 11</b><span>Choose and start</span><span class="hint">Choose your target exams, read their official syllabus and start a steady weekly routine. Keep your school marks strong.</span></li>
+        <li><b>Class 12, first half</b><span>Register and practise</span><span class="hint">Note the last dates. Register early, check the exam centres and take timed practice papers.</span></li>
+        <li><b>After the exam</b><span>Apply and counsel</span><span class="hint">Keep a list of colleges. Watch the counselling and application dates, and keep your documents ready.</span></li>
+      </ol></details>
+      <details><summary>Before you pay for any exam or coaching</summary><ul>
+        <li>Register only on the official website of the exam body. Check the web address carefully, because fake sites copy the real ones.</li>
+        <li>No one can guarantee a rank or a seat. Be careful of anyone who promises one, or who asks for money to a personal account.</li>
+        <li>Ask every private university whether it also accepts national scores (JEE Main, CUET or Class 12 marks), how its scholarships work, and what the full fee and hostel cost is.</li>
+        <li>Check that the course is recognised (UGC, AICTE, Bar Council, NMC or the right body for your course) before you apply.</li></ul></details>
+    </div></section>
+  ${brandFoot()}${exDisclaimer}`;
+}
+function examsGoal(){
+  const g=goalById(state.exGoal),list=EX_ORDER.map(exById).filter(e=>e.goals.includes(g.id));
+  const extra=g.id==='pvt'?`<div class="c-wide c-note" style="margin-top:1.2rem"><h4>Checks for private university tests</h4><ul><li>Does the university also accept JEE Main, CUET or Class 12 marks? You may not need its own test.</li><li>How do scholarships depend on your rank, and for how many years do they last?</li><li>What are the full tuition, hostel and other fees for the whole course?</li><li>Check accreditation and recognition of the course, and ask for placement figures in writing.</li></ul></div>`:g.id==='med'?`<div class="c-wide c-note" style="margin-top:1.2rem"><h4>Good to know</h4><ul><li>NEET scores are used for MBBS, BDS and AYUSH seats. Counselling is held by the national and state authorities, so follow their notices.</li><li>If you may study medicine abroad and return to India, check the National Medical Commission rules first.</li></ul></div>`:'';
+  return `<div class="thead">${crumb('Student Corner','Competitive Exams',g.t)}
+    <h1>${g.ico} ${g.t}</h1>
+    <p class="lead">${g.d}. Choose an exam to see its pattern, subjects, dates and official website.</p>
+    <p class="links noprint" style="margin-top:1rem"><button type="button" class="btn ghost small" data-act="ex-back">← All goals</button></p></div>
+  <section class="block" style="margin-top:1.2rem"><div class="ctys">${list.map(exCard).join('')}</div>${extra}</section>
+  ${brandFoot()}${exDisclaimer}`;
+}
+function cuetPanel(){
+  const sel=state.cuet,n=sel.length;
+  const chip=x=>`<button type="button" class="chipbtn" data-act="cu-toggle" data-id="${x.id}" aria-pressed="${sel.includes(x.id)}">${x.name}${x.code?`<small>${x.code}</small>`:''}</button>`;
+  const flt=state.cuF,dom=CU_DOM.filter(x=>flt==='all'||x.area===flt);
+  const areas=CU_AREAS.map(a=>`<button type="button" class="chipbtn" data-act="cu-area" data-id="${a[0]}" aria-pressed="${flt===a[0]}">${a[1]}</button>`).join('');
+  const ex=CU_EXAMPLES.map((a,i)=>`<button type="button" class="btn ghost small" data-act="cu-example" data-id="${i}">${a[0]}</button>`).join(' ');
+  const picked=n?`<ul>${sel.map(id=>{const x=cuById(id);return `<li><strong>${x.name}</strong>${x.fit?': '+x.fit:''}${x.group==='lang'?': most universities ask for one language paper':''}</li>`;}).join('')}</ul>`:'<p class="hint">Choose papers below, or try an example. Your choices are not saved or sent anywhere.</p>';
+  return `<p>CUET lets you take up to ${CU_MAX} papers. Pick the papers a course needs, and see what they add up to. This is a planner, and universities decide which papers they accept for each course.</p>
+    <h3>Try an example</h3><p class="links noprint">${ex} <button type="button" class="btn ghost small" data-act="cu-clear">Clear</button></p>
+    <p class="hint">These are examples only. Open the programme page of each university to see its exact papers.</p>
+    <div class="costgrid" aria-live="polite">
+      <div class="cost"><span class="hint">Papers chosen</span><b>${n} of ${CU_MAX}</b><span class="hint">${n>=CU_MAX?'You have reached the limit':'You can add '+(CU_MAX-n)+' more'}</span></div>
+      <div class="cost"><span class="hint">Test time</span><b>${n*60} minutes</b><span class="hint">${n*50} questions, up to ${(n*250).toLocaleString('en-IN')} marks</span></div>
+      <div class="cost total"><span class="hint">2026 fee, General category</span><b>${n?'₹'+cuFee(n).toLocaleString('en-IN'):'₹0'}</b><span class="hint">Plus bank charges and tax. Other categories pay less. The 2027 fee may change.</span></div>
+    </div>
+    ${state.cuMsg?`<div class="alert" role="status">${state.cuMsg}</div>`:''}
+    <h3>Your choices</h3>${picked}
+    <h3>Languages</h3><div class="chips">${CU_LANG.map(chip).join('')}</div>
+    <h3>Domain subjects</h3><p class="links noprint" style="margin:.4rem 0 .8rem">${areas}</p><div class="chips">${dom.map(chip).join('')}</div>
+    <h3>General Aptitude Test</h3><div class="chips">${chip(CU_GAT)}</div>
+    <p class="hint" style="margin-top:1rem">Source: the CUET (UG) 2026 information bulletin. Sanskrit is a domain subject and is not translated into other languages. The 2027 list may change.</p>`;
+}
+function examPanel(e,tab){
+  if(tab==='pattern')return `<h3>How the exam works</h3><p><strong>Mode:</strong> ${e.mode}</p><ul>${li(e.pattern)}</ul><p><strong>Subjects:</strong> ${e.subj}</p>${e.id==='cuet'?`<p class="links noprint" style="margin-top:1rem"><button type="button" class="btn" data-act="ex-tab" data-tab="subjects">Next: subject-wise planner</button></p>`:`<p class="links noprint" style="margin-top:1rem"><button type="button" class="btn" data-act="ex-tab" data-tab="dates">Next: dates and apply</button></p>`}`;
+  if(tab==='subjects'&&e.id==='cuet')return cuetPanel();
+  if(tab==='dates')return `<h3>Dates, eligibility and applying</h3><ul>${li(e.dates)}</ul><div class="c-wide c-note" style="margin-top:1.2rem"><h4>Preparing</h4><p>${e.tip}</p><ul><li>Use only the official syllabus and the past papers published by the exam body.</li><li>Make a weekly timetable, and take timed practice papers.</li><li>Keep your school marks strong, because many colleges also look at Class 12 results.</li></ul></div>`;
+  return `<h3>About this exam</h3><p><strong>Who it is for:</strong> ${e.who}</p><p><strong>Conducted by:</strong> ${e.body}</p><p><strong>Mode:</strong> ${e.mode}</p><p class="links noprint" style="margin-top:1.2rem"><button type="button" class="btn" data-act="ex-tab" data-tab="pattern">Next: pattern and subjects</button></p>`;
+}
+function examBody(){
+  const e=exById(state.exId),tabs=exTabs(e),tab=tabs.some(t=>t[0]===state.exTab)?state.exTab:'about';
+  return `<div class="tabs noprint" role="tablist" aria-label="${e.name}">${tabs.map(t=>`<button type="button" role="tab" id="ex-tab-${t[0]}" class="tab" aria-selected="${tab===t[0]}" data-act="ex-tab" data-tab="${t[0]}">${t[1]}</button>`).join('')}</div>
+    <div class="tabpanel" role="tabpanel" aria-labelledby="ex-tab-${tab}"><p class="print-only"><strong>${tabs.find(t=>t[0]===tab)[1]}</strong></p>${examPanel(e,tab)}</div>
+    <p class="links noprint" style="margin-top:1.4rem"><strong>Official website:</strong> ${e.official.map(s=>extLink(s[1],s[0],'ghost')).join(' ')}</p>`;
+}
+function examsPage(){
+  const e=exById(state.exId);
+  const sw=EX_ORDER.map(id=>{const x=exById(id);return `<option value="${x.id}"${x.id===e.id?' selected':''}>${x.name}</option>`;}).join('');
+  const g=state.exGoal&&goalById(state.exGoal);
+  return `<div class="thead">${crumb('Student Corner','Competitive Exams',e.name)}
+    <h1>${e.name}</h1><p class="lead">${e.full}</p><p>${exLevelTag(e)}</p>
+    <p class="links noprint" style="margin-top:1rem"><button type="button" class="btn ghost small" data-act="${g?'ex-goal-back':'ex-back'}">← ${g?g.t:'All goals'}</button> <label class="f">Switch exam <select id="ex-switch">${sw}</select></label> <button type="button" class="btn ghost small" data-act="print">Print or save as PDF</button></p></div>
+  <div id="ex-view">${examBody()}</div>
+  ${brandFoot()}${exDisclaimer}`;
+}
+function exams(){
+  if(state.exMode==='exam'&&exById(state.exId))return examsPage();
+  if(state.exMode==='goal'&&goalById(state.exGoal))return examsGoal();
+  return examsPick();
+}
+function exFocusTop(){window.scrollTo(0,0);const h=app.querySelector('h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+function refreshEx(focusSel){
+  const v=document.getElementById('ex-view');
+  if(!v)return;
+  v.innerHTML=examBody();
+  if(focusSel){const t=v.querySelector(focusSel);if(t)t.focus({preventScroll:true});}
+}
+function exAction(act,b){
+  if(act==='exams'){state.exMode='pick';state.exGoal='';go('exams');}
+  else if(act==='ex-goal'){state.exMode='goal';state.exGoal=b.dataset.id;render();exFocusTop();}
+  else if(act==='ex-pick'){state.exMode='exam';state.exId=b.dataset.id;state.exTab='about';if(!(goalById(state.exGoal)&&exById(state.exId).goals.includes(state.exGoal)))state.exGoal='';render();exFocusTop();}
+  else if(act==='ex-back'){state.exMode='pick';state.exGoal='';render();exFocusTop();}
+  else if(act==='ex-goal-back'){state.exMode='goal';render();exFocusTop();}
+  else if(act==='ex-tab'){state.exTab=b.dataset.tab;refreshEx('#ex-tab-'+state.exTab);}
+  else if(act==='cu-toggle'){
+    const id=b.dataset.id,i=state.cuet.indexOf(id);state.cuMsg='';
+    if(i>=0)state.cuet.splice(i,1);
+    else if(state.cuet.length>=CU_MAX)state.cuMsg='You can choose at most '+CU_MAX+' papers in all. Remove one to add another.';
+    else state.cuet.push(id);
+    refreshEx('[data-act="cu-toggle"][data-id="'+id+'"]');
+  }
+  else if(act==='cu-area'){state.cuF=b.dataset.id;refreshEx('[data-act="cu-area"][data-id="'+state.cuF+'"]');}
+  else if(act==='cu-example'){state.cuet=CU_EXAMPLES[parseInt(b.dataset.id,10)][1].slice();state.cuMsg='';refreshEx('[data-act="cu-example"][data-id="'+b.dataset.id+'"]');}
+  else if(act==='cu-clear'){state.cuet=[];state.cuMsg='';refreshEx('[data-act="cu-clear"]');}
+  else return false;
+  return true;
+}
+const examsCTA=`<div class="alert" style="margin-top:1.2rem"><strong>Preparing for CUET, JEE, NEET, CLAT or a private university test?</strong> See the pattern, subjects and dates for each exam, and plan your CUET papers subject by subject. <button type="button" class="linkbtn" data-act="exams">Explore Competitive Exams</button></div>`;
+
 /* ---------- QUIZ COUNTS AND OPTIONAL RESULT SHARING ---------- */
 /* Anonymous counts: only class, subject group, top interests and scores are sent. No name or contact details.
    Students can also choose to share their result with their name and contact, with consent. Both need CONTACT.endpoint. */
@@ -1735,29 +2045,29 @@ function submitLead(form){
 }
 /* ---------- FOR SCHOOLS ---------- */
 const SCHOOL_GAPS=[
- {ic:'📖',t:'Weak reading and maths foundations',d:['Baseline tests for Classes 3 to 8','Grouping children by level, with a daily remedial block and ready worksheets','Re-testing every 6 to 8 weeks to show progress']},
- {ic:'👩‍🏫',t:'Teacher quality and training',d:['A standard lesson plan format and model lessons','Short monthly training sessions','An observation rubric and coaching visits']},
- {ic:'🚪',t:'Dropout in Classes 8 to 10',d:['An early-warning list built from attendance and marks','Counselling support','Career guidance for Classes 9 to 12 through Ascend Hub']},
- {ic:'📝',t:'Exam and assessment pressure',d:['An assessment policy and blueprints','Competency-based question banks','Paper review and mark analysis after each exam']},
- {ic:'🗂️',t:'Paperwork and compliance',d:['An academic calendar and record templates','A compliance checklist, checked against your board’s current rules']},
- {ic:'🧪',t:'Limited resources',d:['Project ideas and activity plans built around what your school already has','Support to plan exhibitions and science fairs']},
- {ic:'🧩',t:'Learning differences and wellbeing',d:['Screening checklists and differentiated worksheets','A referral process, and child-safety and wellbeing policies','Specialist help always comes from qualified professionals']},
- {ic:'👨‍👩‍👧',t:'Parent communication',d:['Report card comments and parent meeting formats','Short workshops for parents']},
- {ic:'🧭',t:'Weak management systems',d:['Regular review meetings and simple dashboards','Clear job descriptions and routines']}
+ {ic:'📖',t:'Strong foundations in reading and maths',d:['Baseline tests for Classes 3 to 8','Small groups by level, a regular support block and ready worksheets','Re-testing every 6 to 8 weeks to show progress']},
+ {ic:'👩‍🏫',t:'Confident, well-supported teachers',d:['A standard lesson plan format and model lessons','Short monthly training sessions','An observation rubric and coaching visits']},
+ {ic:'🚪',t:'Keeping every child on track',d:['An early-support list built from attendance and marks','Counselling support','Career guidance for Classes 9 to 12 through Ascend Hub']},
+ {ic:'📝',t:'Assessment that guides learning',d:['An assessment policy and blueprints','Competency-based question banks','Paper review and mark analysis after each exam']},
+ {ic:'🗂️',t:'Clear plans and records',d:['An academic calendar and record templates','A compliance checklist, checked against your board’s current rules']},
+ {ic:'🧪',t:'Making the most of your resources',d:['Project ideas and activity plans built around what your school already has','Support to plan exhibitions and science fairs']},
+ {ic:'🧩',t:'Support for every learner and wellbeing',d:['Screening checklists and differentiated worksheets','A referral process, and child-safety and wellbeing policies','Specialist help always comes from qualified professionals']},
+ {ic:'👨‍👩‍👧',t:'Partnership with parents',d:['Report card comments and parent meeting formats','Short workshops for parents']},
+ {ic:'🧭',t:'Strong academic routines',d:['Regular review meetings and simple dashboards','Clear job descriptions and routines']}
 ];
 const SCHOOL_PACKS=[
- {t:'Academic Health Check',s:'A clear picture of where your school stands',d:['A review of academic records','Baseline tests in sampled classes','Classroom observation','A written report','A 90-day action plan']},
- {t:'Academic Partner',s:'Steady support through the school year',d:['Monthly planning support','Lesson plans, question papers, PPTs and assessments','Teacher training sessions','Analysis after every exam','A quarterly review with your leadership team']},
- {t:'Whole-School Programme',s:'Deeper support over several years',d:['Everything in Academic Partner','On-site coaching','A remedial programme for foundational skills','A parent programme','Career guidance for Classes 9 to 12 and leadership mentoring']}
+ {t:'Learning Support Pilot',s:'A 90-day start in one or two classes',d:['A baseline test in reading or maths','Ready worksheets and a simple routine for small-group support','A session and regular check-ins for the teachers','A final test and a review meeting with a clear before-and-after']},
+ {t:'Academic Partner',s:'Ready-to-use material for every class, a month ahead',d:['Lesson plans, session plans, PPTs and worksheets for all subjects','Exam papers with marking schemes','Soft copies a month in advance, for your yearly academic planning','Reviewed by qualified subject teachers']},
+ {t:'Whole-School Programme',s:'Deeper support over several years',d:['Everything in Academic Partner','On-site coaching and a learning support programme','A parent programme, career guidance for Classes 9 to 12, and leadership mentoring']}
 ];
 function schoolsPage(){
   const gaps=SCHOOL_GAPS.map(g=>`<details class="career"><summary><span class="c-main"><h3><span class="ic" aria-hidden="true">${g.ic}</span>${g.t}</h3></span><span class="chev" aria-hidden="true"></span></summary><div class="c-body"><div class="c-wide"><h4>How we help</h4><ul>${li(g.d)}</ul></div></div></details>`).join('');
   const packs=SCHOOL_PACKS.map(p=>`<div class="plan"><h3>${p.t}</h3><p class="hint">${p.s}</p><ul>${li(p.d)}</ul><a class="btn ghost" href="#school-enquiry" data-act="school-pick" data-p="${p.t}">Ask about this</a></div>`).join('');
   const helpBoxes=SCHOOL_GAPS.map(g=>`<label class="consent"><input type="checkbox" name="help" value="${g.t}"> <span>${g.t}</span></label>`).join('');
-  const interest=['Not sure yet'].concat(SCHOOL_PACKS.map(p=>p.t),['A short pilot in one or two classes']).map(x=>`<option>${x}</option>`).join('');
+  const interest=['Not sure yet','Academic Health Check'].concat(SCHOOL_PACKS.map(p=>p.t)).map(x=>`<option>${x}</option>`).join('');
   return `<div class="thead">${crumb('For Schools')}
     <h1>Academic support for schools</h1>
-    <p class="lead">Arohaanex Edvantage works with schools to understand where learning is falling short, plan the fix, equip and train teachers, and track progress.</p>
+    <p class="lead">Arohaanex Edvantage is an academic partner for schools. We prepare ready-to-use teaching material for every class, and we support children who need a little extra help, so that teachers can spend their time on teaching.</p>
     <p class="links" style="margin-top:1.2rem"><button type="button" class="btn" data-act="chk-open">Take the Academic Health Check</button> <a class="btn ghost" href="#school-enquiry" data-act="school-pick" data-p="">Talk to us about your school</a></p>
   </div>
   <section class="block"><h2>Start with the Academic Health Check</h2>
@@ -1770,9 +2080,14 @@ function schoolsPage(){
       <li><b>Step 3</b><span>Equip and train</span><span class="hint">Your teachers get ready-to-use plans, papers and worksheets, and training to use them.</span></li>
       <li><b>Step 4</b><span>Track and review</span><span class="hint">We re-test, review results with you and adjust the plan.</span></li>
     </ol></section>
-  <section class="block"><h2>Where we can help</h2>
+  <section class="block"><h2>Where we support schools</h2>
     <p class="sub">Open any area to see how we support it.</p>
     <div class="list">${gaps}</div></section>
+  <section class="block" id="school-material"><h2>Ready-to-use material for every class</h2>
+    <p class="sub">The Academic Partner gives your teachers a complete monthly pack for each class and subject, prepared by us and reviewed by qualified subject teachers.</p>
+    <div class="pgrid"><div><h3>Each month, for every class and subject</h3><ul><li>A week-by-week month plan</li><li>Lesson plans and session plans</li><li>PPTs for each lesson</li><li>Worksheets at three levels, with answers</li><li>A support strip for children who need extra help</li><li>A blueprint, a test paper and a marking scheme</li></ul></div>
+    <div><h3>How it arrives</h3><ul><li>Soft copies a month in advance, so your yearly academic planning stays ahead of the calendar</li><li>Exam papers by secure link, before the test date you agree with us</li><li>All subjects: English, Mathematics, Science, Social Science, and Computer or AI. Other languages are coming soon</li><li>We launch with Classes 6, 7 and 8</li></ul></div></div>
+    <p class="links" style="margin-top:1rem"><a class="btn" href="#school-enquiry" data-act="school-pick" data-p="Academic Partner">Ask for a sample pack</a></p></section>
   <section class="block"><h2>Ways to work with us</h2>
     <p class="sub">Every school is different. Tell us about yours and we will suggest what fits.</p>
     <div class="plans">${packs}</div>
@@ -1782,7 +2097,7 @@ function schoolsPage(){
       <li>Baseline and end-of-year scores on the same test.</li>
       <li>How many children move up a reading or maths level.</li>
       <li>Teacher observation scores and the quality of exam papers.</li>
-      <li>Attendance and dropout, and the time teachers save on planning.</li>
+      <li>Attendance and retention, and the time teachers save on planning.</li>
     </ul>
     <p class="hint">We aim to improve how the school teaches and checks learning. We do not promise board results.</p></section>
   <section class="block"><h2>How we work responsibly</h2>
@@ -1868,9 +2183,9 @@ function aboutPage(){
   <section class="block"><h2>What we believe</h2>${beliefs}</section>
   <section class="block"><h2>What we offer</h2>
     <div class="tgrid" style="margin-top:1rem">
-      <div class="tsvc"><span class="ic" aria-hidden="true">🏫</span><h3>For Schools</h3><p>An academic support partner. We find where learning falls short, plan the fix, train teachers and track progress.</p><button type="button" class="linkbtn" data-act="schools">See how we help schools</button></div>
+      <div class="tsvc"><span class="ic" aria-hidden="true">🏫</span><h3>For Schools</h3><p>An academic partner: ready-to-use material for every class, learning support for children who need it, and teacher training.</p><button type="button" class="linkbtn" data-act="schools">See how we help schools</button></div>
       <div class="tsvc"><span class="ic" aria-hidden="true">📝</span><h3>Educator Hub</h3><p>Help for teachers on request: lesson plans, question papers, PPTs, assessments and more, shared within 24 hours.</p><button type="button" class="linkbtn" data-act="teachers">Visit Educator Hub</button></div>
-      <div class="tsvc"><span class="ic" aria-hidden="true">🎓</span><h3>Student Corner</h3><p>Career guidance after Class 10 and Class 12, and study-abroad planning, for students and parents.</p><button type="button" class="linkbtn" data-act="home">Career Guidance</button> <button type="button" class="linkbtn" data-act="abroad">Study Abroad</button></div>
+      <div class="tsvc"><span class="ic" aria-hidden="true">🎓</span><h3>Student Corner</h3><p>Career guidance after Class 10 and Class 12, study-abroad planning and competitive exam guidance, for students and parents.</p><button type="button" class="linkbtn" data-act="home">Career Guidance</button> <button type="button" class="linkbtn" data-act="abroad">Study Abroad</button> <button type="button" class="linkbtn" data-act="exams">Competitive Exams</button></div>
     </div></section>
   <section class="block"><h2>Meet Santosh Adivi</h2>
     <p class="founder">Santosh Adivi has spent more than twenty years in mathematics education across CBSE and state-board curricula: teaching mathematics from Class 8 to junior-college level, designing assessment frameworks, policies, question papers and answer keys, preparing academic calendars, year plans and unit plans with regular reviews, supporting teachers and parents, and authoring an IIT Foundation Mathematics book series for Classes 6 to 10. He holds an M.Sc. in Mathematics, a B.Ed. in Mathematics and English and a B.A. in Economics, Mathematics and Statistics, and has completed the Teach to Achieve certification in pedagogy, classroom management and technology-integrated teaching. He believes that assessment should guide improvement, not merely judge.</p></section>
@@ -2311,6 +2626,7 @@ function welcome(){
         <p class="hint">We count how many students take the quiz and which interests are common, without any name or contact details. You can choose to share your result at the end.</p>
         <p class="hint" style="margin-top:1rem">Are you a teacher? <button type="button" class="linkbtn" data-act="teachers">Visit Educator Hub</button></p>
         <div class="alert" style="margin-top:1.2rem"><strong>Thinking of studying abroad?</strong> Compare nine countries on cost, tests, work rights and scholarships. <button type="button" class="linkbtn" data-act="abroad">Explore Study Abroad</button></div>
+        ${examsCTA}
       </form>
     </div>
     <div class="hero-art">${hexSVG(null)}</div>
@@ -2458,7 +2774,7 @@ function compute(){
 
 function render(){
   const v=state.view;
-  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='schools'?schoolsPage():v==='about'?aboutPage():v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
+  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='exams'?exams():v==='schools'?schoolsPage():v==='about'?aboutPage():v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
   syncNav();
 }
 function refresh(){
@@ -2467,8 +2783,8 @@ function refresh(){
 }
 function go(view){
   state.view=view;render();window.scrollTo(0,0);
-  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='schools'?'#schools':view==='about'?'#about':(view==='check'||view==='pulse')?'#check':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#schools'||location.hash==='#about'||location.hash==='#contact'||location.hash==='#check')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
-  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='schools'||view==='about'||view==='check'||view==='pulse')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
+  try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='exams'?'#exams':view==='schools'?'#schools':view==='about'?'#about':(view==='check'||view==='pulse')?'#check':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#exams'||location.hash==='#schools'||location.hash==='#about'||location.hash==='#contact'||location.hash==='#check')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='exams'||view==='schools'||view==='about'||view==='check'||view==='pulse')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
   if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
   if(view==='results')animateCounts();
 }
@@ -2531,6 +2847,8 @@ app.addEventListener('change',e=>{
     const er=document.getElementById('chk-err');if(er)er.hidden=true;return;}
   if(t.id==='ab-budget'){state.abroadBudget=parseInt(t.value,10)||0;const tb=document.getElementById('ab-table');if(tb)tb.innerHTML=abroadTable();else refreshAb();return;}
   if(t.id==='ab-switch'){state.abId=t.value;render();return;}
+  if(t.id==='ex-jump'){if(t.value){state.exMode='exam';state.exId=t.value;state.exTab='about';state.exGoal='';render();exFocusTop();}return;}
+  if(t.id==='ex-switch'){state.exId=t.value;state.exTab='about';if(state.exGoal&&!exById(t.value).goals.includes(state.exGoal))state.exGoal='';render();exFocusTop();return;}
   if(t.name==='level'){const nm=document.getElementById('name');if(nm)state.name=nm.value;state.level=t.value;render();return;}
   if(t.id==='t-files'){
     const arr=Array.from(t.files||[]),errs=checkFiles(arr),box=document.getElementById('t-files-err'),list=document.getElementById('t-files-list');
@@ -2573,6 +2891,7 @@ app.addEventListener('click',e=>{
   else if(act==='ab-back'){state.abMode='pick';render();window.scrollTo(0,0);}
   else if(act==='ab-compare'){state.abMode='compare';render();window.scrollTo(0,0);}
   else if(act==='ab-tab'){state.abTab=b.dataset.tab;refreshAb();}
+  else if(act&&exAction(act,b)){}
   else if(act==='home')go('welcome');
   else if(act==='share')shareCard();
   else if(act==='copy')copyRequest(b);
@@ -2600,14 +2919,15 @@ document.querySelector('.site-head').addEventListener('click',e=>{
   closeMenu();
   if(b.dataset.act==='teachers')go('teachers');
   else if(b.dataset.act==='abroad'){state.abMode='pick';go('abroad');}
+  else if(b.dataset.act==='exams'){state.exMode='pick';state.exGoal='';go('exams');}
   else if(b.dataset.act==='schools')go('schools');
   else if(b.dataset.act==='about')go('about');
   else if(b.dataset.act==='home')go('welcome');
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.menu'))closeMenu();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuList&&!menuList.hidden){closeMenu();if(menuBtn)menuBtn.focus();}});
-window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');else if(location.hash==='#schools'&&state.view!=='schools')go('schools');else if(location.hash==='#about'&&state.view!=='about')go('about');else if(location.hash==='#contact'){go('about');scrollToContact();}else if(location.hash==='#check'&&state.view!=='check'&&state.view!=='pulse'){state.chk=newCheck();go('check');}});
-if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';else if(location.hash==='#schools')state.view='schools';else if(location.hash==='#about'||location.hash==='#contact')state.view='about';else if(location.hash==='#check')state.view='check';
+window.addEventListener('hashchange',()=>{if(isEd(location.hash)&&state.view!=='teachers')go('teachers');else if(location.hash==='#abroad'&&state.view!=='abroad')go('abroad');else if(location.hash==='#exams'&&state.view!=='exams'){state.exMode='pick';go('exams');}else if(location.hash==='#schools'&&state.view!=='schools')go('schools');else if(location.hash==='#about'&&state.view!=='about')go('about');else if(location.hash==='#contact'){go('about');scrollToContact();}else if(location.hash==='#check'&&state.view!=='check'&&state.view!=='pulse'){state.chk=newCheck();go('check');}});
+if(isEd(location.hash))state.view='teachers';else if(location.hash==='#abroad')state.view='abroad';else if(location.hash==='#exams')state.view='exams';else if(location.hash==='#schools')state.view='schools';else if(location.hash==='#about'||location.hash==='#contact')state.view='about';else if(location.hash==='#check')state.view='check';
 document.getElementById('brand-mark').src=BRAND_MARK;
 render();
 if(location.hash==='#contact')scrollToContact();
