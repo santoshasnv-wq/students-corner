@@ -2031,12 +2031,12 @@ function refreshEx(focusSel){
   if(focusSel){const t=v.querySelector(focusSel);if(t)t.focus({preventScroll:true});}
 }
 function exAction(act,b){
-  if(act==='exams'){state.exMode='pick';state.exGoal='';go('exams');}
+  if(act==='exams'){prEnter();state.exMode='pick';state.exGoal='';go('exams');}
   else if(act==='ex-goal'){state.exMode='goal';state.exGoal=b.dataset.id;render();exFocusTop();}
   else if(act==='ex-pick'){state.exMode='exam';state.exId=b.dataset.id;state.exTab='about';if(!(goalById(state.exGoal)&&exById(state.exId).goals.includes(state.exGoal)))state.exGoal='';render();exFocusTop();}
   else if(act==='ex-back'){state.exMode='pick';state.exGoal='';render();exFocusTop();}
   else if(act==='ex-goal-back'){state.exMode='goal';render();exFocusTop();}
-  else if(act==='ex-tab'){state.exTab=b.dataset.tab;refreshEx('#ex-tab-'+state.exTab);}
+  else if(act==='ex-tab'){state.exTab=b.dataset.tab;if(state.exTab==='practice')prEnter();refreshEx('#ex-tab-'+state.exTab);}
   else if(act==='cu-toggle'){
     const id=b.dataset.id,i=state.cuet.indexOf(id);state.cuMsg='';
     if(i>=0)state.cuet.splice(i,1);
@@ -2047,7 +2047,7 @@ function exAction(act,b){
   else if(act==='cu-area'){state.cuF=b.dataset.id;refreshEx('[data-act="cu-area"][data-id="'+state.cuF+'"]');}
   else if(act==='cu-example'){state.cuet=CU_EXAMPLES[parseInt(b.dataset.id,10)][1].slice();state.cuMsg='';refreshEx('[data-act="cu-example"][data-id="'+b.dataset.id+'"]');}
   else if(act==='cu-clear'){state.cuet=[];state.cuMsg='';refreshEx('[data-act="cu-clear"]');}
-  else if(act==='pr-open'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';if(state.view!=='exams')go('exams');else{render();exFocusTop();}}
+  else if(act==='pr-open'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';prEnter();if(state.view!=='exams')go('exams');else{render();exFocusTop();}}
   else if(act.indexOf('pr-')===0){prAction(act,b);}
   else return false;
   return true;
@@ -2366,7 +2366,7 @@ const PRACTICE={endpoint:'https://script.google.com/macros/s/AKfycbzdk8eBlyu_alR
 const PR_SESSION='ascend_pr_session',PR_LOCAL='ascend_pr_local',PR_PENDING='ascend_pr_pending';
 const PR_MODE_NAME={mock:'Full mock',mini:'Mini mock',practice:'Topic practice',revise:'Weak-topic revision'};
 const PR_ERR={email:'Please type a valid email address.',consent:'Please tick the box to agree before we send a code.',slow:'Too many tries. Please wait ten minutes and try again.',busy:'Codes cannot be sent right now. Please try again later.',code:'That code is not right or has expired. Check it, or ask for a new code.',locked:'Too many wrong codes. Please ask for a new code.',net:'We could not reach the server. Check your internet and try again.',off:'Sign-in is not switched on yet.',auth:'Your sign-in has ended. Please sign in again.',data:'We could not save that.',server:'Something went wrong on our side. Please try again.'};
-const PR={screen:'home',user:null,attempts:[],started:false,loading:false,login:{step:'email',email:'',msg:'',busy:false},cfg:{sec:'all',topic:'',diff:0,count:10},run:null,res:null,msg:'',timer:0,confirmSubmit:false,confirmDel:false,revFilter:'all',notice:''};
+const PR={screen:'home',user:null,attempts:[],started:false,loading:false,login:{step:'email',email:'',msg:'',busy:false},cfg:{sec:'all',topic:'',diff:0,count:10},run:null,res:null,msg:'',timer:0,confirmSubmit:false,confirmDiscard:false,confirmDel:false,revFilter:'all',notice:''};
 const PR_TOPIC_SEC={};
 ['qa','ri','en'].forEach(s=>NPAT.TOPICS[s].forEach(t=>{PR_TOPIC_SEC[t]=s;}));
 
@@ -2433,10 +2433,25 @@ function prWeak(list){
   return Object.keys(g.top).filter(k=>PR_TOPIC_SEC[k]&&g.top[k][0]>=5&&prPct(g.top[k][1],g.top[k][0])<65).sort((a,b)=>prPct(g.top[a][1],g.top[a][0])-prPct(g.top[b][1],g.top[b][0])).slice(0,5);
 }
 
+/* ----- coming back to the practice tab ----- */
+function prEnter(){
+  PR.confirmDiscard=false;PR.confirmSubmit=false;
+  if(PR.run)PR.screen='resume';
+  else if(PR.screen!=='home')PR.screen='home';
+}
+function prResumeHTML(){
+  const r=PR.run,n=r.qs.length,answered=r.ans.filter(x=>x>=0).length;
+  const left=r.limit?'<br>Time left: <strong id="pr-timer" role="timer">'+prMMSS(r.limit-(Date.now()-r.start)/1000)+'</strong>':'';
+  return `<h3 id="pr-qtext" tabindex="-1">You have a session in progress</h3>
+  <div class="alert"><strong>${PR_MODE_NAME[r.mode]}</strong>: you are on question ${r.i+1} of ${n}, and you have answered ${answered}.${left}</div>
+  ${r.limit?'<p class="hint">The timer keeps running while you are away. If time runs out, your test is submitted for you.</p>':''}
+  <p class="links"><button type="button" class="btn" data-act="pr-resume">Continue where I left off</button> <button type="button" class="btn ghost" data-act="pr-finish-now">Finish and see my score</button> ${PR.confirmDiscard?`<span class="pr-del" role="alert">This throws away this session. <button type="button" class="btn small" data-act="pr-discard-yes">Yes, start fresh</button> <button type="button" class="btn ghost small" data-act="pr-discard-no">Cancel</button></span>`:`<button type="button" class="btn ghost" data-act="pr-discard">Start a new practice instead</button>`}</p>`;
+}
+
 /* ----- the panel ----- */
 function npatPanel(){
   prInit();
-  const body=PR.screen==='login'?prLoginHTML():PR.screen==='run'&&PR.run?prRunHTML():PR.screen==='result'&&PR.res?prResultHTML():PR.screen==='review'&&PR.res?prReviewHTML():prHomeHTML();
+  const body=PR.screen==='login'?prLoginHTML():PR.screen==='resume'&&PR.run?prResumeHTML():PR.screen==='run'&&PR.run?prRunHTML():PR.screen==='result'&&PR.res?prResultHTML():PR.screen==='review'&&PR.res?prReviewHTML():prHomeHTML();
   return `<div class="pr" id="pr-root">${body}</div>`;
 }
 const prNote=`<div class="alert"><strong>About these questions.</strong> They are practice questions written by Ascend Hub in the style of the NPAT (Quantitative and Numerical Ability, Reasoning and General Intelligence, Proficiency in English). They are not real NPAT papers, and no teacher has reviewed each one. If you think an answer is wrong, use <em>Report a mistake</em> in the review. Check the real pattern on the NMIMS website.</div>`;
@@ -2462,6 +2477,7 @@ function prHomeHTML(){
   ${prNote}${prAccountHTML()}
   ${PR.loading?'<p role="status">Loading your saved scores…</p>':''}
   <div class="prstats">${stat(g.n,'questions tried')}${stat(g.n?prPct(g.c,g.n)+'%':'–','correct overall')}${stat(list.length,'tests and sessions')}</div>
+  ${PR.res?`<div class="alert"><strong>Your last session:</strong> ${PR_MODE_NAME[PR.res.mode]}, ${PR.res.attempt.correct} of ${PR.res.attempt.total} right. <button type="button" class="linkbtn" data-act="pr-result">See the result</button> <button type="button" class="linkbtn" data-act="pr-review">Review answers</button></div>`:''}
   <h3>Mock tests</h3>
   <div class="costgrid">
     <div class="cost"><strong>Full mock</strong><p>120 questions, 40 in each section, ${PRACTICE.mockMin} minutes. One mark for each right answer and no negative marking, like the reported pattern.</p><button type="button" class="btn" data-act="pr-start" data-mode="mock">Start full mock</button></div>
@@ -2505,7 +2521,7 @@ function prStart(mode){
     qs=prShuffle(qs).slice(0,c.count);
   }
   if(!qs.length){PR.msg='We could not find questions for that choice. Try another level or topic.';prRefresh();return;}
-  PR.run={mode,qs,i:0,ans:qs.map(()=>-1),mark:qs.map(()=>false),start:Date.now(),limit,id:prId(),live:''};
+  PR.run={mode,qs,i:0,ans:qs.map(()=>-1),mark:qs.map(()=>false),shown:qs.map(()=>false),start:Date.now(),limit,id:prId(),live:''};
   PR.screen='run';PR.confirmSubmit=false;PR.res=null;
   clearInterval(PR.timer);
   if(limit)PR.timer=setInterval(prTick,1000);
@@ -2528,12 +2544,13 @@ function prOptsHTML(q,sel,reveal){
   }).join('');
 }
 function prRunHTML(){
-  const r=PR.run,q=r.qs[r.i],n=r.qs.length,fb=prFeedback(r),sel=r.ans[r.i],reveal=fb&&sel>=0;
+  const r=PR.run,q=r.qs[r.i],n=r.qs.length,fb=prFeedback(r),sel=r.ans[r.i],reveal=fb&&(sel>=0||r.shown[r.i]);
   const answered=r.ans.filter(x=>x>=0).length,marked=r.mark.filter(Boolean).length;
   const head=`<div class="pr-top"><p><strong>${PR_MODE_NAME[r.mode]}</strong> · Question ${r.i+1} of ${n} · ${esc(NPAT.SECS[q.sec])}${q.topic?' · '+esc(q.topic):''}</p>${r.limit?`<p class="prtimer">Time left <span id="pr-timer" role="timer">${prMMSS(r.limit-(Date.now()-r.start)/1000)}</span></p>`:''}</div><div class="sr-only" id="pr-live" aria-live="polite"></div><p class="bar" aria-hidden="true"><span style="width:${prPct(r.i+1,n)}%"></span></p>`;
   const qh=`${q.passage?`<div class="prpass"><strong>Read the passage, then answer.</strong><p>${esc(q.passage)}</p></div>`:''}<p class="prq" id="pr-qtext" tabindex="-1">${esc(q.q)}</p><div class="pro" role="group" aria-labelledby="pr-qtext">${prOptsHTML(q,sel,reveal)}</div>`;
-  const exp=reveal?`<div class="prexp" role="status"><strong>${sel===q.ans?'Right.':'Not this time.'}</strong> ${esc(q.exp)}</div>`:'';
-  const nav=`<p class="links"><button type="button" class="btn ghost" data-act="pr-prev"${r.i===0?' disabled':''}>← Previous</button> ${fb?'':`<button type="button" class="btn ghost" data-act="pr-mark" aria-pressed="${r.mark[r.i]}">${r.mark[r.i]?'Unmark':'Mark for review'}</button> `}${r.i<n-1?`<button type="button" class="btn" data-act="pr-next">${fb&&sel<0?'Skip':'Next'} →</button>`:''} <button type="button" class="btn ${r.i===n-1?'':'ghost'}" data-act="pr-submit">${fb?'Finish and see score':'Submit test'}</button></p>`;
+  const exp=reveal?`<div class="prexp" role="status"><strong>${sel<0?'Here is the answer.':sel===q.ans?'Right.':'Not this time.'}</strong> ${esc(q.exp)}</div>`:'';
+  const showBtn=fb&&!reveal?`<p><button type="button" class="btn ghost" data-act="pr-show">Show answer and solution</button></p>`:'';
+  const nav=`${showBtn}<p class="links"><button type="button" class="btn ghost" data-act="pr-prev"${r.i===0?' disabled':''}>← Previous</button> ${fb?'':`<button type="button" class="btn ghost" data-act="pr-mark" aria-pressed="${r.mark[r.i]}">${r.mark[r.i]?'Unmark':'Mark for review'}</button> `}${r.i<n-1?`<button type="button" class="btn" data-act="pr-next">${fb&&!reveal?'Skip':'Next'} →</button>`:''} <button type="button" class="btn ${r.i===n-1?'':'ghost'}" data-act="pr-submit">${fb?'Finish and see score':'Submit test'}</button></p>`;
   let confirm='';
   if(PR.confirmSubmit)confirm=`<div class="alert" role="alertdialog" aria-label="Confirm"><strong>${fb?'Finish this session?':'Submit your test?'}</strong> You answered ${answered} of ${n}.${marked?' '+marked+' marked for review.':''}${!fb&&answered<n?' Unanswered questions score zero.':''} <button type="button" class="btn small" data-act="pr-submit-yes">Yes, ${fb?'finish':'submit'}</button> <button type="button" class="btn ghost small" data-act="pr-submit-no">Keep going</button></div>`;
   let pal='';
@@ -2545,7 +2562,7 @@ function prRunHTML(){
 }
 function prOpt(k){
   const r=PR.run;if(!r)return;
-  if(prFeedback(r)&&r.ans[r.i]>=0)return;
+  if(prFeedback(r)&&(r.ans[r.i]>=0||r.shown[r.i]))return;
   r.ans[r.i]=r.ans[r.i]===k&&!prFeedback(r)?-1:k;
   prRefresh(prFeedback(r)?'[data-act="pr-next"],[data-act="pr-submit"]':'[data-act="pr-opt"][data-k="'+k+'"]');
 }
@@ -2554,7 +2571,7 @@ function prGo(i){const r=PR.run;if(!r||i<0||i>=r.qs.length)return;r.i=i;PR.confi
 function prFinish(auto){
   const r=PR.run;if(!r)return;
   clearInterval(PR.timer);
-  const idx=r.qs.map((q,i)=>i).filter(i=>!prFeedback(r)||r.ans[i]>=0);
+  const idx=r.qs.map((q,i)=>i).filter(i=>!prFeedback(r)||r.ans[i]>=0||r.shown[i]);
   PR.confirmSubmit=false;
   if(!idx.length){PR.run=null;PR.screen='home';PR.msg='You did not answer any question, so nothing was saved.';prRefresh();return;}
   const bySec={qa:[0,0],ri:[0,0],en:[0,0]},byTopic={};let correct=0;
@@ -2626,12 +2643,18 @@ async function prAction(act,b){
     case 'pr-prev':if(PR.run)prGo(PR.run.i-1);break;
     case 'pr-go':prGo(parseInt(b.dataset.i,10));break;
     case 'pr-mark':if(PR.run){PR.run.mark[PR.run.i]=!PR.run.mark[PR.run.i];prRefresh('[data-act="pr-mark"]');}break;
+    case 'pr-show':if(PR.run){PR.run.shown[PR.run.i]=true;prRefresh('[data-act="pr-next"],[data-act="pr-submit"]');}break;
+    case 'pr-resume':if(PR.run){PR.screen='run';prRefresh('#pr-qtext');}break;
+    case 'pr-finish-now':prFinish(false);break;
+    case 'pr-discard':PR.confirmDiscard=true;prRefresh('[data-act="pr-discard-yes"]');break;
+    case 'pr-discard-no':PR.confirmDiscard=false;prRefresh('[data-act="pr-discard"]');break;
+    case 'pr-discard-yes':clearInterval(PR.timer);PR.run=null;PR.confirmDiscard=false;PR.screen='home';prRefresh('#pr-root h3');break;
     case 'pr-submit':PR.confirmSubmit=true;prRefresh('[data-act="pr-submit-yes"]');break;
     case 'pr-submit-no':PR.confirmSubmit=false;prRefresh('[data-act="pr-submit"]');break;
     case 'pr-submit-yes':prFinish(false);break;
     case 'pr-review':PR.screen='review';prRefresh('#pr-qtext');window.scrollTo(0,0);break;
     case 'pr-result':PR.screen='result';prRefresh('#pr-qtext');window.scrollTo(0,0);break;
-    case 'pr-home':PR.screen='home';PR.msg='';PR.res=null;prRefresh('#pr-root h3');window.scrollTo(0,0);break;
+    case 'pr-home':PR.screen='home';PR.msg='';prRefresh('#pr-root h3');window.scrollTo(0,0);break;
     case 'pr-filter':PR.revFilter=b.dataset.f;prRefresh('[data-act="pr-filter"][data-f="'+b.dataset.f+'"]');break;
     case 'pr-login':PR.screen='login';L.step='email';L.msg='';L.busy=false;prRefresh('#pr-email');break;
     case 'pr-login-back':PR.screen='home';prRefresh('[data-act="pr-login"]');break;
