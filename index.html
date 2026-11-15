@@ -412,6 +412,60 @@ details.career[open]::details-content{block-size:auto}
   .btn.small{border:0;padding:0;text-decoration:underline;color:var(--accent);background:none;min-height:0}
   .hx-shape{animation:none}
 }
+
+/* NPAT practice */
+:root{--ok:#0B6B3A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ok:#7FE0A8}}
+:root[data-theme="dark"]{--ok:#7FE0A8}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pr h3{margin-top:1.6rem}
+.pr-acct{margin:1rem 0;padding:.8rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.pr-acct p{margin:.3rem 0}
+.pr-del{display:inline-block;margin-left:.4rem}
+.prstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin:1rem 0}
+.prstat{border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;background:var(--surface)}
+.prstat b{display:block;font-size:1.6rem;font-family:var(--font-display);line-height:1.2}
+.prstat span{color:var(--muted);font-size:.9rem}
+.prsetup{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:.8rem 0}
+.bar{display:block;height:10px;background:var(--accent-soft);border-radius:99px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.prrows,.prlist{list-style:none;padding:0;margin:.6rem 0}
+.prrows li{display:grid;grid-template-columns:minmax(120px,1.4fr) 2fr minmax(110px,1.1fr);gap:.7rem;align-items:center;padding:.35rem 0}
+.prlist li{padding:.35rem 0;border-bottom:1px solid var(--line)}
+.pr-lab{font-weight:700}.pr-val{color:var(--muted);font-size:.9rem}
+.pr-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.4rem 1rem;align-items:baseline}
+.prtimer{font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.prq{font-size:1.15rem;line-height:1.5;margin:1rem 0;white-space:pre-line}
+.prpass{white-space:pre-line;border-left:4px solid var(--accent);padding:.7rem 1rem;background:var(--accent-soft);border-radius:8px;margin:1rem 0}
+.prpass p{margin:.4rem 0 0}
+.pro{display:grid;gap:.6rem;margin:1rem 0}
+.optbtn{display:flex;gap:.8rem;align-items:flex-start;text-align:left;min-height:48px;width:100%;padding:.7rem .9rem;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:inherit;font:inherit;line-height:1.45}
+button.optbtn{cursor:pointer}
+button.optbtn:hover:not(:disabled){border-color:var(--accent)}
+.optbtn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.optbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.optbtn:disabled{opacity:1;color:inherit}
+.optbtn.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.optbtn.no{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 10%,var(--surface))}
+.optbtn b{flex:none;width:1.5rem}
+.pr-tag{font-weight:700;white-space:nowrap}
+.optbtn.ok .pr-tag{color:var(--ok)}.optbtn.no .pr-tag{color:var(--danger)}
+.prexp{margin:1rem 0;padding:.8rem 1rem;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.pr-pal{margin-top:1.4rem;border:1px solid var(--line);border-radius:12px;padding:.6rem 1rem;background:var(--surface)}
+.pr-pal summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.pr-pal-h{margin:.8rem 0 .3rem;font-weight:700;font-size:.9rem;color:var(--muted)}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:.4rem}
+.pal{min-height:44px;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:inherit;font:inherit;font-weight:700;cursor:pointer}
+.pal.ans{background:var(--accent-soft);border-color:var(--accent)}
+.pal.mk{border-style:dashed;border-color:var(--mark)}
+.pal.cur{outline:3px solid var(--accent);outline-offset:2px}
+.pr-consent label{display:flex;gap:.6rem;align-items:flex-start;line-height:1.5}
+.pr-consent input{margin-top:.3rem;width:1.2rem;height:1.2rem;flex:none}
+.pr-msg{color:var(--danger);font-weight:700}
+.prrev{list-style:none;padding:0}
+.pr-rev{margin:1.4rem 0;padding-bottom:1.2rem;border-bottom:1px solid var(--line)}
+.pr input[type=email],.pr input[inputmode=numeric]{display:block;min-height:48px;width:100%;max-width:22rem;padding:.5rem .8rem;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--surface);color:inherit}
+@media (max-width:620px){.prrows li{grid-template-columns:1fr;gap:.2rem}}
 </style>
 </head>
 <body>
@@ -1812,10 +1866,12 @@ const EXAMS=[
  {id:'aeee',name:'AEEE',full:'Amrita Entrance Examination (Engineering)',level:'general',goals:['pvt','eng'],body:'Amrita Vishwa Vidyapeetham',
   who:'Students who want B.Tech at the Amrita campuses.',mode:'Check the Amrita website for the mode.',pattern:[GEN_PATTERN],subj:'Physics, Chemistry and Mathematics',
   dates:[GEN_DATES],tip:'Compare the cost and the course structure with other colleges before you decide.',official:[['Amrita','https://www.amrita.edu/']]},
- {id:'npat',name:'NPAT',full:'NMIMS National Performance Assessment Test',level:'general',goals:['pvt','mgt','law'],body:'SVKM’s NMIMS',
-  who:'Students who want programmes such as management, commerce, law and others at NMIMS. Check which programmes use the test.',
-  mode:'Check the NMIMS website for the mode.',pattern:[GEN_PATTERN],subj:'Check the programme page. Papers differ by programme.',
-  dates:[GEN_DATES],tip:'Read the programme page. Some programmes accept other scores, so check before you register.',official:[['NMIMS admissions','https://www.nmims.edu/']]},
+ {id:'npat',name:'NPAT',full:'NMIMS National Performance Assessment Test',level:'secondary',goals:['pvt','mgt','law'],body:'SVKM’s NMIMS',
+  who:'Students who want programmes such as management and commerce at NMIMS. Check which programmes use the test, because some programmes use other tests or scores.',
+  mode:'Computer-based test, as reported. Confirm the mode on the NMIMS website.',
+  pattern:['Reported pattern: three sections of 40 questions each, so 120 questions for 120 marks.','Reported time: 100 minutes. One mark for each right answer, and no negative marking.','The sections reported are Quantitative and Numerical Ability, Reasoning and General Intelligence, and Proficiency in English.','This comes from news and admissions-guide summaries, not from an NMIMS bulletin, and NMIMS can change it. Confirm it on the NMIMS website before you plan.'],
+  subj:'Quantitative and Numerical Ability; Reasoning and General Intelligence; Proficiency in English. Papers can differ by programme, so check yours.',
+  dates:[GEN_DATES],tip:'Use the Practice online tab for mock tests and topic practice. Then read the programme page, because some programmes accept other scores.',official:[['NMIMS admissions','https://www.nmims.edu/']]},
  {id:'set',name:'SET (Symbiosis)',full:'Symbiosis Entrance Test',level:'general',goals:['pvt','law','mgt'],body:'Symbiosis International (Deemed University)',
   who:'Students who want undergraduate programmes such as law and management at Symbiosis. Different programmes may use different tests.',
   mode:'Check the Symbiosis website for the mode.',pattern:[GEN_PATTERN],subj:'Check the programme page. Papers differ by programme.',
@@ -1875,7 +1931,7 @@ const cuFee=n=>n<=3?1000:1000+400*(n-3);
 
 const exById=id=>EXAMS.find(e=>e.id===id);
 const goalById=id=>EX_GOALS.find(g=>g.id===id);
-const exTabs=e=>[['about','Overview'],['pattern','Pattern and subjects']].concat(e.id==='cuet'?[['subjects','Subject-wise']]:[],[['dates','Dates and apply']]);
+const exTabs=e=>[['about','Overview'],['pattern','Pattern and subjects']].concat(e.id==='cuet'?[['subjects','Subject-wise']]:[],e.id==='npat'?[['practice','Practice online']]:[],[['dates','Dates and apply']]);
 const exLevelTag=e=>`<span class="chip-fit ${EX_LEVEL[e.level][0]}">${EX_LEVEL[e.level][1]}</span>`;
 const exDisclaimer=`<p class="disclaimer">Ascend Hub is a guidance tool and not an admissions or coaching agency. Exam patterns, dates, fees and eligibility change every year. The details on these pages were collected from public sources on ${EX_CHECKED}, and each exam page says how well we could check it. The official notification of each exam always comes first. Please confirm everything on the official website before you register or pay.</p>`;
 function exCard(e){return `<button type="button" class="cty" data-act="ex-pick" data-id="${e.id}"><strong>${e.name}</strong><span class="hint">${e.full}</span><span class="hint">${e.body}</span></button>`;}
@@ -1886,6 +1942,8 @@ function examsPick(){
     <p class="lead">Choose what you are aiming for. You will see the exams that lead there, then the pattern, subjects, dates and official websites, one step at a time.</p></div>
   <section class="block" style="margin-top:1.4rem"><h2>Start with CUET</h2>
     <div class="ctys"><button type="button" class="cty" data-act="ex-pick" data-id="cuet"><span class="flag" aria-hidden="true">🎓</span><strong>CUET (UG), subject by subject</strong><span class="hint">Plan your papers for BA, BSc, BCom, BBA and more</span></button></div></section>
+  <section class="block"><h2>Practise online</h2>
+    <div class="ctys"><button type="button" class="cty" data-act="pr-open"><span class="flag" aria-hidden="true">📝</span><strong>NPAT practice for commerce and management</strong><span class="hint">Mock tests and topic practice in all three sections, with your progress shown</span></button></div></section>
   <section class="block"><h2>Or choose your goal</h2>
     <div class="ctys">${EX_GOALS.map(g=>`<button type="button" class="cty" data-act="ex-goal" data-id="${g.id}"><span class="flag" aria-hidden="true">${g.ico}</span><strong>${g.t}</strong><span class="hint">${g.d}</span></button>`).join('')}</div>
     <p class="filters noprint" style="margin-top:1.2rem">${jump}</p></section>
@@ -1938,6 +1996,7 @@ function cuetPanel(){
     <p class="hint" style="margin-top:1rem">Source: the CUET (UG) 2026 information bulletin. Sanskrit is a domain subject and is not translated into other languages. The 2027 list may change.</p>`;
 }
 function examPanel(e,tab){
+  if(tab==='practice'&&e.id==='npat')return npatPanel();
   if(tab==='pattern')return `<h3>How the exam works</h3><p><strong>Mode:</strong> ${e.mode}</p><ul>${li(e.pattern)}</ul><p><strong>Subjects:</strong> ${e.subj}</p>${e.id==='cuet'?`<p class="links noprint" style="margin-top:1rem"><button type="button" class="btn" data-act="ex-tab" data-tab="subjects">Next: subject-wise planner</button></p>`:`<p class="links noprint" style="margin-top:1rem"><button type="button" class="btn" data-act="ex-tab" data-tab="dates">Next: dates and apply</button></p>`}`;
   if(tab==='subjects'&&e.id==='cuet')return cuetPanel();
   if(tab==='dates')return `<h3>Dates, eligibility and applying</h3><ul>${li(e.dates)}</ul><div class="c-wide c-note" style="margin-top:1.2rem"><h4>Preparing</h4><p>${e.tip}</p><ul><li>Use only the official syllabus and the past papers published by the exam body.</li><li>Make a weekly timetable, and take timed practice papers.</li><li>Keep your school marks strong, because many colleges also look at Class 12 results.</li></ul></div>`;
@@ -1988,10 +2047,640 @@ function exAction(act,b){
   else if(act==='cu-area'){state.cuF=b.dataset.id;refreshEx('[data-act="cu-area"][data-id="'+state.cuF+'"]');}
   else if(act==='cu-example'){state.cuet=CU_EXAMPLES[parseInt(b.dataset.id,10)][1].slice();state.cuMsg='';refreshEx('[data-act="cu-example"][data-id="'+b.dataset.id+'"]');}
   else if(act==='cu-clear'){state.cuet=[];state.cuMsg='';refreshEx('[data-act="cu-clear"]');}
+  else if(act==='pr-open'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';if(state.view!=='exams')go('exams');else{render();exFocusTop();}}
+  else if(act.indexOf('pr-')===0){prAction(act,b);}
   else return false;
   return true;
 }
 const examsCTA=`<div class="alert" style="margin-top:1.2rem"><strong>Preparing for CUET, JEE, NEET, CLAT or a private university test?</strong> See the pattern, subjects and dates for each exam, and plan your CUET papers subject by subject. <button type="button" class="linkbtn" data-act="exams">Explore Competitive Exams</button></div>`;
+
+/* ---------- NPAT QUESTION BANK ---------- */
+/* ---------- NPAT PRACTICE BANK ----------
+   Original questions written for Ascend Hub. No past-paper questions are copied.
+   Maths and reasoning questions are GENERATED from a seed, so every attempt is different, and each answer is computed by the code.
+   English questions are written by hand (a fixed set).
+   Every question: {id, sec, topic, diff, q, passage?, opts[4], ans (0-3), exp, meta?}
+   sec: 'qa' Quantitative and Numerical Ability, 'ri' Reasoning and General Intelligence, 'en' Proficiency in English. diff: 1 easy, 2 medium, 3 hard. */
+const NPAT=(function(){
+  const SECS={qa:'Quantitative and Numerical Ability',ri:'Reasoning and General Intelligence',en:'Proficiency in English'};
+  function rng(seed){let a=(seed>>>0)||1;return function(){a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+  const ri=(r,a,b)=>a+Math.floor(r()*(b-a+1));
+  const pick=(r,a)=>a[Math.floor(r()*a.length)];
+  function shuffle(r,a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  const inr=n=>'₹'+Number(n).toLocaleString('en-IN');
+  const num=n=>Number(n).toLocaleString('en-IN');
+  const gcd=(a,b)=>b?gcd(b,a%b):a;
+  function until(r,f){for(let i=0;i<500;i++){const v=f();if(v)return v;}throw new Error('generator could not satisfy its constraints');}
+  /* Builds the 4 options: the correct one plus 3 distinct wrong ones, in a random order. */
+  function mk(r,o){
+    const correct=String(o.correct),opts=[correct];
+    (o.wrong||[]).forEach(w=>{w=String(w);if(!opts.includes(w)&&opts.length<4)opts.push(w);});
+    if(opts.length<4){ /* top up with nearby numbers in the same format (prefix, commas, suffix) */
+      const m=correct.match(/^([^0-9\-]*)(-?[\d,]*\.?\d+)(.*)$/);
+      if(m){const base=parseFloat(m[2].replace(/,/g,'')),dec=(m[2].split('.')[1]||'').length;
+        for(const d of [1,-1,2,-2,3,-3,5,-5,10,-10,12,-12,20,-20]){if(opts.length>=4)break;const v=base+d;if(v<0&&base>=0)continue;
+          const t=m[1]+(m[2].indexOf(',')>=0?v.toLocaleString('en-IN'):v.toFixed(dec))+m[3];if(!opts.includes(t))opts.push(t);}}
+    }
+    if(opts.length<4)throw new Error('not enough distinct wrong options for '+o.topic+': '+o.q);
+    const order=shuffle(r,[0,1,2,3]),shuffled=order.map(i=>opts[i]);
+    return {sec:o.sec,topic:o.topic,diff:o.diff,q:o.q,opts:shuffled,ans:shuffled.indexOf(correct),exp:o.exp,meta:o.meta,passage:o.passage};
+  }
+
+  /* ======================= QUANTITATIVE ======================= */
+  const QA={};
+  QA.pct1={topic:'Percentages',diff:1,f(r){const p=pick(r,[5,10,12,15,20,25,30,35,40,45,60,75]);const n=until(r,()=>{const x=pick(r,[80,120,160,200,240,300,360,400,500,640,800]);return p*x%100===0?x:0;});const a=p*n/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`What is ${p}% of ${num(n)}?`,correct:a,wrong:[a+p,a-p>0?a-p:a+2*p,a*2,n-a],exp:`${p}% of ${num(n)} = ${p}/100 × ${num(n)} = ${num(a)}.`,meta:{kind:'pct1',p,n,ans:a}});}};
+  QA.pct2={topic:'Percentages',diff:2,f(r){const up=r()<0.5,k=pick(r,[5,10,15,20,25,30,40,50]);const old=until(r,()=>{const x=pick(r,[200,240,300,400,500,600,800,1000,1200]);return x*k%100===0?x:0;});const nw=up?old+old*k/100:old-old*k/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The price of an article ${up?'rose':'fell'} from ${inr(old)} to ${inr(nw)}. What is the percentage ${up?'increase':'decrease'}?`,correct:k+'%',wrong:[(k+5)+'%',(k+10)+'%',(k>5?k-5:k+15)+'%',(up?(Math.round((nw-old)/nw*100)):(Math.round((old-nw)/nw*100)))+'%'],exp:`Change = ${inr(Math.abs(nw-old))}. Percentage ${up?'increase':'decrease'} = ${num(Math.abs(nw-old))}/${num(old)} × 100 = ${k}%.`,meta:{kind:'pct2',old,nw,ans:k}});}};
+  QA.pct3={topic:'Percentages',diff:3,f(r){const m=pick(r,[1000,1500,2000,2500,4000,5000]);const [d1,d2]=until(r,()=>{const a=pick(r,[5,10,15,20,25]),b=pick(r,[5,10,15,20,25]);return a!==b&&m*(100-a)*(100-b)%10000===0?[a,b]:0;});const sp=m*(100-d1)*(100-d2)/10000;
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`A shopkeeper marks an article at ${inr(m)} and gives two successive discounts of ${d1}% and ${d2}%. What is the selling price?`,correct:inr(sp),wrong:[inr(m*(100-d1-d2)/100),inr(m*(100-d1)/100),inr(m*(100-d2)/100),inr(sp+m/50)],exp:`After ${d1}%: ${num(m)} × ${100-d1}/100 = ${num(m*(100-d1)/100)}. After ${d2}% more: ${num(m*(100-d1)/100)} × ${100-d2}/100 = ${num(sp)}. Discounts are applied one after the other, not added.`,meta:{kind:'pct3',m,d1,d2,ans:sp}});}};
+  QA.pl1={topic:'Profit and Loss',diff:1,f(r){const loss=r()<0.4,p=pick(r,[5,10,15,20,25,30]);const cp=until(r,()=>{const x=pick(r,[400,500,600,800,1000,1200,1500,2000,2500]);return x*p%100===0?x:0;});const sp=loss?cp-cp*p/100:cp+cp*p/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`An article bought for ${inr(cp)} is sold at a ${loss?'loss':'profit'} of ${p}%. What is the selling price?`,correct:inr(sp),wrong:[inr(loss?cp+cp*p/100:cp-cp*p/100),inr(cp+p),inr(cp-p),inr(sp+cp/20)],exp:`${loss?'Loss':'Profit'} = ${p}% of ${num(cp)} = ${num(cp*p/100)}. Selling price = ${num(cp)} ${loss?'−':'+'} ${num(cp*p/100)} = ${num(sp)}.`,meta:{kind:'pl1',cp,p,loss,ans:sp}});}};
+  QA.pl2={topic:'Profit and Loss',diff:2,f(r){const p=pick(r,[10,20,25,50]);const cp=until(r,()=>{const x=pick(r,[200,300,400,500,600,800,1000,1200,1600,2000]);return x*p%100===0?x:0;});const sp=cp+cp*p/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A trader sells an article for ${inr(sp)} and earns a profit of ${p}%. What did the article cost him?`,correct:inr(cp),wrong:[inr(sp-sp*p/100),inr(sp-p),inr(cp+cp/10),inr(sp)],exp:`Selling price = (100 + ${p})% of cost = ${100+p}/100 × cost. So cost = ${num(sp)} × 100/${100+p} = ${num(cp)}.`,meta:{kind:'pl2',sp,p,ans:cp}});}};
+  QA.pl3={topic:'Profit and Loss',diff:2,f(r){const n=pick(r,[20,25,40,50,60]),c=pick(r,[12,15,18,20,24,30]),s=c+pick(r,[3,4,5,6]);const profit=n*(s-c);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A shopkeeper buys ${n} notebooks at ${inr(c)} each and sells all of them at ${inr(s)} each. What is the total profit?`,correct:inr(profit),wrong:[inr(n*s),inr(profit+n),inr(s-c),inr(profit-n*2)],exp:`Profit on one notebook = ${s} − ${c} = ${s-c}. Total profit = ${n} × ${s-c} = ${num(profit)}.`,meta:{kind:'pl3',n,c,s,ans:profit}});}};
+  QA.ratio1={topic:'Ratio and Proportion',diff:2,f(r){const [a,b]=pick(r,[[2,3],[3,5],[1,4],[3,2],[5,7],[4,5],[2,7],[3,4]]);const k=pick(r,[100,150,200,250,300,400,500]);const total=k*(a+b);const share=k*a;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`${inr(total)} is divided between Asha and Bilal in the ratio ${a}:${b}. How much does Asha get?`,correct:inr(share),wrong:[inr(k*b),inr(total/2),inr(share+k),inr(Math.round(total*a/(a+b+1)))],exp:`Total parts = ${a} + ${b} = ${a+b}. One part = ${num(total)}/${a+b} = ${num(k)}. Asha's share = ${a} × ${num(k)} = ${num(share)}.`,meta:{kind:'ratio1',total,a,b,ans:share}});}};
+  QA.ratio2={topic:'Ratio and Proportion',diff:1,f(r){const [a,b]=pick(r,[[3,2],[4,3],[5,4],[7,5],[2,1],[3,1]]);const k=pick(r,[6,8,10,12,15,20]);const total=k*(a+b);
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`In a class the ratio of boys to girls is ${a}:${b}. If there are ${total} students, how many girls are there?`,correct:k*b,wrong:[k*a,k*b+k,total-k,k*(b+1)],exp:`Total parts = ${a+b}. One part = ${total}/${a+b} = ${k}. Girls = ${b} × ${k} = ${k*b}.`,meta:{kind:'ratio2',total,a,b,ans:k*b}});}};
+  QA.avg1={topic:'Averages',diff:1,f(r){const nums=[0,0,0,0,0].map(()=>ri(r,20,90));const s=nums.reduce((x,y)=>x+y,0);nums[4]+= (5-s%5)%5;const sum=nums.reduce((x,y)=>x+y,0);const av=sum/5;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`Find the average of ${nums.join(', ')}.`,correct:av,wrong:[av+2,av-3,av+5,Math.round(sum/4)],exp:`Sum = ${sum}. Average = ${sum}/5 = ${av}.`,meta:{kind:'avg1',nums,ans:av}});}};
+  QA.avg2={topic:'Averages',diff:2,f(r){const [A,x]=until(r,()=>{const a=ri(r,20,60),x=ri(r,30,90);return (5*a+x)%6===0?[a,x]:0;});const nw=(5*A+x)/6;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The average of 5 numbers is ${A}. When a sixth number, ${x}, is added, what is the new average?`,correct:nw,wrong:[nw+2,nw-2,(A+x)/2,nw+5].map(v=>Number.isInteger(v)?v:Math.round(v)),exp:`Sum of 5 numbers = 5 × ${A} = ${5*A}. New sum = ${5*A} + ${x} = ${5*A+x}. New average = ${5*A+x}/6 = ${nw}.`,meta:{kind:'avg2',A,x,ans:nw}});}};
+  QA.si1={topic:'Interest',diff:1,f(r){const P=pick(r,[2000,3000,4000,5000,6000,8000,10000]),R=pick(r,[4,5,6,8,10,12]),T=pick(r,[2,3,4,5]);const si=P*R*T/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`Find the simple interest on ${inr(P)} at ${R}% per year for ${T} years.`,correct:inr(si),wrong:[inr(si+P*R/100),inr(si*2),inr(P*R/100),inr(si-P*R/200)],exp:`Simple interest = P × R × T / 100 = ${num(P)} × ${R} × ${T} / 100 = ${num(si)}.`,meta:{kind:'si1',P,R,T,ans:si}});}};
+  QA.ci1={topic:'Interest',diff:3,f(r){const R=pick(r,[5,10,20]);const P=until(r,()=>{const x=pick(r,[4000,8000,10000,12000,16000,20000]);return x*((100+R)*(100+R)-10000)%10000===0?x:0;});const ci=P*((100+R)*(100+R)-10000)/10000;const si=P*R*2/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`What is the compound interest on ${inr(P)} for 2 years at ${R}% per year, compounded yearly?`,correct:inr(ci),wrong:[inr(si),inr(ci+P*R/100),inr(ci-R*10),inr(P+ci)],exp:`Amount after 2 years = ${num(P)} × (1 + ${R}/100)² = ${num(P+ci)}. Compound interest = ${num(P+ci)} − ${num(P)} = ${num(ci)}. (Simple interest would be only ${num(si)}.)`,meta:{kind:'ci1',P,R,ans:ci}});}};
+  QA.std1={topic:'Speed, Time and Distance',diff:1,f(r){const s=pick(r,[40,45,50,60,72,80]),t=pick(r,[2,3,4,5,6]);const d=s*t;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`A car travels at ${s} km/h for ${t} hours. How far does it go?`,correct:d+' km',wrong:[(d+s)+' km',(d-s)+' km',(s+t)+' km',(d*2)+' km'],exp:`Distance = speed × time = ${s} × ${t} = ${d} km.`,meta:{kind:'std1',s,t,ans:d}});}};
+  QA.std2={topic:'Speed, Time and Distance',diff:2,f(r){const [a,b,av]=pick(r,[[40,60,48],[30,60,40],[20,30,24],[60,90,72],[40,24,30],[50,75,60],[45,90,60]]);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A man goes from his house to the market at ${a} km/h and comes back by the same road at ${b} km/h. What is his average speed for the whole trip?`,correct:av+' km/h',wrong:[((a+b)/2)+' km/h',(av+2)+' km/h',(av-3)+' km/h',(b-a)+' km/h'],exp:`For equal distances, average speed = 2ab/(a + b) = 2 × ${a} × ${b}/(${a} + ${b}) = ${av} km/h. It is not the simple average ${(a+b)/2}.`,meta:{kind:'std2',a,b,ans:av}});}};
+  QA.std3={topic:'Speed, Time and Distance',diff:3,f(r){const k=pick(r,[2,3,4,5,6,7,8]),t=pick(r,[6,8,9,10,12,15]);const L=5*k*t;
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`A train running at ${18*k} km/h passes a pole in ${t} seconds. What is the length of the train?`,correct:L+' m',wrong:[(18*k*t)+' m',(L+5*t)+' m',(L-5*t)+' m',Math.round(L/2)+' m'],exp:`Speed = ${18*k} km/h = ${18*k} × 5/18 = ${5*k} m/s. Length = speed × time = ${5*k} × ${t} = ${L} m.`,meta:{kind:'std3',kmph:18*k,t,ans:L}});}};
+  QA.tw1={topic:'Time and Work',diff:2,f(r){const [x,y,t]=pick(r,[[12,6,4],[10,15,6],[20,30,12],[12,24,8],[30,45,18],[18,9,6],[15,10,6],[16,48,12],[20,5,4]]);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A can finish a piece of work in ${x} days and B can finish it in ${y} days. In how many days can they finish it working together?`,correct:t+' days',wrong:[((x+y)/2)+' days',(t+2)+' days',(x+y)+' days',(t-1)+' days'],exp:`In one day A does 1/${x} and B does 1/${y} of the work. Together: 1/${x} + 1/${y} = ${(x+y)}/${x*y} per day. So the work takes ${x*y}/${x+y} = ${t} days.`,meta:{kind:'tw1',x,y,ans:t}});}};
+  QA.tw2={topic:'Time and Work',diff:3,f(r){const [x,y,t]=pick(r,[[6,12,12],[4,12,6],[10,15,30],[12,18,36],[8,24,12],[6,9,18],[15,20,60],[9,18,18]]);
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`A tap can fill a tank in ${x} hours. A leak at the bottom can empty the full tank in ${y} hours. If both work together, how long will it take to fill the empty tank?`,correct:t+' hours',wrong:[Math.round(x*y/(x+y)*10)/10+' hours',(t+2)+' hours',(y-x)+' hours',(x+y)+' hours'],exp:`Net filling in one hour = 1/${x} − 1/${y} = ${y-x}/${x*y}. Time = ${x*y}/${y-x} = ${t} hours.`,meta:{kind:'tw2',x,y,ans:t}});}};
+  QA.ns1={topic:'Number System',diff:2,f(r){const g=pick(r,[2,3,4,5,6,7]),[m,n]=pick(r,[[2,3],[3,4],[2,5],[3,5],[4,5],[3,7],[5,6]]);const a=g*m,b=g*n;const askL=r()<0.5;const L=g*m*n;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`What is the ${askL?'LCM':'HCF'} of ${a} and ${b}?`,correct:askL?L:g,wrong:askL?[a*b,L+g,L-g,a+b]:[g*2,g+1,L,m*n],exp:askL?`${a} = ${g} × ${m} and ${b} = ${g} × ${n}, and ${m}, ${n} have no common factor. LCM = ${g} × ${m} × ${n} = ${L}.`:`${a} = ${g} × ${m} and ${b} = ${g} × ${n}, and ${m}, ${n} have no common factor. HCF = ${g}.`,meta:{kind:'ns1',a,b,askL,ans:askL?L:g}});}};
+  QA.ns2={topic:'Number System',diff:1,f(r){const d=pick(r,[7,9,11,13,6,8]);const N=until(r,()=>{const x=ri(r,200,999);return x%d>1?x:0;});const rem=N%d;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`What is the remainder when ${N} is divided by ${d}?`,correct:rem,wrong:[rem+1,d-rem,rem-1,rem+2].filter(v=>v>=0&&v<d+3),exp:`${N} = ${d} × ${Math.floor(N/d)} + ${rem}. The remainder is ${rem}.`,meta:{kind:'ns2',N,d,ans:rem}});}};
+  QA.ns3={topic:'Number System',diff:2,f(r){const k=pick(r,[6,7,8,9,12,15]);const lo=ri(r,10,60),hi=lo+ri(r,120,320);const cnt=Math.floor(hi/k)-Math.floor((lo-1)/k);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`How many multiples of ${k} are there from ${lo} to ${hi} (both included)?`,correct:cnt,wrong:[cnt+1,cnt-1,Math.floor((hi-lo)/k)+2,cnt+2],exp:`Multiples up to ${hi}: ${Math.floor(hi/k)}. Multiples below ${lo}: ${Math.floor((lo-1)/k)}. So there are ${Math.floor(hi/k)} − ${Math.floor((lo-1)/k)} = ${cnt}.`,meta:{kind:'ns3',k,lo,hi,ans:cnt}});}};
+  QA.ns4={topic:'Number System',diff:2,f(r){const d=pick(r,[9,12,15,16,18,25]);const N=until(r,()=>{const x=ri(r,300,990);return x%d!==0?x:0;});const add=d-N%d;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`What is the smallest number that must be added to ${N} so that the sum is exactly divisible by ${d}?`,correct:add,wrong:[N%d,add+d,add+1,d],exp:`${N} ÷ ${d} leaves remainder ${N%d}. Adding ${d} − ${N%d} = ${add} gives ${N+add}, which is divisible by ${d}.`,meta:{kind:'ns4',N,d,ans:add}});}};
+  QA.alg1={topic:'Algebra',diff:1,f(r){const x=until(r,()=>{const v=ri(r,-5,12);return v!==0?v:0;}),a=ri(r,2,9),b=ri(r,-15,20);const c=a*x+b;const bs=b<0?`− ${-b}`:`+ ${b}`;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`Solve for x: ${a}x ${bs} = ${c}`,correct:x,wrong:[x+1,x-1,x+2,-x].filter(v=>v!==x),exp:`${a}x = ${c} ${b<0?'+':'−'} ${Math.abs(b)} = ${c-b}. So x = ${c-b}/${a} = ${x}.`,meta:{kind:'alg1',a,b,c,ans:x}});}};
+  QA.alg2={topic:'Algebra',diff:3,f(r){const p=ri(r,1,9),q=ri(r,1,9);const S=p+q,Pd=p*q;const ans=S*S-2*Pd;
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`If α and β are the roots of x² − ${S}x + ${Pd} = 0, find the value of α² + β².`,correct:ans,wrong:[S*S,ans+Pd,ans-2,S*S-Pd],exp:`Sum of roots = ${S} and product = ${Pd}. α² + β² = (α + β)² − 2αβ = ${S*S} − ${2*Pd} = ${ans}.`,meta:{kind:'alg2',S,P:Pd,ans}});}};
+  QA.alg3={topic:'Algebra',diff:2,f(r){const x=ri(r,5,30),y=ri(r,1,x-1);const S=x+y,D=x-y;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The sum of two numbers is ${S} and their difference is ${D}. What is the larger number?`,correct:x,wrong:[y,x+1,x-1,S-D],exp:`Larger number = (sum + difference)/2 = (${S} + ${D})/2 = ${x}.`,meta:{kind:'alg3',S,D,ans:x}});}};
+  QA.geo1={topic:'Geometry and Mensuration',diff:1,f(r){const l=ri(r,6,25),b=ri(r,3,l-1);const area=r()<0.5;const v=area?l*b:2*(l+b);
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`A rectangle is ${l} cm long and ${b} cm wide. What is its ${area?'area':'perimeter'}?`,correct:v+(area?' sq cm':' cm'),wrong:[(area?2*(l+b):l*b)+(area?' sq cm':' cm'),(v+l)+(area?' sq cm':' cm'),(v-b)+(area?' sq cm':' cm'),(l+b)+(area?' sq cm':' cm')],exp:area?`Area = length × width = ${l} × ${b} = ${v} sq cm.`:`Perimeter = 2 × (length + width) = 2 × (${l} + ${b}) = ${v} cm.`,meta:{kind:'geo1',l,b,area,ans:v}});}};
+  QA.geo2={topic:'Geometry and Mensuration',diff:2,f(r){const k=pick(r,[1,2,3,4,5]);const rad=7*k;const area=r()<0.5;const v=area?154*k*k:44*k;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The radius of a circle is ${rad} cm. Taking π = 22/7, what is its ${area?'area':'circumference'}?`,correct:v+(area?' sq cm':' cm'),wrong:[(area?44*k:154*k*k)+(area?' sq cm':' cm'),(v*2)+(area?' sq cm':' cm'),(v+rad)+(area?' sq cm':' cm'),(v-k*7)+(area?' sq cm':' cm')],exp:area?`Area = π r² = 22/7 × ${rad} × ${rad} = ${v} sq cm.`:`Circumference = 2πr = 2 × 22/7 × ${rad} = ${v} cm.`,meta:{kind:'geo2',rad,area,ans:v}});}};
+  QA.geo3={topic:'Geometry and Mensuration',diff:2,f(r){const [a,b,c]=pick(r,[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15],[12,16,20],[15,20,25]]);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The two shorter sides of a right-angled triangle are ${a} cm and ${b} cm. What is the length of the longest side?`,correct:c+' cm',wrong:[(a+b)+' cm',(c+1)+' cm',(c-1)+' cm',(a*b/2)+' cm'],exp:`Longest side² = ${a}² + ${b}² = ${a*a} + ${b*b} = ${c*c}. So it is ${c} cm.`,meta:{kind:'geo3',a,b,ans:c}});}};
+  QA.geo4={topic:'Geometry and Mensuration',diff:2,f(r){const [a,b,c]=pick(r,[[1,2,3],[2,3,4],[3,4,5],[1,1,2],[2,3,5],[1,2,6],[1,3,5],[2,2,5]]);const u=180/(a+b+c);
+    if(!Number.isInteger(u))return QA.geo4.f(r);
+    const big=Math.max(a,b,c)*u;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`The angles of a triangle are in the ratio ${a}:${b}:${c}. What is the largest angle?`,correct:big+'°',wrong:[(big+10)+'°',(big-10)+'°',Math.min(a,b,c)*u+'°',(big*2>180?big+20:big*2)+'°'],exp:`The angles of a triangle add up to 180°. One part = 180/${a+b+c} = ${u}°. Largest angle = ${Math.max(a,b,c)} × ${u} = ${big}°.`,meta:{kind:'geo4',a,b,c,ans:big}});}};
+  QA.geo5={topic:'Geometry and Mensuration',diff:2,f(r){const s=ri(r,3,15);const sa=r()<0.5;const v=sa?6*s*s:s*s*s;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A cube has edge ${s} cm. What is its ${sa?'total surface area':'volume'}?`,correct:v+(sa?' sq cm':' cu cm'),wrong:[(sa?s*s*s:6*s*s)+(sa?' sq cm':' cu cm'),(sa?4*s*s:3*s*s)+(sa?' sq cm':' cu cm'),(v+s)+(sa?' sq cm':' cu cm'),(sa?s*s:6*s)+(sa?' sq cm':' cu cm')],exp:sa?`A cube has 6 faces, each ${s} × ${s}. Total surface area = 6 × ${s*s} = ${v} sq cm.`:`Volume = edge³ = ${s} × ${s} × ${s} = ${v} cu cm.`,meta:{kind:'geo5',s,sa,ans:v}});}};
+  QA.di1={topic:'Data Interpretation',diff:2,f(r){const yrs=[2021,2022,2023,2024];const kind=pick(r,['total','best','growth']);let vals=yrs.map(()=>ri(r,20,80)*5);
+    const tbl=yrs.map((y,i)=>`${y}: ₹${vals[i]} lakh`).join('\n');
+    if(kind==='growth'){const k=pick(r,[10,20,25,50]);const a=until(r,()=>{const x=pick(r,[100,120,160,200,240,300,400]);return x*k%100===0?x:0;});vals=[a,a+a*k/100,ri(r,20,80)*5,ri(r,20,80)*5];const t2=yrs.map((y,i)=>`${y}: ₹${vals[i]} lakh`).join('\n');
+      return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A firm's yearly sales are given below.\n${t2}\nBy what percentage did sales grow from 2021 to 2022?`,correct:k+'%',wrong:[(k+5)+'%',(k+10)+'%',(k>5?k-5:k+15)+'%',Math.round((vals[1]-vals[0])/vals[1]*100)+'%'],exp:`Growth = ${vals[1]} − ${vals[0]} = ${vals[1]-vals[0]}. Percentage growth = ${vals[1]-vals[0]}/${vals[0]} × 100 = ${k}%.`,meta:{kind:'di-growth',vals,ans:k}});}
+    if(kind==='total'){const t=vals.reduce((x,y)=>x+y,0);
+      return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A firm's yearly sales are given below.\n${tbl}\nWhat were the total sales over the four years?`,correct:inr(t)+' lakh',wrong:[inr(t+25)+' lakh',inr(t-20)+' lakh',inr(Math.round(t/4))+' lakh',inr(t+50)+' lakh'],exp:`Total = ${vals.join(' + ')} = ${t} (in ₹ lakh).`,meta:{kind:'di-total',vals,ans:t}});}
+    vals=until(r,()=>{const v=yrs.map(()=>ri(r,20,80)*5);return new Set(v).size===4?v:0;});const tb=yrs.map((y,i)=>`${y}: ₹${vals[i]} lakh`).join('\n');const bi=vals.indexOf(Math.max(...vals));
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A firm's yearly sales are given below.\n${tb}\nIn which year were the sales the highest?`,correct:String(yrs[bi]),wrong:yrs.filter((y,i)=>i!==bi).map(String),exp:`The highest value is ₹${vals[bi]} lakh, in ${yrs[bi]}.`,meta:{kind:'di-best',vals,yrs,ans:yrs[bi]}});}};
+  QA.cnt1={topic:'Counting and Sets',diff:2,f(r){const n=ri(r,5,9),k=ri(r,2,3);let c=1;for(let i=0;i<k;i++)c=c*(n-i)/(i+1);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`In how many ways can a committee of ${k} students be chosen from ${n} students?`,correct:c,wrong:[c*k,c+n,n*k,c*2].filter(v=>v!==c),exp:`Number of ways = ${n}C${k} = ${Array.from({length:k},(_,i)=>n-i).join(' × ')} / ${k===2?'2':'6'} = ${c}.`,meta:{kind:'cnt1',n,k,ans:c}});}};
+  QA.cnt2={topic:'Counting and Sets',diff:2,f(r){const n=ri(r,4,6);let f=1;for(let i=2;i<=n;i++)f*=i;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`In how many different ways can ${n} people stand in a line?`,correct:f,wrong:[f/n,f+n,n*n,f*2],exp:`The first place can be filled in ${n} ways, the next in ${n-1}, and so on. Total = ${Array.from({length:n},(_,i)=>n-i).join(' × ')} = ${f}.`,meta:{kind:'cnt2',n,ans:f}});}};
+  QA.cnt3={topic:'Counting and Sets',diff:2,f(r){const [N,a,b,both]=until(r,()=>{const n=pick(r,[60,80,100,120]),x=ri(r,25,45),y=ri(r,20,40),z=ri(r,5,15);return n-(x+y-z)>=5?[n,x,y,z]:0;});const none=N-(a+b-both);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`In a group of ${N} students, ${a} like tea, ${b} like coffee and ${both} like both. How many like neither?`,correct:none,wrong:[N-a-b,none+both,a+b-both,none-5],exp:`Like at least one = ${a} + ${b} − ${both} = ${a+b-both}. Neither = ${N} − ${a+b-both} = ${none}.`,meta:{kind:'cnt3',N,a,b,both,ans:none}});}};
+  QA.age1={topic:'Ages',diff:2,f(r){const k=pick(r,[2,3,4,5]);const s=ri(r,8,20);const S=(k+1)*s;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`A father is ${k} times as old as his son. The sum of their ages is ${S} years. What is the son's age?`,correct:s+' years',wrong:[(s+2)+' years',(s-2)+' years',(k*s)+' years',(S/2)+' years'],exp:`Let the son be s. Then father = ${k}s and ${k}s + s = ${S}, so ${k+1}s = ${S} and s = ${s}.`,meta:{kind:'age1',k,S,ans:s}});}};
+  QA.age2={topic:'Ages',diff:2,f(r){const p=ri(r,4,12);const young=ri(r,10,25);const S=2*young+p;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`Rina is ${p} years older than her brother Sam. The sum of their ages is ${S} years. How old is Sam?`,correct:young+' years',wrong:[(young+p)+' years',(S/2)+' years',(young-2)+' years',(young+3)+' years'].map(v=>v),exp:`Let Sam be s years. Rina = s + ${p}. So 2s + ${p} = ${S}, giving s = ${young}.`,meta:{kind:'age2',p,S,ans:young}});}};
+  QA.com1={topic:'Commerce Applications',diff:1,f(r){const g=pick(r,[5,12,18,28]);const B=pick(r,[1000,1500,2000,2500,4000,5000]);const tot=B*(100+g)/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`The price of a product before tax is ${inr(B)}. GST at ${g}% is added. What is the final price?`,correct:inr(tot),wrong:[inr(B+g),inr(B*(100-g)/100),inr(tot+B/100),inr(B*g/100)],exp:`GST = ${g}% of ${num(B)} = ${num(B*g/100)}. Final price = ${num(B)} + ${num(B*g/100)} = ${num(tot)}.`,meta:{kind:'com1',B,g,ans:tot}});}};
+  QA.com2={topic:'Commerce Applications',diff:1,f(r){const c=pick(r,[2,3,4,5,8]);const S=pick(r,[20000,25000,40000,50000,75000,100000]);const com=S*c/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:1,q:`A salesman earns ${c}% commission on his sales. What does he earn on sales of ${inr(S)}?`,correct:inr(com),wrong:[inr(com*2),inr(S/c),inr(com+c*10),inr(S-com)],exp:`Commission = ${c}% of ${num(S)} = ${num(com)}.`,meta:{kind:'com2',c,S,ans:com}});}};
+  QA.com3={topic:'Commerce Applications',diff:2,f(r){const [x,y]=pick(r,[[20000,30000],[15000,25000],[40000,60000],[30000,50000],[12000,18000],[50000,75000]]);const g=gcd(x,y);const k=pick(r,[4,5,6,8]);const P=(x/g+y/g)*k*1000;const share=P*x/(x+y);
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`Arun invests ${inr(x)} and Beena invests ${inr(y)} in a business for the same period. They earn a profit of ${inr(P)}. What is Arun's share?`,correct:inr(share),wrong:[inr(P-share),inr(P/2),inr(share+1000),inr(P*y/(x+y)+1000)],exp:`Profit is shared in the ratio of investments ${x/g}:${y/g}. Arun's share = ${num(P)} × ${x/g}/${x/g+y/g} = ${num(share)}.`,meta:{kind:'com3',x,y,P,ans:share}});}};
+  QA.com4={topic:'Commerce Applications',diff:2,f(r){const d=pick(r,[10,15,20,25,30,40]);const M=until(r,()=>{const x=pick(r,[400,500,800,1000,1200,2000]);return x*d%100===0?x:0;});const sp=M-M*d/100;
+    return mk(r,{sec:'qa',topic:this.topic,diff:2,q:`An item marked at ${inr(M)} is sold for ${inr(sp)}. What is the rate of discount?`,correct:d+'%',wrong:[(d+5)+'%',(d-5>0?d-5:d+10)+'%',(d+10)+'%',Math.round((M-sp)/sp*100)+'%'],exp:`Discount = ${num(M)} − ${num(sp)} = ${num(M-sp)}. Rate = ${num(M-sp)}/${num(M)} × 100 = ${d}%.`,meta:{kind:'com4',M,sp,ans:d}});}};
+  QA.com5={topic:'Commerce Applications',diff:3,f(r){const s=pick(r,[50,60,80,100,120]),v=s-pick(r,[10,15,20,25,30]);const u=pick(r,[100,150,200,250,400,500]);const F=u*(s-v);
+    return mk(r,{sec:'qa',topic:this.topic,diff:3,q:`A small factory has fixed costs of ${inr(F)}. Each unit sells for ${inr(s)} and costs ${inr(v)} to make. How many units must it sell to break even?`,correct:u+' units',wrong:[Math.round(F/s)+' units',(u+50)+' units',(u-50>0?u-50:u+100)+' units',(F/v>0?Math.round(F/v):u+25)+' units'],exp:`Profit on each unit = ${s} − ${v} = ${s-v}. Break-even units = fixed costs / profit per unit = ${num(F)}/${s-v} = ${u}.`,meta:{kind:'com5',F,s,v,ans:u}});}};
+
+  /* ======================= REASONING ======================= */
+  const RI={};
+  RI.series={topic:'Number Series',diff:2,f(r){const kind=pick(r,['ap','gp','sq','alt','inc']);let terms,next,rule;
+    if(kind==='ap'){const a=ri(r,2,20),d=ri(r,2,9);terms=[0,1,2,3,4].map(i=>a+d*i);next=a+5*d;rule=`Each term adds ${d}.`;}
+    else if(kind==='gp'){const a=ri(r,1,5),m=pick(r,[2,3]);terms=[0,1,2,3,4].map(i=>a*m**i);next=a*m**5;rule=`Each term is multiplied by ${m}.`;}
+    else if(kind==='sq'){const n=ri(r,2,8),c=ri(r,-3,5);terms=[0,1,2,3,4].map(i=>(n+i)**2+c);next=(n+5)**2+c;rule=`The terms are squares ${c?`${c>0?'plus':'minus'} ${Math.abs(c)}`:''}: ${n}², ${n+1}², ${n+2}² … so the next is ${n+5}²${c?(c>0?' + ':' − ')+Math.abs(c):''}.`;}
+    else if(kind==='alt'){const a=ri(r,3,15),x=ri(r,2,6),y=ri(r,7,12);terms=[a];for(let i=1;i<5;i++)terms.push(terms[i-1]+(i%2?x:y));next=terms[4]+x;rule=`The terms alternately add ${x} and ${y}.`;}
+    else{const a=ri(r,1,10);terms=[a];for(let i=1;i<5;i++)terms.push(terms[i-1]+i);next=terms[4]+5;rule=`The differences go 1, 2, 3, 4, so the next difference is 5.`;}
+    return mk(r,{sec:'ri',topic:this.topic,diff:kind==='ap'?1:kind==='gp'||kind==='alt'?2:3,q:`What comes next in the series?\n${terms.join(', ')}, ?`,correct:next,wrong:[next+1,next-1,next+2,next-2,next+3],exp:`${rule} The next term is ${next}.`,meta:{kind:'series',st:kind,terms,ans:next}});}};
+  RI.code={topic:'Coding and Decoding',diff:2,f(r){const k=ri(r,1,5);const words=['BANK','CASH','LOAN','COST','SALE','GAIN','FUND','RATE','NOTE','DEAL'];const w=pick(r,words);const sh=(s,n)=>s.split('').map(c=>String.fromCharCode((c.charCodeAt(0)-65+n+26)%26+65)).join('');const ans=sh(w,k);
+    return mk(r,{sec:'ri',topic:this.topic,diff:2,q:`In a certain code, every letter is replaced by the letter ${k} place${k>1?'s':''} ahead of it in the alphabet. How is ${w} written in that code?`,correct:ans,wrong:[sh(w,k+1),sh(w,k-1),sh(w,-k),sh(w,k+2)],exp:`Move each letter ${k} place${k>1?'s':''} ahead: ${w.split('').map((c,i)=>c+'→'+ans[i]).join(', ')}. The code is ${ans}.`,meta:{kind:'code',w,k,ans}});}};
+  RI.alpha={topic:'Coding and Decoding',diff:1,f(r){const base=ri(r,0,15),k=ri(r,3,9);const L=i=>String.fromCharCode(65+i);const ans=L(base+k);const right=r()<0.5;const start=right?base:base+k;const t=right?base+k:base;
+    return mk(r,{sec:'ri',topic:this.topic,diff:1,q:`Which letter is ${k} places ${right?'after':'before'} ${L(start)} in the English alphabet?`,correct:L(t),wrong:[t+1,t-1,t+2,t-2,t+3,t-3].filter(i=>i>=0&&i<26).map(L),exp:`Counting ${k} places ${right?'forward':'backward'} from ${L(start)} gives ${L(t)}.`,meta:{kind:'alpha',start:start,k,right,ans:L(t)}});}};
+  RI.dir1={topic:'Direction Sense',diff:2,f(r){const [a,b,c]=pick(r,[[3,4,5],[6,8,10],[5,12,13],[9,12,15],[8,15,17],[12,16,20]]);const [d1,d2]=pick(r,[['north','east'],['south','west'],['east','south'],['west','north']]);
+    return mk(r,{sec:'ri',topic:this.topic,diff:2,q:`Mohan walks ${a} km ${d1}, then turns and walks ${b} km ${d2}. How far is he now from his starting point?`,correct:c+' km',wrong:[(a+b)+' km',(c+1)+' km',(c-1)+' km',Math.abs(a-b)+' km'],exp:`The two legs are at right angles. Distance² = ${a}² + ${b}² = ${a*a+b*b}, so the distance is ${c} km.`,meta:{kind:'dir1',a,b,ans:c}});}};
+  RI.dir2={topic:'Direction Sense',diff:2,f(r){const dirs=['North','East','South','West'];const s=ri(r,0,3);const turns=[0,0,0].map(()=>pick(r,['right','left']));let h=s;turns.forEach(t=>{h=(h+(t==='right'?1:3))%4;});
+    return mk(r,{sec:'ri',topic:this.topic,diff:2,q:`Priya is facing ${dirs[s]}. She turns ${turns[0]}, then ${turns[1]}, then ${turns[2]} (each a 90° turn). Which direction is she facing now?`,correct:dirs[h],wrong:dirs.filter((d,i)=>i!==h),exp:`Start: ${dirs[s]}. A right turn moves clockwise (N→E→S→W) and a left turn moves anticlockwise. After the three turns she faces ${dirs[h]}.`,meta:{kind:'dir2',s,turns,ans:dirs[h]}});}};
+  RI.rank1={topic:'Ranking and Order',diff:1,f(r){const p=ri(r,5,20),q=ri(r,5,20);const n=p+q-1;
+    return mk(r,{sec:'ri',topic:this.topic,diff:1,q:`In a row of students, Kavya is ${p}th from the left end and ${q}th from the right end. How many students are in the row?`,correct:n,wrong:[p+q,n+2,n-2,p*2],exp:`Total = ${p} + ${q} − 1 = ${n}. Kavya is counted from both ends, so subtract 1.`,meta:{kind:'rank1',p,q,ans:n}});}};
+  RI.rank2={topic:'Ranking and Order',diff:1,f(r){const n=ri(r,30,60),x=ri(r,5,25);const b=n-x+1;
+    return mk(r,{sec:'ri',topic:this.topic,diff:1,q:`In a class of ${n} students, Dev ranks ${x}th from the top. What is his rank from the bottom?`,correct:b+'th',wrong:[(n-x)+'th',(b+1)+'th',(b-2)+'th',x+'th'],exp:`Rank from bottom = ${n} − ${x} + 1 = ${b}.`,meta:{kind:'rank2',n,x,ans:b}});}};
+  RI.day={topic:'Calendar and Clock',diff:2,f(r){const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];const s=ri(r,0,6),n=ri(r,10,200);const h=(s+n)%7;
+    return mk(r,{sec:'ri',topic:this.topic,diff:2,q:`Today is ${days[s]}. What day of the week will it be after ${n} days?`,correct:days[h],wrong:days.filter((d,i)=>i!==h),exp:`${n} = 7 × ${Math.floor(n/7)} + ${n%7}. The weeks do not change the day, so we move ${n%7} day${n%7===1?'':'s'} forward from ${days[s]}: ${days[h]}.`,meta:{kind:'day',s,n,ans:days[h]}});}};
+  RI.clock={topic:'Calendar and Clock',diff:3,f(r){const [h,m]=until(r,()=>{const hh=ri(r,1,12),mm=pick(r,[0,10,20,30,40,50]);const rw=Math.abs(30*(hh%12)-5.5*mm);return rw%360!==0?[hh,mm]:0;});const raw=Math.abs(30*(h%12)-5.5*m);const ang=raw>180?360-raw:raw;const fmt=a=>Number.isInteger(a)?a+'°':a.toFixed(1)+'°';
+    return mk(r,{sec:'ri',topic:this.topic,diff:3,q:`What is the smaller angle between the hands of a clock at ${h}:${String(m).padStart(2,'0')}?`,correct:fmt(ang),wrong:[fmt(ang+15),fmt(Math.abs(ang-30)),fmt(ang+30),fmt(Math.abs(ang-15))],exp:`Hour hand angle from 12 = 30 × ${h%12} + 0.5 × ${m} = ${30*(h%12)+0.5*m}°. Minute hand angle = 6 × ${m} = ${6*m}°. Difference = ${raw}°${raw>180?`, and the smaller angle is 360° − ${raw}° = ${ang}°`:''}.`,meta:{kind:'clock',h,m,ans:ang}});}};
+  RI.odd={topic:'Odd One Out',diff:1,f(r){const k=pick(r,[3,4,5,6,7,9]);const mult=[0,1,2].map(()=>k*ri(r,3,15));const set=new Set(mult);if(set.size<3)return RI.odd.f(r);let odd=ri(r,20,100);while(odd%k===0||set.has(odd))odd++;
+    const opts=shuffle(r,mult.concat([odd]));
+    return mk(r,{sec:'ri',topic:this.topic,diff:1,q:`Find the odd one out: ${opts.join(', ')}`,correct:odd,wrong:mult,exp:`${mult.sort((a,b)=>a-b).join(', ')} are all multiples of ${k}. ${odd} is not.`,meta:{kind:'odd',k,nums:opts,ans:odd}});}};
+  /* Syllogisms: the answer is computed by checking every possible arrangement of three groups, so it is always right. */
+  const NOUNS=['pens','books','tables','chairs','cups','boxes','bags','shirts','lamps','maps','plates','clocks'];
+  const FORMS={A:(x,y)=>`All ${x} are ${y}`,I:(x,y)=>`Some ${x} are ${y}`,E:(x,y)=>`No ${x} are ${y}`,O:(x,y)=>`Some ${x} are not ${y}`};
+  function holds(form,X,Y,types){ // types: set of present region masks over (A=1,B=2,C=4)
+    const has=(m,i)=>(m>>i)&1;
+    if(form==='A')return types.every(m=>!has(m,X)||has(m,Y));
+    if(form==='E')return types.every(m=>!(has(m,X)&&has(m,Y)));
+    if(form==='I')return types.some(m=>has(m,X)&&has(m,Y));
+    return types.some(m=>has(m,X)&&!has(m,Y));
+  }
+  function follows(premises,concl){
+    for(let mask=0;mask<256;mask++){const types=[];for(let m=0;m<8;m++)if((mask>>m)&1)types.push(m);
+      if(premises.every(p=>holds(p[0],p[1],p[2],types))&&!holds(concl[0],concl[1],concl[2],types))return false;}
+    return true;
+  }
+  RI.syl={topic:'Syllogisms',diff:3,f(r){
+    const want=ri(r,0,3); // 0 only I,1 only II,2 both,3 neither
+    for(let tries=0;tries<400;tries++){
+      const nn=shuffle(r,NOUNS).slice(0,3);const P1=[pick(r,['A','I','E']),0,1],P2=[pick(r,['A','I','E']),1,2];
+      const c1=[pick(r,['A','I','E','O']),0,2],c2=[pick(r,['A','I','E','O']),pick(r,[0,2]),0];if(c2[1]===0)c2[1]=2;const C2=[c2[0],2,0];
+      const f1=follows([P1,P2],c1),f2=follows([P1,P2],C2);
+      const out=f1&&f2?2:f1?0:f2?1:3;if(out!==want&&tries<399)continue; /* after many tries, accept whatever outcome we have */
+      const T=(f,x,y)=>FORMS[f[0]](nn[f[1]],nn[f[2]]);
+      const opts=['Only conclusion I follows','Only conclusion II follows','Both conclusions I and II follow','Neither conclusion I nor II follows'];
+      const exps=['Conclusion I is true in every case that fits the statements, but II is not.','Conclusion II is true in every case that fits the statements, but I is not.','Both conclusions are true in every case that fits the statements.','Each conclusion fails in at least one case that fits the statements, so neither must be true.'];
+      return mk(r,{sec:'ri',topic:this.topic,diff:3,q:`Statements:\n1. ${T(P1)}.\n2. ${T(P2)}.\nConclusions:\nI. ${T(c1)}.\nII. ${T(C2)}.\nWhich conclusion(s) follow?`,correct:opts[out],wrong:opts.filter((o,i)=>i!==out),exp:`Draw every possible arrangement of the three groups that fits both statements. ${exps[out]}`,meta:{kind:'syl',P1,P2,c1,c2:C2,ans:out}});
+    }
+    throw new Error('syllogism generator failed');}};
+  /* Fixed reasoning questions (blood relations, odd words) written by hand. */
+  const RI_STATIC=[
+   ['Blood Relations',2,'Pointing to a girl, Ravi said, "She is the daughter of my mother\'s only son." How is the girl related to Ravi?','Daughter',['Sister','Niece','Mother'],'My mother\'s only son is Ravi himself, so the girl is his daughter.'],
+   ['Blood Relations',2,'A is the brother of B. B is the sister of C. C is the father of D. How is A related to D?','Uncle',['Father','Brother','Cousin'],'A is the brother of C, who is D\'s father. So A is D\'s uncle.'],
+   ['Blood Relations',2,'Pointing to a man, Sita said, "His mother is the only daughter of my mother." How is the man related to Sita?','Son',['Brother','Nephew','Husband'],'The only daughter of Sita\'s mother is Sita. So the man\'s mother is Sita and he is her son.'],
+   ['Blood Relations',1,'P is the mother of Q. Q is the sister of R. R is a boy. How is R related to P?','Son',['Brother','Nephew','Husband'],'Q and R are P\'s children. R is a boy, so R is P\'s son.'],
+   ['Blood Relations',1,'Rohan\'s father\'s only sister has a son named Karan. How is Karan related to Rohan?','Cousin',['Brother','Uncle','Nephew'],'Rohan\'s father\'s sister is Rohan\'s aunt, and her son is his cousin.'],
+   ['Blood Relations',3,'A man said, "I have no brother or sister, but that man\'s father is my father\'s son." Whose photograph was he pointing to?','His son',['His father','His nephew','Himself'],'He has no siblings, so "my father\'s son" is himself. So that man\'s father is the speaker, and the photograph is of his son.'],
+   ['Blood Relations',2,'A and B are brothers. C is A\'s father. D is C\'s brother. E is D\'s son. How is B related to E?','Cousin',['Brother','Uncle','Nephew'],'D is B\'s uncle, so D\'s son E is B\'s cousin.'],
+   ['Blood Relations',1,'Sunita is the wife of Ramesh. Ramesh\'s mother is Lata. How is Lata related to Sunita?','Mother-in-law',['Sister-in-law','Aunt','Grandmother'],'Lata is the mother of Sunita\'s husband, so she is Sunita\'s mother-in-law.'],
+   ['Odd One Out',1,'Choose the odd one out: Rupee, Dollar, Euro, Bank','Bank',['Rupee','Dollar','Euro'],'Rupee, Dollar and Euro are currencies. A bank is an institution.'],
+   ['Odd One Out',1,'Choose the odd one out: Profit, Loss, Revenue, Triangle','Triangle',['Profit','Loss','Revenue'],'The other three are business terms. A triangle is a shape.'],
+   ['Odd One Out',1,'Choose the odd one out: Mango, Apple, Potato, Banana','Potato',['Mango','Apple','Banana'],'Mango, apple and banana are fruits. A potato is a vegetable.'],
+   ['Odd One Out',2,'Choose the odd one out: Square, Rectangle, Circle, Rhombus','Circle',['Square','Rectangle','Rhombus'],'The other three have four straight sides and four corners. A circle has none.']
+  ];
+
+  /* ======================= ENGLISH (fixed set) ======================= */
+  const RC1='Small shops in India are changing. Many owners who once kept accounts only in a notebook now use phone apps to record sales and to accept digital payments. The owners say this saves time at the end of the day and reduces mistakes. Some customers, however, still prefer to pay in cash, so most shops accept both. Experts believe that shops that learn to use simple technology will find it easier to get bank loans, because their records are clear and can be checked.';
+  const RC2='Every business must decide how to set the price of what it sells. If the price is too high, customers may go elsewhere. If it is too low, the business may not cover its costs and will make a loss. A sensible owner first adds up all the costs of making or buying the product, then adds a fair profit, and finally compares the price with those of competitors. Prices may also change with the season: umbrellas cost more before the monsoon, and woollen clothes cost less at the end of winter.';
+  const EN=[
+   ['Grammar',1,'Each of the students ___ submitted the form.','has',['have','are','were'],'"Each" takes a singular verb, so "has" is correct.'],
+   ['Grammar',1,'She has been working here ___ 2019.','since',['for','from','by'],'"Since" is used with a starting point in time.'],
+   ['Grammar',1,'He has been living in Mumbai ___ ten years.','for',['since','from','during'],'"For" is used with a length of time.'],
+   ['Grammar',2,'If I ___ you, I would accept the offer.','were',['was','am','be'],'In an imaginary condition ("if I were you"), "were" is used for every subject.'],
+   ['Grammar',2,'The manager, along with his assistants, ___ attending the meeting.','is',['are','were','have been'],'The subject is "the manager", which is singular. "Along with his assistants" does not change it.'],
+   ['Grammar',1,'I saw ___ elephant at the zoo.','an',['a','the','some'],'"Elephant" starts with a vowel sound, so "an" is used.'],
+   ['Grammar',1,'She is the ___ of the two sisters.','taller',['tallest','more tall','most tall'],'For two people we use the comparative form: "taller".'],
+   ['Grammar',2,'Choose the correct sentence.','Please send me the information.',['Please send me the informations.','Please send me an information.','Please send me informations.'],'"Information" is uncountable, so it has no plural and no "an".'],
+   ['Grammar',2,'The company ___ its annual report last week.','published',['publishes','has published','is publishing'],'"Last week" shows a finished action in the past, so the simple past "published" is used.'],
+   ['Grammar',1,'He is good ___ mathematics.','at',['in','on','for'],'We say "good at" a subject or skill.'],
+   ['Grammar',1,'Mathematics ___ my favourite subject.','is',['are','were','have been'],'"Mathematics" is a singular subject, so it takes "is".'],
+   ['Grammar',3,'Hardly had he reached the station ___ the train left.','when',['than','then','while'],'"Hardly" is followed by "when", and "no sooner" is followed by "than".'],
+   ['Grammar',3,'She suggested that he ___ a doctor.','see',['sees','saw','seeing'],'After "suggest that", the base form of the verb is used.'],
+   ['Grammar',2,'By the time we arrived, the film ___.','had started',['has started','starts','was start'],'The film started before we arrived, so the past perfect "had started" is used.'],
+   ['Vocabulary',1,'Choose the word closest in meaning to ABUNDANT.','plentiful',['scarce','rare','limited'],'"Abundant" means present in large amounts, which is "plentiful".'],
+   ['Vocabulary',2,'Choose the word closest in meaning to CANDID.','frank',['secretive','polite','careful'],'"Candid" means open and honest, which is "frank".'],
+   ['Vocabulary',1,'Choose the word closest in meaning to DILIGENT.','hardworking',['lazy','careless','clever'],'"Diligent" means careful and hardworking.'],
+   ['Vocabulary',2,'Choose the word closest in meaning to PRUDENT.','cautious',['reckless','wasteful','proud'],'"Prudent" means careful and sensible, which is "cautious".'],
+   ['Vocabulary',2,'Choose the word closest in meaning to OBSOLETE.','outdated',['modern','useful','valuable'],'"Obsolete" means no longer in use, which is "outdated".'],
+   ['Vocabulary',2,'Choose the word closest in meaning to FRUGAL.','thrifty',['extravagant','greedy','rich'],'"Frugal" means careful with money, which is "thrifty".'],
+   ['Vocabulary',3,'Choose the word closest in meaning to MEAGRE.','scanty',['plentiful','generous','heavy'],'"Meagre" means small in amount, which is "scanty".'],
+   ['Vocabulary',1,'Choose the word closest in meaning to RELUCTANT.','unwilling',['eager','ready','pleased'],'"Reluctant" means not willing.'],
+   ['Vocabulary',1,'Choose the word opposite in meaning to EXPAND.','contract',['extend','grow','stretch'],'"Expand" means to grow bigger, and its opposite is "contract".'],
+   ['Vocabulary',1,'Choose the word opposite in meaning to SCARCE.','plentiful',['rare','limited','few'],'"Scarce" means hard to find, and its opposite is "plentiful".'],
+   ['Vocabulary',1,'Choose the word opposite in meaning to VICTORY.','defeat',['triumph','success','win'],'The opposite of victory is defeat.'],
+   ['Vocabulary',1,'Choose the word opposite in meaning to ANCIENT.','modern',['old','antique','historic'],'"Ancient" means very old, and its opposite is "modern".'],
+   ['Vocabulary',1,'Choose the word opposite in meaning to GENEROUS.','stingy',['kind','noble','lavish'],'"Generous" means giving freely, and its opposite is "stingy".'],
+   ['Vocabulary',2,'Choose the word opposite in meaning to INCREASE.','decline',['rise','grow','expand'],'"Increase" means to go up, and its opposite is "decline".'],
+   ['Vocabulary',2,'Choose the word opposite in meaning to OPTIMISTIC.','pessimistic',['hopeful','cheerful','positive'],'An optimist expects good things. A pessimist expects bad things.'],
+   ['Vocabulary',2,'Choose the word opposite in meaning to TRANSPARENT.','opaque',['clear','thin','bright'],'You can see through a transparent thing but not through an opaque one.'],
+   ['Fill in the Blanks',1,'The bank approved the loan ___ the borrower had submitted all the documents.','because',['although','unless','until'],'The documents are the reason for the approval, so "because" fits.'],
+   ['Fill in the Blanks',1,'Prices of vegetables have ___ sharply this month.','risen',['raised','rose','rise'],'"Have" needs the past participle of the verb "rise", which is "risen".'],
+   ['Fill in the Blanks',2,'The company decided to ___ its operations to new cities.','expand',['expend','expel','expire'],'"Expand" means to make bigger.'],
+   ['Fill in the Blanks',1,'Please ___ the form before the last date.','submit',['submitted','submitting','submits'],'After "please" in a request we use the base form of the verb.'],
+   ['Fill in the Blanks',1,'The shopkeeper gave a ___ on bulk purchases.','discount',['discard','discuss','disclose'],'A discount is a reduction in price.'],
+   ['Fill in the Blanks',2,'He was ___ of cheating in the exam.','accused',['blamed','charged','punished'],'We say "accused of". "Blamed" and "charged" go with other words ("blamed for", "charged with").'],
+   ['Fill in the Blanks',2,'The new policy will come into ___ from April.','effect',['affect','affection','effort'],'"Come into effect" is the correct phrase.'],
+   ['Fill in the Blanks',1,'Neither the manager ___ the clerks were present.','nor',['or','and','but'],'"Neither" is paired with "nor".'],
+   ['Idioms',1,'Choose the meaning of the idiom: "to break the ice".','to start a conversation in a social setting',['to damage something','to feel cold','to end a quarrel'],'"Break the ice" means to make people feel relaxed at the start of a meeting.'],
+   ['Idioms',2,'Choose the meaning of the idiom: "a blessing in disguise".','a good thing that seemed bad at first',['a hidden curse','a religious ceremony','a lucky charm'],'It describes something that looks like bad luck but turns out well.'],
+   ['Idioms',1,'Choose the meaning of the idiom: "once in a blue moon".','very rarely',['every month','at night','very often'],'It means something that happens very seldom.'],
+   ['Idioms',1,'Choose the meaning of the idiom: "to cost an arm and a leg".','to be very expensive',['to cause an injury','to be cheap','to be painful'],'It means that something costs a very large amount of money.'],
+   ['Para Jumbles',2,'Arrange the sentences to form a meaningful paragraph.\nP. As a result, many families now shop online for groceries.\nQ. The internet has changed the way people buy things.\nR. Delivery services have grown to meet this demand.\nS. Earlier, people had to visit a market for every purchase.','QSPR',['PQRS','SQRP','RPQS'],'Q introduces the idea, S gives the earlier situation, P says what followed ("as a result"), and R ends with delivery services.'],
+   ['Para Jumbles',2,'Arrange the sentences to form a meaningful paragraph.\nP. That is why savings give us a cushion in difficult times.\nQ. A good habit is to save a fixed part of income every month.\nR. Over time, even small amounts grow into a useful fund.\nS. Many people spend all they earn and have nothing left.','SQRP',['PQRS','QRSP','RSPQ'],'S states the problem, Q gives the habit, R describes the growth, and P gives the benefit.'],
+   ['Para Jumbles',2,'Arrange the sentences to form a meaningful paragraph.\nP. The shopkeeper checked the stock and found that sugar was nearly finished.\nQ. He called the supplier and placed an order.\nR. The goods arrived the next morning.\nS. One evening, a regular customer asked for five kilos of sugar.','SPQR',['PQRS','QRSP','SQPR'],'The story begins with the customer (S), then the stock check (P), the order (Q) and the delivery (R).'],
+   ['Para Jumbles',3,'Arrange the sentences to form a meaningful paragraph.\nP. This is why a brand name matters so much.\nQ. People often trust products they already know.\nR. A familiar name tells them that the quality will be steady.\nS. As a result, they will pay more for a brand than for an unknown product.','QRSP',['QSRP','PQRS','RQSP'],'Q gives the idea, R explains it, S ("as a result") follows from R, and P ("this is why") closes.'],
+   ['Reading Comprehension',1,'What did many shop owners once use to keep their accounts?','a notebook',['a computer','phone apps','a bank statement'],'The passage says owners "once kept accounts only in a notebook".',RC1],
+   ['Reading Comprehension',1,'According to the owners, digital records ___.','save time and reduce mistakes',['increase costs','attract fewer customers','cause delays'],'The owners say it "saves time at the end of the day and reduces mistakes".',RC1],
+   ['Reading Comprehension',2,'Why do most shops accept both cash and digital payments?','Some customers still prefer to pay in cash.',['Banks demand it.','Digital payments are not allowed.','The apps do not work well.'],'The passage says some customers still prefer cash, so most shops accept both.',RC1],
+   ['Reading Comprehension',2,'Why might such shops find it easier to get bank loans?','Their records are clear and can be checked.',['They are very large.','They pay no tax.','They sell more goods.'],'The passage says it is "because their records are clear and can be checked".',RC1],
+   ['Reading Comprehension',1,'What may happen if the price of a product is too low?','The business may make a loss.',['Customers will go elsewhere.','Costs will fall.','Profit will be high.'],'The passage says the business "may not cover its costs and will make a loss".',RC2],
+   ['Reading Comprehension',2,'What does a sensible owner do first when setting a price?','Add up all the costs.',['Compare with competitors.','Add a fair profit.','Wait for the season.'],'The owner "first adds up all the costs", then adds a profit, then compares prices.',RC2],
+   ['Reading Comprehension',1,'According to the passage, which item costs less at the end of winter?','Woollen clothes',['Umbrellas','Cotton shirts','Raincoats'],'The passage says woollen clothes cost less at the end of winter.',RC2],
+   ['Reading Comprehension',2,'The passage is mainly about ___.','how businesses decide on prices',['how to make umbrellas','why customers like discounts','how banks give loans'],'The whole passage explains how a business sets its prices.',RC2]
+  ];
+
+  /* ======================= BUILDING QUESTION SETS ======================= */
+  const QA_IDS=Object.keys(QA),RI_IDS=Object.keys(RI);
+  const TOPICS={qa:[...new Set(QA_IDS.map(k=>QA[k].topic))],ri:[...new Set(RI_IDS.map(k=>RI[k].topic).concat(RI_STATIC.map(x=>x[0])))],en:[...new Set(EN.map(x=>x[0]))]};
+  function fixed(arr,sec,i,seed){const x=arr[i];const q=mk(rng(seed),{sec,topic:x[0],diff:x[1],q:x[2],correct:x[3],wrong:x[4],exp:x[5],passage:x[6]});q.id=sec+'-f'+i+'-'+seed;return q;}
+  function gen(map,sec,key,seed){const r=rng(seed);const q=map[key].f(r);q.id=sec+'-'+key+'-'+seed;return q;}
+  /* Rebuild a question from its id, so a saved attempt can be reviewed. */
+  function fromId(id){const p=String(id).split('-'),sec=p[0];if(/^f\d+$/.test(p[1]||'')){return fixed(sec==='ri'?RI_STATIC:EN,sec,parseInt(p[1].slice(1),10),parseInt(p[2],10));}
+    return gen(sec==='qa'?QA:RI,sec,p[1],parseInt(p[2],10));}
+  /* spec: {sec:'qa'|'ri'|'en', topic?:string, diff?:1|2|3, count:int, seed:int}. Returns unique questions. */
+  function build(spec){
+    const r=rng(spec.seed||1),out=[],seen=new Set();let guard=0;
+    const sec=spec.sec;
+    const fixedPool=sec==='en'?EN.map((x,i)=>i):sec==='ri'?RI_STATIC.map((x,i)=>i):[];
+    const arr=sec==='en'?EN:RI_STATIC;
+    const genMap=sec==='qa'?QA:sec==='ri'?RI:null;
+    let genKeys=genMap?Object.keys(genMap):[];
+    if(spec.topic){genKeys=genKeys.filter(k=>genMap[k].topic===spec.topic);}
+    let fixedIdx=fixedPool.filter(i=>!spec.topic||arr[i][0]===spec.topic);
+    if(spec.diff){fixedIdx=fixedIdx.filter(i=>arr[i][1]===spec.diff);if(genMap)genKeys=genKeys.filter(k=>genMap[k].diff===spec.diff||k==='series');}
+    const fixedOrder=shuffle(r,fixedIdx);let fp=0;
+    /* mix: fixed questions are used for about 25% of reasoning questions, and for all English questions */
+    while(out.length<spec.count&&guard++<spec.count*40){
+      let q=null;
+      if(sec==='en'){if(fp>=fixedOrder.length)break;q=fixed(EN,'en',fixedOrder[fp++],Math.floor(r()*1e9)+1);}
+      else{
+        const useFixed=sec==='ri'&&fixedOrder.length>fp&&(!genKeys.length||r()<0.25);
+        if(useFixed)q=fixed(RI_STATIC,'ri',fixedOrder[fp++],Math.floor(r()*1e9)+1);
+        else if(genKeys.length){const key=genKeys[Math.floor(r()*genKeys.length)];q=gen(genMap,sec,key,Math.floor(r()*1e9)+1);if(spec.diff&&q.diff!==spec.diff)q=null;}
+        else break;
+      }
+      if(!q)continue;
+      const sig=q.q+'|'+(q.passage||'');
+      if(seen.has(sig))continue;seen.add(sig);out.push(q);
+    }
+    return out;
+  }
+  /* Full or mini mock: equal number of questions per section. */
+  function mock(perSection,seed){
+    const r=rng(seed);
+    return ['qa','ri','en'].reduce((all,sec)=>all.concat(build({sec,count:perSection,seed:Math.floor(r()*1e9)+1})),[]);
+  }
+  function weakSet(weak,count,seed){ /* weak: [{sec,topic}] */
+    const r=rng(seed);const out=[];const per=Math.max(1,Math.ceil(count/weak.length));
+    weak.forEach(w=>{build({sec:w.sec,topic:w.topic,count:per,seed:Math.floor(r()*1e9)+1}).forEach(q=>out.push(q));});
+    return shuffle(r,out).slice(0,count);
+  }
+  return {SECS,TOPICS,build,mock,weakSet,fromId,QA,RI,RI_STATIC,EN,follows,counts:{qaGen:QA_IDS.length,riGen:RI_IDS.length,riFixed:RI_STATIC.length,en:EN.length}};
+})();
+if(typeof module!=='undefined')module.exports=NPAT;
+
+/* ---------- NPAT PRACTICE (online, with optional sign-in) ---------- */
+/* PRACTICE.endpoint: paste the /exec URL of the practice Apps Script here. While it is empty the section works
+   for everyone as a guest and scores are kept on this device only. */
+const PRACTICE={endpoint:'',consentVersion:'2026-11',mockMin:100,miniMin:25,support:'connect@arohaanex.com'};
+const PR_SESSION='ascend_pr_session',PR_LOCAL='ascend_pr_local',PR_PENDING='ascend_pr_pending';
+const PR_MODE_NAME={mock:'Full mock',mini:'Mini mock',practice:'Topic practice',revise:'Weak-topic revision'};
+const PR_ERR={email:'Please type a valid email address.',consent:'Please tick the box to agree before we send a code.',slow:'Too many tries. Please wait ten minutes and try again.',busy:'Codes cannot be sent right now. Please try again later.',code:'That code is not right or has expired. Check it, or ask for a new code.',locked:'Too many wrong codes. Please ask for a new code.',net:'We could not reach the server. Check your internet and try again.',off:'Sign-in is not switched on yet.',auth:'Your sign-in has ended. Please sign in again.',data:'We could not save that.',server:'Something went wrong on our side. Please try again.'};
+const PR={screen:'home',user:null,attempts:[],started:false,loading:false,login:{step:'email',email:'',msg:'',busy:false},cfg:{sec:'all',topic:'',diff:0,count:10},run:null,res:null,msg:'',timer:0,confirmSubmit:false,confirmDel:false,revFilter:'all',notice:''};
+const PR_TOPIC_SEC={};
+['qa','ri','en'].forEach(s=>NPAT.TOPICS[s].forEach(t=>{PR_TOPIC_SEC[t]=s;}));
+
+function prLsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function prLsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+function prLsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+function prJson(k,d){try{const v=JSON.parse(prLsGet(k)||'null');return v==null?d:v;}catch(e){return d;}}
+const prPct=(c,n)=>n?Math.round(100*c/n):0;
+const prMMSS=s=>{s=Math.max(0,Math.floor(s));const m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');};
+const prDur=s=>{s=Math.round(s);return s<60?s+' sec':Math.floor(s/60)+' min '+(s%60?(s%60)+' sec':'');};
+const prSeed=()=>Math.floor(Math.random()*1e9)+1;
+const prId=()=>'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+function prShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ----- server calls ----- */
+async function prApi(body){
+  if(!PRACTICE.endpoint)return{ok:false,error:'off'};
+  const ac=new AbortController(),t=setTimeout(()=>ac.abort(),20000);
+  try{
+    const r=await fetch(PRACTICE.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),signal:ac.signal});
+    return await r.json();
+  }catch(e){return{ok:false,error:'net'};}
+  finally{clearTimeout(t);}
+}
+function prLocalAttempts(){return prJson(PR_LOCAL,[]);}
+function prList(){return PR.user?PR.attempts:prLocalAttempts();}
+function prRefresh(sel){if(state.view==='exams'&&state.exTab==='practice'&&document.getElementById('ex-view'))refreshEx(sel);}
+
+async function prInit(){
+  if(PR.started)return;
+  PR.started=true;
+  const s=prJson(PR_SESSION,null);
+  if(s&&s.token&&s.email&&PRACTICE.endpoint){
+    PR.user={email:s.email,token:s.token};
+    PR.loading=true;
+    const r=await prApi({action:'progress',token:s.token});
+    PR.loading=false;
+    if(r.ok){PR.attempts=r.attempts||[];prFlushPending();}
+    else if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;PR.notice='Your sign-in had ended, so you are using the section as a guest. Sign in again to see your saved scores.';}
+    else{PR.attempts=[];PR.notice='We could not load your saved scores right now. You can still practise.';}
+    prRefresh();
+  }
+}
+async function prFlushPending(){
+  if(!PR.user)return;
+  const q=prJson(PR_PENDING,[]);if(!q.length)return;
+  const keep=[];
+  for(const a of q){const r=await prApi({action:'save',token:PR.user.token,attempt:a});if(!r.ok&&r.error!=='data')keep.push(a);else if(r.ok&&!PR.attempts.some(x=>x.id===a.id))PR.attempts.unshift(a);}
+  prLsSet(PR_PENDING,JSON.stringify(keep));prRefresh();
+}
+
+/* ----- numbers for the dashboard ----- */
+function prAgg(list){
+  const sec={qa:[0,0],ri:[0,0],en:[0,0]},top={};let n=0,c=0;
+  list.forEach(a=>{
+    n+=a.total;c+=a.correct;
+    ['qa','ri','en'].forEach(s=>{const p=(a.bySec||{})[s];if(p){sec[s][0]+=p[0];sec[s][1]+=p[1];}});
+    Object.keys(a.byTopic||{}).forEach(k=>{const p=a.byTopic[k];if(!top[k])top[k]=[0,0];top[k][0]+=p[0];top[k][1]+=p[1];});
+  });
+  return{n,c,sec,top};
+}
+function prWeak(list){
+  const g=prAgg(list||prList());
+  return Object.keys(g.top).filter(k=>PR_TOPIC_SEC[k]&&g.top[k][0]>=5&&prPct(g.top[k][1],g.top[k][0])<65).sort((a,b)=>prPct(g.top[a][1],g.top[a][0])-prPct(g.top[b][1],g.top[b][0])).slice(0,5);
+}
+
+/* ----- the panel ----- */
+function npatPanel(){
+  prInit();
+  const body=PR.screen==='login'?prLoginHTML():PR.screen==='run'&&PR.run?prRunHTML():PR.screen==='result'&&PR.res?prResultHTML():PR.screen==='review'&&PR.res?prReviewHTML():prHomeHTML();
+  return `<div class="pr" id="pr-root">${body}</div>`;
+}
+const prNote=`<div class="alert"><strong>About these questions.</strong> They are practice questions written by Ascend Hub in the style of the NPAT (Quantitative and Numerical Ability, Reasoning and General Intelligence, Proficiency in English). They are not real NPAT papers, and no teacher has reviewed each one. If you think an answer is wrong, use <em>Report a mistake</em> in the review. Check the real pattern on the NMIMS website.</div>`;
+
+function prAccountHTML(){
+  if(PR.user)return `<div class="pr-acct"><p><strong>Signed in as ${esc(PR.user.email)}.</strong> Your scores are saved to your account.</p><p class="links"><button type="button" class="btn ghost small" data-act="pr-logout">Sign out</button> ${PR.confirmDel?`<span class="pr-del" role="alert">This deletes your email and all your saved scores from our records. <button type="button" class="btn small" data-act="pr-del-yes">Yes, delete everything</button> <button type="button" class="btn ghost small" data-act="pr-del-no">Cancel</button></span>`:`<button type="button" class="btn ghost small" data-act="pr-del">Delete my data</button>`}</p></div>`;
+  const clear=prLocalAttempts().length?` <button type="button" class="linkbtn" data-act="pr-clear-local">Clear scores on this device</button>`:'';
+  if(!PRACTICE.endpoint)return `<div class="pr-acct"><p><strong>Practising as a guest.</strong> Your scores are kept on this device only.${clear}</p></div>`;
+  return `<div class="pr-acct"><p><strong>Practising as a guest.</strong> Your scores are kept on this device only. Sign in with your email to keep your progress and see it on any phone or computer.${clear}</p><p class="links"><button type="button" class="btn small" data-act="pr-login">Sign in</button></p></div>`;
+}
+
+function prHomeHTML(){
+  const list=prList(),g=prAgg(list),weak=prWeak(list),c=PR.cfg;
+  const secOpts=[['all','All three sections']].concat(['qa','ri','en'].map(s=>[s,NPAT.SECS[s]]));
+  const topics=c.sec==='all'?[]:NPAT.TOPICS[c.sec];
+  const stat=(b,l)=>`<div class="prstat"><b>${b}</b><span>${l}</span></div>`;
+  const secBars=['qa','ri','en'].map(s=>{const p=g.sec[s],v=prPct(p[1],p[0]);return `<li><span class="pr-lab">${NPAT.SECS[s]}</span><span class="bar" aria-hidden="true"><span style="width:${v}%"></span></span><span class="pr-val">${p[0]?v+'% ('+p[1]+' of '+p[0]+')':'not tried yet'}</span></li>`;}).join('');
+  const topRows=Object.keys(g.top).filter(k=>PR_TOPIC_SEC[k]).sort((a,b)=>prPct(g.top[a][1],g.top[a][0])-prPct(g.top[b][1],g.top[b][0])).map(k=>{const p=g.top[k],v=prPct(p[1],p[0]);return `<li><span class="pr-lab">${esc(k)}</span><span class="bar" aria-hidden="true"><span style="width:${v}%"></span></span><span class="pr-val">${v}% (${p[1]} of ${p[0]})</span></li>`;}).join('');
+  const recent=list.slice().sort((a,b)=>b.ts-a.ts).slice(0,8).map(a=>`<li><strong>${new Date(a.ts).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</strong> · ${PR_MODE_NAME[a.mode]||'Practice'} · ${a.correct} of ${a.total} (${prPct(a.correct,a.total)}%) · ${prDur(a.durationSec)}</li>`).join('');
+  return `${PR.notice?`<div class="alert" role="status">${esc(PR.notice)}</div>`:''}
+  <h3>Practise for the NPAT</h3>
+  <p>Fresh questions each time, in the three NPAT sections. Choose a mock test, or practise one topic at a time with the answer and the working shown straight away.</p>
+  ${prNote}${prAccountHTML()}
+  ${PR.loading?'<p role="status">Loading your saved scores…</p>':''}
+  <div class="prstats">${stat(g.n,'questions tried')}${stat(g.n?prPct(g.c,g.n)+'%':'–','correct overall')}${stat(list.length,'tests and sessions')}</div>
+  <h3>Mock tests</h3>
+  <div class="costgrid">
+    <div class="cost"><strong>Full mock</strong><p>120 questions, 40 in each section, ${PRACTICE.mockMin} minutes. One mark for each right answer and no negative marking, like the reported pattern.</p><button type="button" class="btn" data-act="pr-start" data-mode="mock">Start full mock</button></div>
+    <div class="cost"><strong>Mini mock</strong><p>30 questions, 10 in each section, ${PRACTICE.miniMin} minutes. Good for a short session.</p><button type="button" class="btn" data-act="pr-start" data-mode="mini">Start mini mock</button></div>
+    <div class="cost"><strong>Revise weak topics</strong><p>${weak.length?'20 questions on '+weak.map(esc).join(', ')+'.':'Do a few tests first. Once you have tried at least five questions on a topic, your weak topics show up here.'}</p><button type="button" class="btn"${weak.length?'':' disabled'} data-act="pr-start" data-mode="revise">Start revision</button></div>
+  </div>
+  <h3>Practise one topic</h3>
+  <div class="prsetup">
+    <label class="f">Section <select id="pr-sec">${secOpts.map(o=>`<option value="${o[0]}"${c.sec===o[0]?' selected':''}>${o[1]}</option>`).join('')}</select></label>
+    <label class="f">Topic <select id="pr-topic"${c.sec==='all'?' disabled':''}><option value="">${c.sec==='all'?'Choose a section first':'Any topic'}</option>${topics.map(t=>`<option value="${esc(t)}"${c.topic===t?' selected':''}>${esc(t)}</option>`).join('')}</select></label>
+    <label class="f">Level <select id="pr-diff">${[[0,'Mixed'],[1,'Easier'],[2,'Medium'],[3,'Harder']].map(o=>`<option value="${o[0]}"${c.diff===o[0]?' selected':''}>${o[1]}</option>`).join('')}</select></label>
+    <label class="f">Questions <select id="pr-count">${[10,20,30].map(n=>`<option value="${n}"${c.count===n?' selected':''}>${n}</option>`).join('')}</select></label>
+  </div>
+  ${PR.msg?`<p class="pr-msg" role="alert">${esc(PR.msg)}</p>`:''}
+  <p class="links"><button type="button" class="btn" data-act="pr-start" data-mode="practice">Start practice</button></p>
+  ${g.n?`<h3>How you are doing</h3><ul class="prrows">${secBars}</ul>${topRows?`<h3>Topic by topic, weakest first</h3><ul class="prrows">${topRows}</ul>`:''}${recent?`<h3>Recent sessions</h3><ul class="prlist">${recent}</ul>`:''}`:'<p class="hint">Your progress will show here after your first session.</p>'}`;
+}
+
+/* ----- sign-in ----- */
+function prLoginHTML(){
+  const L=PR.login,msg=L.msg?`<p class="pr-msg" role="alert">${esc(L.msg)}</p>`:'';
+  if(L.step==='code')return `<h3>Enter your code</h3><p>We sent a 6-digit code to <strong>${esc(L.email)}</strong>. It works for 10 minutes. Check your spam folder too.</p>${msg}
+    <label class="f">6-digit code <input id="pr-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"></label>
+    <p class="links"><button type="button" class="btn" data-act="pr-verify"${L.busy?' disabled':''}>${L.busy?'Checking…':'Sign in'}</button> <button type="button" class="btn ghost" data-act="pr-login-email">Use another email</button> <button type="button" class="btn ghost" data-act="pr-login-back">Cancel</button></p>`;
+  return `<h3>Sign in to keep your progress</h3><p>No password needed. We email you a 6-digit code.</p>${msg}
+    <label class="f">Your email <input id="pr-email" type="email" autocomplete="email" value="${esc(L.email)}"></label>
+    <p class="pr-consent"><label><input type="checkbox" id="pr-consent"> I agree that Arohaanex Edvantage may store my email address and my practice scores to show my progress. I can delete them at any time from this page. If I am under 18, my parent or guardian knows and agrees.</label></p>
+    <p class="hint">We store your email, when you signed in, and the scores of each session. We do not store the questions you saw. We do not sell or share this information.</p>
+    <p class="links"><button type="button" class="btn" data-act="pr-send"${L.busy?' disabled':''}>${L.busy?'Sending…':'Send me a code'}</button> <button type="button" class="btn ghost" data-act="pr-login-back">Cancel</button></p>`;
+}
+
+/* ----- running a test ----- */
+function prStart(mode){
+  const seed=prSeed(),c=PR.cfg;let qs=[],limit=0;PR.msg='';PR.notice='';
+  if(mode==='mock'){qs=NPAT.mock(40,seed);limit=PRACTICE.mockMin*60;}
+  else if(mode==='mini'){qs=NPAT.mock(10,seed);limit=PRACTICE.miniMin*60;}
+  else if(mode==='revise'){const w=prWeak();if(!w.length)return;qs=NPAT.weakSet(w.map(t=>({sec:PR_TOPIC_SEC[t],topic:t})),20,seed);}
+  else{
+    const secs=c.sec==='all'?['qa','ri','en']:[c.sec],per=Math.ceil(c.count/secs.length);
+    secs.forEach(s=>{qs=qs.concat(NPAT.build({sec:s,topic:secs.length===1&&c.topic?c.topic:undefined,diff:c.diff||undefined,count:per,seed:seed+s.charCodeAt(0)}));});
+    qs=prShuffle(qs).slice(0,c.count);
+  }
+  if(!qs.length){PR.msg='We could not find questions for that choice. Try another level or topic.';prRefresh();return;}
+  PR.run={mode,qs,i:0,ans:qs.map(()=>-1),mark:qs.map(()=>false),start:Date.now(),limit,id:prId(),live:''};
+  PR.screen='run';PR.confirmSubmit=false;PR.res=null;
+  clearInterval(PR.timer);
+  if(limit)PR.timer=setInterval(prTick,1000);
+  prRefresh('#pr-qtext');window.scrollTo(0,0);
+}
+function prTick(){
+  const r=PR.run;
+  if(!r||!r.limit){clearInterval(PR.timer);return;}
+  const left=r.limit-(Date.now()-r.start)/1000,el=document.getElementById('pr-timer');
+  if(el)el.textContent=prMMSS(left);
+  [600,300,60].forEach(s=>{if(left<=s&&!r['w'+s]){r['w'+s]=true;const lv=document.getElementById('pr-live');if(lv)lv.textContent=Math.round(s/60)+(s===60?' minute':' minutes')+' left.';}});
+  if(left<=0)prFinish(true);
+}
+const prFeedback=r=>r.mode==='practice'||r.mode==='revise';
+function prOptsHTML(q,sel,reveal){
+  return q.opts.map((o,k)=>{
+    let cls='optbtn',tag='';
+    if(reveal){if(k===q.ans){cls+=' ok';tag='<span class="pr-tag">✓ Correct answer</span>';}else if(k===sel){cls+=' no';tag='<span class="pr-tag">✗ Your answer</span>';}}
+    return `<button type="button" class="${cls}" data-act="pr-opt" data-k="${k}" aria-pressed="${sel===k}"${reveal?' disabled':''}><b aria-hidden="true">${'ABCD'[k]}</b><span>${esc(o)}${tag?' '+tag:''}</span></button>`;
+  }).join('');
+}
+function prRunHTML(){
+  const r=PR.run,q=r.qs[r.i],n=r.qs.length,fb=prFeedback(r),sel=r.ans[r.i],reveal=fb&&sel>=0;
+  const answered=r.ans.filter(x=>x>=0).length,marked=r.mark.filter(Boolean).length;
+  const head=`<div class="pr-top"><p><strong>${PR_MODE_NAME[r.mode]}</strong> · Question ${r.i+1} of ${n} · ${esc(NPAT.SECS[q.sec])}${q.topic?' · '+esc(q.topic):''}</p>${r.limit?`<p class="prtimer">Time left <span id="pr-timer" role="timer">${prMMSS(r.limit-(Date.now()-r.start)/1000)}</span></p>`:''}</div><div class="sr-only" id="pr-live" aria-live="polite"></div><p class="bar" aria-hidden="true"><span style="width:${prPct(r.i+1,n)}%"></span></p>`;
+  const qh=`${q.passage?`<div class="prpass"><strong>Read the passage, then answer.</strong><p>${esc(q.passage)}</p></div>`:''}<p class="prq" id="pr-qtext" tabindex="-1">${esc(q.q)}</p><div class="pro" role="group" aria-labelledby="pr-qtext">${prOptsHTML(q,sel,reveal)}</div>`;
+  const exp=reveal?`<div class="prexp" role="status"><strong>${sel===q.ans?'Right.':'Not this time.'}</strong> ${esc(q.exp)}</div>`:'';
+  const nav=`<p class="links"><button type="button" class="btn ghost" data-act="pr-prev"${r.i===0?' disabled':''}>← Previous</button> ${fb?'':`<button type="button" class="btn ghost" data-act="pr-mark" aria-pressed="${r.mark[r.i]}">${r.mark[r.i]?'Unmark':'Mark for review'}</button> `}${r.i<n-1?`<button type="button" class="btn" data-act="pr-next">${fb&&sel<0?'Skip':'Next'} →</button>`:''} <button type="button" class="btn ${r.i===n-1?'':'ghost'}" data-act="pr-submit">${fb?'Finish and see score':'Submit test'}</button></p>`;
+  let confirm='';
+  if(PR.confirmSubmit)confirm=`<div class="alert" role="alertdialog" aria-label="Confirm"><strong>${fb?'Finish this session?':'Submit your test?'}</strong> You answered ${answered} of ${n}.${marked?' '+marked+' marked for review.':''}${!fb&&answered<n?' Unanswered questions score zero.':''} <button type="button" class="btn small" data-act="pr-submit-yes">Yes, ${fb?'finish':'submit'}</button> <button type="button" class="btn ghost small" data-act="pr-submit-no">Keep going</button></div>`;
+  let pal='';
+  if(!fb){
+    const parts=['qa','ri','en'].map(s=>{const idx=r.qs.map((x,k)=>x.sec===s?k:-1).filter(k=>k>=0);if(!idx.length)return '';return `<p class="pr-pal-h">${esc(NPAT.SECS[s])}</p><div class="palette">${idx.map(k=>`<button type="button" class="pal${r.ans[k]>=0?' ans':''}${r.mark[k]?' mk':''}${k===r.i?' cur':''}" data-act="pr-go" data-i="${k}" aria-label="Question ${k+1}, ${r.ans[k]>=0?'answered':'not answered'}${r.mark[k]?', marked for review':''}"${k===r.i?' aria-current="true"':''}>${k+1}</button>`).join('')}</div>`;}).join('');
+    pal=`<details class="pr-pal"${n<=30?' open':''}><summary>Question palette · ${answered} answered${marked?' · '+marked+' marked':''}</summary>${parts}<p class="hint">Filled = answered. Dashed = marked for review.</p></details>`;
+  }
+  return `${head}${qh}${exp}${nav}${confirm}${pal}`;
+}
+function prOpt(k){
+  const r=PR.run;if(!r)return;
+  if(prFeedback(r)&&r.ans[r.i]>=0)return;
+  r.ans[r.i]=r.ans[r.i]===k&&!prFeedback(r)?-1:k;
+  prRefresh(prFeedback(r)?'[data-act="pr-next"],[data-act="pr-submit"]':'[data-act="pr-opt"][data-k="'+k+'"]');
+}
+function prGo(i){const r=PR.run;if(!r||i<0||i>=r.qs.length)return;r.i=i;PR.confirmSubmit=false;prRefresh('#pr-qtext');const q=document.getElementById('pr-qtext');if(q)q.scrollIntoView({block:'nearest'});}
+
+function prFinish(auto){
+  const r=PR.run;if(!r)return;
+  clearInterval(PR.timer);
+  const idx=r.qs.map((q,i)=>i).filter(i=>!prFeedback(r)||r.ans[i]>=0);
+  PR.confirmSubmit=false;
+  if(!idx.length){PR.run=null;PR.screen='home';PR.msg='You did not answer any question, so nothing was saved.';prRefresh();return;}
+  const bySec={qa:[0,0],ri:[0,0],en:[0,0]},byTopic={};let correct=0;
+  idx.forEach(i=>{const q=r.qs[i],ok=r.ans[i]===q.ans;bySec[q.sec][0]++;if(ok){bySec[q.sec][1]++;correct++;}if(!byTopic[q.topic])byTopic[q.topic]=[0,0];byTopic[q.topic][0]++;if(ok)byTopic[q.topic][1]++;});
+  const secs=['qa','ri','en'].filter(s=>bySec[s][0]>0);
+  const dur=Math.min(20000,Math.round((Date.now()-r.start)/1000));
+  const attempt={id:r.id,ts:Date.now(),mode:r.mode,sec:secs.length===1?secs[0]:'all',total:idx.length,correct,durationSec:dur,bySec,byTopic};
+  PR.res={attempt,qs:r.qs,ans:r.ans,mark:r.mark,mode:r.mode,auto:!!auto,saveMsg:'',reported:{}};
+  PR.run=null;PR.screen='result';PR.revFilter='all';
+  prSave(attempt);
+  prRefresh('#pr-qtext');window.scrollTo(0,0);
+}
+async function prSave(a){
+  if(!PR.user){
+    const L=prLocalAttempts();L.unshift(a);prLsSet(PR_LOCAL,JSON.stringify(L.slice(0,200)));
+    if(PR.res)PR.res.saveMsg=prLsGet(PR_LOCAL)?'Saved on this device.':'We could not save this score on your device.';
+    return;
+  }
+  const r=await prApi({action:'save',token:PR.user.token,attempt:a});
+  if(r.ok){PR.attempts.unshift(a);if(PR.res)PR.res.saveMsg='Saved to your account.';}
+  else if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;const L=prLocalAttempts();L.unshift(a);prLsSet(PR_LOCAL,JSON.stringify(L.slice(0,200)));if(PR.res)PR.res.saveMsg='Your sign-in had ended. This score is saved on this device. Sign in again to continue saving to your account.';}
+  else{const q=prJson(PR_PENDING,[]);q.push(a);prLsSet(PR_PENDING,JSON.stringify(q.slice(-30)));if(PR.res)PR.res.saveMsg='We could not reach the server. We will try again next time you open this page signed in.';}
+  prRefresh();
+}
+
+/* ----- results and review ----- */
+function prResultHTML(){
+  const R=PR.res,a=R.attempt,v=prPct(a.correct,a.total);
+  const real=R.mode==='mock'?'':'';
+  const secRows=['qa','ri','en'].filter(s=>a.bySec[s][0]>0).map(s=>{const p=a.bySec[s],x=prPct(p[1],p[0]);return `<li><span class="pr-lab">${NPAT.SECS[s]}</span><span class="bar" aria-hidden="true"><span style="width:${x}%"></span></span><span class="pr-val">${p[1]} of ${p[0]} (${x}%)</span></li>`;}).join('');
+  const topRows=Object.keys(a.byTopic).sort((x,y)=>prPct(a.byTopic[x][1],a.byTopic[x][0])-prPct(a.byTopic[y][1],a.byTopic[y][0])).map(k=>{const p=a.byTopic[k],x=prPct(p[1],p[0]);return `<li><span class="pr-lab">${esc(k)}</span><span class="bar" aria-hidden="true"><span style="width:${x}%"></span></span><span class="pr-val">${p[1]} of ${p[0]}</span></li>`;}).join('');
+  const sk=R.qs.filter((q,i)=>R.ans[i]<0).length;
+  return `<h3 id="pr-qtext" tabindex="-1">Your result</h3>${R.auto?'<p class="pr-msg" role="status">Time was up, so your test was submitted for you.</p>':''}
+  <div class="prstats"><div class="prstat"><b>${a.correct} / ${a.total}</b><span>marks (1 for each right answer)</span></div><div class="prstat"><b>${v}%</b><span>correct</span></div><div class="prstat"><b>${prDur(a.durationSec)}</b><span>time taken</span></div></div>
+  ${R.mode==='mock'||R.mode==='mini'?`<p>${sk?sk+' question'+(sk===1?' was':'s were')+' left unanswered. ':''}This is practice. Your score on a real NPAT depends on that paper, so use it to find what to work on.</p>`:''}
+  <p class="hint" role="status">${esc(R.saveMsg)}</p>
+  <h3>By section</h3><ul class="prrows">${secRows}</ul><h3>By topic, weakest first</h3><ul class="prrows">${topRows}</ul>
+  <p class="links"><button type="button" class="btn" data-act="pr-review">Review answers and working</button> <button type="button" class="btn ghost" data-act="pr-home">Back to my practice page</button></p>`;
+}
+function prReviewHTML(){
+  const R=PR.res,f=PR.revFilter;
+  const items=R.qs.map((q,i)=>({q,i,s:R.ans[i]})).filter(x=>f==='all'||(f==='wrong'&&x.s>=0&&x.s!==x.q.ans)||(f==='skipped'&&x.s<0));
+  const filt=[['all','All'],['wrong','Wrong'],['skipped','Not answered']].map(o=>`<button type="button" class="chipbtn" data-act="pr-filter" data-f="${o[0]}" aria-pressed="${f===o[0]}">${o[1]}</button>`).join(' ');
+  const rows=items.map(x=>{
+    const q=x.q,st=x.s<0?'Not answered':x.s===q.ans?'Right':'Wrong';
+    const rep=PR.res.reported[q.id]?'<span class="hint">Thank you, we will check this question.</span>':(PR.user?`<button type="button" class="linkbtn" data-act="pr-report" data-i="${x.i}">Report a mistake</button>`:`<a class="linkbtn" href="mailto:${PRACTICE.support}?subject=${encodeURIComponent('Ascend Hub practice: question '+q.id)}&body=${encodeURIComponent('Question id: '+q.id+'\n\nWhat looks wrong:\n')}">Report a mistake</a>`);
+    return `<li class="pr-rev"><p class="pr-rev-h"><strong>Question ${x.i+1}</strong> · ${esc(NPAT.SECS[q.sec])} · ${esc(q.topic)} · <strong>${st}</strong></p>${q.passage?`<details><summary>Show the passage</summary><div class="prpass"><p>${esc(q.passage)}</p></div></details>`:''}<p class="prq">${esc(q.q)}</p><div class="pro">${q.opts.map((o,k)=>{let cls='optbtn',tag='';if(k===q.ans){cls+=' ok';tag=' ✓ Correct answer';}else if(k===x.s){cls+=' no';tag=' ✗ Your answer';}return `<div class="${cls}"><b aria-hidden="true">${'ABCD'[k]}</b><span>${esc(o)}${tag}</span></div>`;}).join('')}</div><div class="prexp"><strong>Working:</strong> ${esc(q.exp)}</div><p>${rep}</p></li>`;
+  }).join('');
+  return `<h3 id="pr-qtext" tabindex="-1">Review</h3><p class="links noprint">${filt}</p><ol class="prrev">${rows||'<li>Nothing to show here.</li>'}</ol><p class="links"><button type="button" class="btn" data-act="pr-result">Back to result</button> <button type="button" class="btn ghost" data-act="pr-home">My practice page</button></p>`;
+}
+
+/* ----- clicks and changes ----- */
+function prChange(t){
+  const c=PR.cfg;
+  if(t.id==='pr-sec'){c.sec=t.value;c.topic='';}
+  else if(t.id==='pr-topic')c.topic=t.value;
+  else if(t.id==='pr-diff')c.diff=parseInt(t.value,10)||0;
+  else if(t.id==='pr-count')c.count=parseInt(t.value,10)||10;
+  PR.msg='';
+  if(t.id==='pr-sec')prRefresh('#pr-sec');
+}
+async function prAction(act,b){
+  const L=PR.login;
+  switch(act){
+    case 'pr-open':break;
+    case 'pr-start':prStart(b.dataset.mode);break;
+    case 'pr-opt':prOpt(parseInt(b.dataset.k,10));break;
+    case 'pr-next':if(PR.run)prGo(PR.run.i+1);break;
+    case 'pr-prev':if(PR.run)prGo(PR.run.i-1);break;
+    case 'pr-go':prGo(parseInt(b.dataset.i,10));break;
+    case 'pr-mark':if(PR.run){PR.run.mark[PR.run.i]=!PR.run.mark[PR.run.i];prRefresh('[data-act="pr-mark"]');}break;
+    case 'pr-submit':PR.confirmSubmit=true;prRefresh('[data-act="pr-submit-yes"]');break;
+    case 'pr-submit-no':PR.confirmSubmit=false;prRefresh('[data-act="pr-submit"]');break;
+    case 'pr-submit-yes':prFinish(false);break;
+    case 'pr-review':PR.screen='review';prRefresh('#pr-qtext');window.scrollTo(0,0);break;
+    case 'pr-result':PR.screen='result';prRefresh('#pr-qtext');window.scrollTo(0,0);break;
+    case 'pr-home':PR.screen='home';PR.msg='';PR.res=null;prRefresh('#pr-root h3');window.scrollTo(0,0);break;
+    case 'pr-filter':PR.revFilter=b.dataset.f;prRefresh('[data-act="pr-filter"][data-f="'+b.dataset.f+'"]');break;
+    case 'pr-login':PR.screen='login';L.step='email';L.msg='';L.busy=false;prRefresh('#pr-email');break;
+    case 'pr-login-back':PR.screen='home';prRefresh('[data-act="pr-login"]');break;
+    case 'pr-login-email':L.step='email';L.msg='';prRefresh('#pr-email');break;
+    case 'pr-send':{
+      const em=(document.getElementById('pr-email')||{}).value||'',ok=!!(document.getElementById('pr-consent')||{}).checked;
+      L.email=em.trim();
+      if(!L.email||!/^\S+@\S+\.\S+$/.test(L.email)){L.msg=PR_ERR.email;prRefresh('#pr-email');break;}
+      if(!ok){L.msg=PR_ERR.consent;prRefresh('#pr-consent');break;}
+      L.busy=true;L.msg='';prRefresh();
+      const r=await prApi({action:'requestCode',email:L.email,consent:true});
+      L.busy=false;
+      if(r.ok){L.step='code';L.msg='';prRefresh('#pr-code');}
+      else{L.msg=PR_ERR[r.error]||PR_ERR.server;prRefresh('#pr-email');}
+      break;}
+    case 'pr-verify':{
+      const code=((document.getElementById('pr-code')||{}).value||'').replace(/\D/g,'');
+      if(code.length!==6){L.msg=PR_ERR.code;prRefresh('#pr-code');break;}
+      L.busy=true;L.msg='';prRefresh();
+      const r=await prApi({action:'verifyCode',email:L.email,code});
+      L.busy=false;
+      if(r.ok){
+        prLsSet(PR_SESSION,JSON.stringify({token:r.token,email:r.email}));
+        PR.user={email:r.email,token:r.token};PR.attempts=[];PR.screen='home';PR.notice='';PR.loading=true;prRefresh('#pr-root h3');
+        const p=await prApi({action:'progress',token:r.token});PR.loading=false;
+        if(p.ok)PR.attempts=p.attempts||[];else PR.notice='We could not load your saved scores right now.';
+        prFlushPending();prRefresh('#pr-root h3');
+      }else{L.msg=PR_ERR[r.error]||PR_ERR.server;prRefresh('#pr-code');}
+      break;}
+    case 'pr-logout':{const t=PR.user&&PR.user.token;PR.user=null;PR.attempts=[];prLsDel(PR_SESSION);PR.confirmDel=false;PR.notice='You have signed out.';prRefresh('#pr-root h3');if(t)prApi({action:'logout',token:t});break;}
+    case 'pr-del':PR.confirmDel=true;prRefresh('[data-act="pr-del-yes"]');break;
+    case 'pr-del-no':PR.confirmDel=false;prRefresh('[data-act="pr-del"]');break;
+    case 'pr-del-yes':{
+      const t=PR.user&&PR.user.token;if(!t)break;
+      const r=await prApi({action:'deleteMe',token:t});
+      PR.confirmDel=false;
+      if(r.ok||r.error==='auth'){PR.user=null;PR.attempts=[];prLsDel(PR_SESSION);prLsDel(PR_PENDING);PR.notice='Your email and your saved scores have been deleted.';}
+      else PR.notice='We could not delete your data right now. Please try again, or write to '+PRACTICE.support+'.';
+      prRefresh('#pr-root h3');break;}
+    case 'pr-clear-local':prLsDel(PR_LOCAL);PR.notice='Scores on this device were cleared.';prRefresh('#pr-root h3');break;
+    case 'pr-report':{
+      const i=parseInt(b.dataset.i,10),q=PR.res&&PR.res.qs[i];if(!q||!PR.user)break;
+      const r=await prApi({action:'report',token:PR.user.token,questionId:q.id,message:'Reported from review'});
+      if(r.ok){PR.res.reported[q.id]=true;prRefresh();}
+      else{b.textContent='Could not send. Try again.';}
+      break;}
+  }
+}
+window.addEventListener('beforeunload',e=>{if(PR.run&&PR.run.limit){e.preventDefault();e.returnValue='';}});
 
 /* ---------- QUIZ COUNTS AND OPTIONAL RESULT SHARING ---------- */
 /* Anonymous counts: only class, subject group, top interests and scores are sent. No name or contact details.
@@ -2847,6 +3536,7 @@ app.addEventListener('change',e=>{
     const er=document.getElementById('chk-err');if(er)er.hidden=true;return;}
   if(t.id==='ab-budget'){state.abroadBudget=parseInt(t.value,10)||0;const tb=document.getElementById('ab-table');if(tb)tb.innerHTML=abroadTable();else refreshAb();return;}
   if(t.id==='ab-switch'){state.abId=t.value;render();return;}
+  if(t.id&&t.id.indexOf('pr-')===0){prChange(t);return;}
   if(t.id==='ex-jump'){if(t.value){state.exMode='exam';state.exId=t.value;state.exTab='about';state.exGoal='';render();exFocusTop();}return;}
   if(t.id==='ex-switch'){state.exId=t.value;state.exTab='about';if(state.exGoal&&!exById(t.value).goals.includes(state.exGoal))state.exGoal='';render();exFocusTop();return;}
   if(t.name==='level'){const nm=document.getElementById('name');if(nm)state.name=nm.value;state.level=t.value;render();return;}
@@ -2866,6 +3556,11 @@ app.addEventListener('change',e=>{
   else return;
   state.filters.all=false;state.filters.allC=false;
   refresh();
+});
+app.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  if(e.target.id==='pr-email'){e.preventDefault();prAction('pr-send',e.target);}
+  else if(e.target.id==='pr-code'){e.preventDefault();prAction('pr-verify',e.target);}
 });
 app.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
