@@ -471,6 +471,72 @@ button.optbtn:hover:not(:disabled){border-color:var(--accent)}
 .pr-rev{margin:1.4rem 0;padding-bottom:1.2rem;border-bottom:1px solid var(--line)}
 .pr input[type=email],.pr input[inputmode=numeric]{display:block;min-height:48px;width:100%;max-width:22rem;padding:.5rem .8rem;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--surface);color:inherit}
 @media (max-width:620px){.prrows li{grid-template-columns:1fr;gap:.2rem}}
+
+/* NPAT practice */
+.topbar{display:flex;justify-content:flex-end;padding-top:.6rem}
+.topbar[hidden]{display:none}
+.signin-top{min-height:44px;max-width:60vw;padding:.4rem 1.2rem;border:2px solid var(--accent);border-radius:999px;background:var(--accent);color:var(--on-accent);font-family:var(--font-body);font-weight:700;font-size:.95rem;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.signin-top:hover{filter:brightness(1.1)}
+.signin-top:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+:root{--ok:#0B6B3A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ok:#7FE0A8}}
+:root[data-theme="dark"]{--ok:#7FE0A8}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pr h3{margin-top:1.6rem}
+.pr-acct{margin:1rem 0;padding:.8rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.pr-acct p{margin:.3rem 0}
+.pr-del{display:inline-block;margin-left:.4rem}
+.prstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin:1rem 0}
+.prstat{border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;background:var(--surface)}
+.prstat b{display:block;font-size:1.6rem;font-family:var(--font-display);line-height:1.2}
+.prstat span{color:var(--muted);font-size:.9rem}
+.prsetup{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:.8rem 0}
+.bar{display:block;height:10px;background:var(--accent-soft);border-radius:99px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.prrows,.prlist{list-style:none;padding:0;margin:.6rem 0}
+.prrows li{display:grid;grid-template-columns:minmax(120px,1.4fr) 2fr minmax(110px,1.1fr);gap:.7rem;align-items:center;padding:.35rem 0}
+.prlist li{padding:.35rem 0;border-bottom:1px solid var(--line)}
+.pr-lab{font-weight:700}.pr-val{color:var(--muted);font-size:.9rem}
+.pr-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.4rem 1rem;align-items:baseline}
+.prtimer{font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.prq{font-size:1.15rem;line-height:1.5;margin:1rem 0;white-space:pre-line}
+.prpass{white-space:pre-line;border-left:4px solid var(--accent);padding:.7rem 1rem;background:var(--accent-soft);border-radius:8px;margin:1rem 0}
+.prpass p{margin:.4rem 0 0}
+.pro{display:grid;gap:.6rem;margin:1rem 0}
+.optbtn{display:flex;gap:.8rem;align-items:flex-start;text-align:left;min-height:48px;width:100%;padding:.7rem .9rem;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:inherit;font:inherit;line-height:1.45}
+button.optbtn{cursor:pointer}
+button.optbtn:hover:not(:disabled){border-color:var(--accent)}
+.optbtn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.optbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.optbtn:disabled{opacity:1;color:inherit}
+.optbtn.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.optbtn.no{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 10%,var(--surface))}
+.optbtn b{flex:none;width:1.5rem}
+.pr-tag{font-weight:700;white-space:nowrap}
+.optbtn.ok .pr-tag{color:var(--ok)}.optbtn.no .pr-tag{color:var(--danger)}
+.prexp{margin:1rem 0;padding:.8rem 1rem;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.pr-pal{margin-top:1.4rem;border:1px solid var(--line);border-radius:12px;padding:.6rem 1rem;background:var(--surface)}
+.pr-pal summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.pr-pal-h{margin:.8rem 0 .3rem;font-weight:700;font-size:.9rem;color:var(--muted)}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:.4rem}
+.pal{min-height:44px;border:2px solid var(--line);border-radius:8px;background:var(--surface);color:inherit;font:inherit;font-weight:700;cursor:pointer}
+.pal.ans{background:var(--accent-soft);border-color:var(--accent)}
+.pal.mk{border-style:dashed;border-color:var(--mark)}
+.pal.cur{outline:3px solid var(--accent);outline-offset:2px}
+.pr-consent label{display:flex;gap:.6rem;align-items:flex-start;line-height:1.5}
+.pr-consent input{margin-top:.3rem;width:1.2rem;height:1.2rem;flex:none}
+.pr-msg{color:var(--danger);font-weight:700}
+.prrev{list-style:none;padding:0}
+.pr-rev{margin:1.4rem 0;padding-bottom:1.2rem;border-bottom:1px solid var(--line)}
+.pr input[type=email],.pr input[inputmode=numeric]{display:block;min-height:48px;width:100%;max-width:22rem;padding:.5rem .8rem;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--surface);color:inherit}
+@media (max-width:620px){.prrows li{grid-template-columns:1fr;gap:.2rem}}
+.rolegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-top:.8rem}
+.rolecard{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;text-align:left;min-height:48px;padding:.9rem 1rem;border:2px solid var(--line);border-radius:14px;background:var(--surface);color:inherit;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.rolecard:hover{border-color:var(--accent)}
+.rolecard[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.rolecard:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.rolecard .ic{font-size:1.6rem}
+.gate{margin-top:1rem}
 </style>
 </head>
 <body>
@@ -1320,6 +1386,14 @@ const TSERVICES=[
  {ic:'✨',t:'Something else',d:'Curriculum mapping, school calendars, worksheets or training material. Tell us what you need.'}
 ];
 function teachers(){
+  let html=teachersBase();
+  if(authOn()){
+    if(!canUse('teachers'))html=html.replace(/<form id="treq"[\s\S]*?<\/form>/,gateHTML('teachers'));
+    else if(PR.user)html=html.replace('id="t-email" name="email" type="email" required autocomplete="email"','id="t-email" name="email" type="email" required autocomplete="email" value="'+esc(PR.user.email)+'"');
+  }
+  return html;
+}
+function teachersBase(){
   const svc=TSERVICES.map(s=>`<div class="tsvc"><span class="ic" aria-hidden="true">${s.ic}</span><h3>${s.t}</h3><p>${s.d}</p><button type="button" class="linkbtn" data-act="pick" data-t="${s.t}">Request this</button></div>`).join('');
   const opts=TSERVICES.map(s=>`<option>${s.t}</option>`).join('');
   const lib=LIBRARY.length
@@ -2053,7 +2127,9 @@ function exAction(act,b){
   else if(act==='cu-area'){state.cuF=b.dataset.id;refreshEx('[data-act="cu-area"][data-id="'+state.cuF+'"]');}
   else if(act==='cu-example'){state.cuet=CU_EXAMPLES[parseInt(b.dataset.id,10)][1].slice();state.cuMsg='';refreshEx('[data-act="cu-example"][data-id="'+b.dataset.id+'"]');}
   else if(act==='cu-clear'){state.cuet=[];state.cuMsg='';refreshEx('[data-act="cu-clear"]');}
+  else if(act==='pr-open'&&authOn()&&!PR.user){authOpen('practice');}
   else if(act==='pr-open'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';prEnter();if(state.view!=='exams')go('exams');else{render();exFocusTop();}}
+  else if(act.indexOf('au-')===0){auAction(act,b);}
   else if(act.indexOf('pr-')===0){prAction(act,b);}
   else return false;
   return true;
@@ -2371,7 +2447,7 @@ if(typeof module!=='undefined')module.exports=NPAT;
 const PRACTICE={endpoint:'https://script.google.com/macros/s/AKfycbzdk8eBlyu_alRZX57eyiK2qxZjjMT9npygQO7PxeYUISMl-AAzYuenXunY2EEfnAEV/exec',consentVersion:'2026-11',mockMin:100,miniMin:25,support:'connect@arohaanex.com'};
 const PR_SESSION='ascend_pr_session',PR_LOCAL='ascend_pr_local',PR_PENDING='ascend_pr_pending';
 const PR_MODE_NAME={mock:'Full mock',mini:'Mini mock',practice:'Topic practice',revise:'Weak-topic revision'};
-const PR_ERR={email:'Please type a valid email address.',consent:'Please tick the box to agree before we send a code.',slow:'Too many tries. Please wait ten minutes and try again.',busy:'Codes cannot be sent right now. Please try again later.',code:'That code is not right. Check the 6 digits in your latest email and try again.',expired:'That code has expired or was replaced. Please ask for a new code.',short:'Please type the 6-digit code from your email.',locked:'Too many wrong codes. Please ask for a new code.',net:'We could not reach the server. Check your internet and try again.',off:'Sign-in is not switched on yet.',auth:'Your sign-in has ended. Please sign in again.',data:'We could not save that.',server:'Something went wrong on our side. Please try again.'};
+const PR_ERR={email:'Please type a valid email address.',consent:'Please tick the box to agree before we send a code.',role:'Please choose who you are first.',slow:'Too many tries. Please wait ten minutes and try again.',busy:'Codes cannot be sent right now. Please try again later.',code:'That code is not right. Check the 6 digits in your latest email and try again.',expired:'That code has expired or was replaced. Please ask for a new code.',short:'Please type the 6-digit code from your email.',locked:'Too many wrong codes. Please ask for a new code.',net:'We could not reach the server. Check your internet and try again.',off:'Sign-in is not switched on yet.',auth:'Your sign-in has ended. Please sign in again.',data:'We could not save that.',server:'Something went wrong on our side. Please try again.'};
 const PR={screen:'home',user:null,attempts:[],started:false,loading:false,login:{step:'email',email:'',code:'',msg:'',info:'',busy:false},cfg:{sec:'all',topic:'',diff:0,count:10},run:null,res:null,msg:'',timer:0,confirmSubmit:false,confirmDiscard:false,confirmDel:false,revFilter:'all',notice:''};
 const PR_TOPIC_SEC={};
 ['qa','ri','en'].forEach(s=>NPAT.TOPICS[s].forEach(t=>{PR_TOPIC_SEC[t]=s;}));
@@ -2404,14 +2480,12 @@ function prRefresh(sel){prSyncTop();if(state.view==='exams'&&state.exTab==='prac
 async function prInit(){
   if(PR.started)return;
   PR.started=true;
-  const s=prJson(PR_SESSION,null);
-  if(s&&s.token&&s.email&&PRACTICE.endpoint){
-    PR.user={email:s.email,token:s.token};
+  if(PR.user&&PR.user.role==='student'){
     PR.loading=true;
-    const r=await prApi({action:'progress',token:s.token});
+    const r=await prApi({action:'progress',token:PR.user.token});
     PR.loading=false;
     if(r.ok){PR.attempts=r.attempts||[];prFlushPending();}
-    else if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;PR.notice='Your sign-in had ended, so you are using the section as a guest. Sign in again to see your saved scores.';}
+    else if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;prSyncTop();PR.notice='Your sign-in has ended. Please sign in again to see your saved scores.';}
     else{PR.attempts=[];PR.notice='We could not load your saved scores right now. You can still practise.';}
     prRefresh();
   }
@@ -2456,17 +2530,17 @@ function prResumeHTML(){
 
 /* ----- the panel ----- */
 function npatPanel(){
+  if(!canUse('practice'))return `<div class="pr" id="pr-root">${gateHTML('practice')}</div>`;
   prInit();
-  const body=PR.screen==='login'?prLoginHTML():PR.screen==='resume'&&PR.run?prResumeHTML():PR.screen==='run'&&PR.run?prRunHTML():PR.screen==='result'&&PR.res?prResultHTML():PR.screen==='review'&&PR.res?prReviewHTML():prHomeHTML();
+  const body=PR.screen==='resume'&&PR.run?prResumeHTML():PR.screen==='run'&&PR.run?prRunHTML():PR.screen==='result'&&PR.res?prResultHTML():PR.screen==='review'&&PR.res?prReviewHTML():prHomeHTML();
   return `<div class="pr" id="pr-root">${body}</div>`;
 }
 const prNote=`<div class="alert"><strong>About these questions.</strong> They are practice questions written by Ascend Hub in the style of the NPAT (Quantitative and Numerical Ability, Reasoning and General Intelligence, Proficiency in English). They are not real NPAT papers, and no teacher has reviewed each one. If you think an answer is wrong, use <em>Report a mistake</em> in the review. Check the real pattern on the NMIMS website.</div>`;
 
 function prAccountHTML(){
-  if(PR.user)return `<div class="pr-acct"><p><strong>Signed in as ${esc(PR.user.email)}.</strong> Your scores are saved to your account.</p><p class="links"><button type="button" class="btn ghost small" data-act="pr-logout">Sign out</button> ${PR.confirmDel?`<span class="pr-del" role="alert">This deletes your email and all your saved scores from our records. <button type="button" class="btn small" data-act="pr-del-yes">Yes, delete everything</button> <button type="button" class="btn ghost small" data-act="pr-del-no">Cancel</button></span>`:`<button type="button" class="btn ghost small" data-act="pr-del">Delete my data</button>`}</p></div>`;
+  if(PR.user)return `<div class="pr-acct"><p><strong>Signed in as ${esc(PR.user.email)}</strong> (student). Your scores are saved to your account.</p><p class="links"><button type="button" class="btn ghost small" data-act="au-account">My account</button></p></div>`;
   const clear=prLocalAttempts().length?` <button type="button" class="linkbtn" data-act="pr-clear-local">Clear scores on this device</button>`:'';
-  if(!PRACTICE.endpoint)return `<div class="pr-acct"><p><strong>Practising as a guest.</strong> Your scores are kept on this device only.${clear}</p></div>`;
-  return `<div class="pr-acct"><p><strong>Practising as a guest.</strong> Your scores are kept on this device only. Sign in with your email to keep your progress and see it on any phone or computer.${clear}</p><p class="links"><button type="button" class="btn small" data-act="pr-login">Sign in</button></p></div>`;
+  return `<div class="pr-acct"><p><strong>Practising as a guest.</strong> Your scores are kept on this device only.${clear}</p></div>`;
 }
 
 function prHomeHTML(){
@@ -2500,19 +2574,6 @@ function prHomeHTML(){
   ${PR.msg?`<p class="pr-msg" role="alert">${esc(PR.msg)}</p>`:''}
   <p class="links"><button type="button" class="btn" data-act="pr-start" data-mode="practice">Start practice</button></p>
   ${g.n?`<h3>How you are doing</h3><ul class="prrows">${secBars}</ul>${topRows?`<h3>Topic by topic, weakest first</h3><ul class="prrows">${topRows}</ul>`:''}${recent?`<h3>Recent sessions</h3><ul class="prlist">${recent}</ul>`:''}`:'<p class="hint">Your progress will show here after your first session.</p>'}`;
-}
-
-/* ----- sign-in ----- */
-function prLoginHTML(){
-  const L=PR.login,msg=L.msg?`<p class="pr-msg" role="alert">${esc(L.msg)}</p>`:'';
-  if(L.step==='code')return `<h3>Enter your code</h3><p>We sent a 6-digit code to <strong>${esc(L.email)}</strong>. It works for 10 minutes. Check your spam folder too.</p>${L.info?`<p class="hint" role="status">${esc(L.info)}</p>`:''}${msg}
-    <label class="f">6-digit code <input id="pr-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" value="${esc(L.code||'')}"></label>${L.busy?'<p role="status" class="hint">Checking your code. This can take a few seconds, please wait.</p>':''}
-    <p class="links"><button type="button" class="btn" data-act="pr-verify"${L.busy?' disabled':''}>${L.busy?'Checking…':'Sign in'}</button> <button type="button" class="btn ghost" data-act="pr-login-email">Use another email</button> <button type="button" class="btn ghost" data-act="pr-login-back">Cancel</button></p>`;
-  return `<h3>Sign in to keep your progress</h3><p>No password needed. We email you a 6-digit code.</p>${msg}
-    <label class="f">Your email <input id="pr-email" type="email" autocomplete="email" value="${esc(L.email)}"></label>
-    <p class="pr-consent"><label><input type="checkbox" id="pr-consent"> I agree that Arohaanex Edvantage may store my email address and my practice scores to show my progress. I can delete them at any time from this page. If I am under 18, my parent or guardian knows and agrees.</label></p>
-    <p class="hint">We store your email, when you signed in, and the scores of each session. We do not store the questions you saw. We do not sell or share this information.</p>
-    <p class="links"><button type="button" class="btn" data-act="pr-send"${L.busy?' disabled':''}>${L.busy?'Sending…':'Send me a code'}</button> <button type="button" class="btn ghost" data-act="pr-login-back">Cancel</button></p>`;
 }
 
 /* ----- running a test ----- */
@@ -2598,7 +2659,7 @@ async function prSave(a){
   }
   const r=await prApi({action:'save',token:PR.user.token,attempt:a});
   if(r.ok){PR.attempts.unshift(a);if(PR.res)PR.res.saveMsg='Saved to your account.';}
-  else if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;const L=prLocalAttempts();L.unshift(a);prLsSet(PR_LOCAL,JSON.stringify(L.slice(0,200)));if(PR.res)PR.res.saveMsg='Your sign-in had ended. This score is saved on this device. Sign in again to continue saving to your account.';}
+  else if(r.error==='auth'||r.error==='role'){if(r.error==='auth'){prLsDel(PR_SESSION);PR.user=null;prSyncTop();}const L=prLocalAttempts();L.unshift(a);prLsSet(PR_LOCAL,JSON.stringify(L.slice(0,200)));if(PR.res)PR.res.saveMsg='This score is saved on this device. Please sign in again as a student to keep saving to your account.';}
   else{const q=prJson(PR_PENDING,[]);q.push(a);prLsSet(PR_PENDING,JSON.stringify(q.slice(-30)));if(PR.res)PR.res.saveMsg='We could not reach the server. We will try again next time you open this page signed in.';}
   prRefresh();
 }
@@ -2640,7 +2701,6 @@ function prChange(t){
   if(t.id==='pr-sec')prRefresh('#pr-sec');
 }
 async function prAction(act,b){
-  const L=PR.login;
   switch(act){
     case 'pr-open':break;
     case 'pr-start':prStart(b.dataset.mode);break;
@@ -2662,47 +2722,6 @@ async function prAction(act,b){
     case 'pr-result':PR.screen='result';prRefresh('#pr-qtext');window.scrollTo(0,0);break;
     case 'pr-home':PR.screen='home';PR.msg='';prRefresh('#pr-root h3');window.scrollTo(0,0);break;
     case 'pr-filter':PR.revFilter=b.dataset.f;prRefresh('[data-act="pr-filter"][data-f="'+b.dataset.f+'"]');break;
-    case 'pr-login':PR.screen='login';L.step='email';L.msg='';L.info='';L.code='';L.busy=false;prRefresh('#pr-email');break;
-    case 'pr-login-back':PR.screen='home';prRefresh('[data-act="pr-login"]');break;
-    case 'pr-login-email':L.step='email';L.msg='';prRefresh('#pr-email');break;
-    case 'pr-send':{
-      if(L.busy)break;
-      const em=(document.getElementById('pr-email')||{}).value||'',ok=!!(document.getElementById('pr-consent')||{}).checked;
-      L.email=em.trim();
-      if(!L.email||!/^\S+@\S+\.\S+$/.test(L.email)){L.msg=PR_ERR.email;prRefresh('#pr-email');break;}
-      if(!ok){L.msg=PR_ERR.consent;prRefresh('#pr-consent');break;}
-      L.busy=true;L.msg='';prRefresh();
-      const r=await prApi({action:'requestCode',email:L.email,consent:true});
-      L.busy=false;
-      if(r.ok){L.step='code';L.msg='';L.code='';L.info=r.repeat?'We sent a code a moment ago. Please use the code from that email.':'';prRefresh('#pr-code');}
-      else{L.msg=PR_ERR[r.error]||PR_ERR.server;prRefresh('#pr-email');}
-      break;}
-    case 'pr-verify':{
-      if(L.busy)break;
-      const code=((document.getElementById('pr-code')||{}).value||'').replace(/\D/g,'');
-      L.code=code;
-      if(code.length!==6){L.msg=PR_ERR.short;prRefresh('#pr-code');break;}
-      L.busy=true;L.msg='';prRefresh();
-      const r=await prApi({action:'verifyCode',email:L.email,code});
-      L.busy=false;
-      if(r.ok){
-        prLsSet(PR_SESSION,JSON.stringify({token:r.token,email:r.email}));
-        PR.user={email:r.email,token:r.token};PR.attempts=[];PR.screen='home';PR.notice='';L.code='';PR.loading=true;prRefresh('#pr-root h3');
-        const p=await prApi({action:'progress',token:r.token});PR.loading=false;
-        if(p.ok)PR.attempts=p.attempts||[];else PR.notice='We could not load your saved scores right now.';
-        prFlushPending();prRefresh('#pr-root h3');
-      }else{L.msg=PR_ERR[r.error]||PR_ERR.server;prRefresh('#pr-code');}
-      break;}
-    case 'pr-logout':{const t=PR.user&&PR.user.token;PR.user=null;PR.attempts=[];prLsDel(PR_SESSION);PR.confirmDel=false;PR.notice='You have signed out.';prRefresh('#pr-root h3');if(t)prApi({action:'logout',token:t});break;}
-    case 'pr-del':PR.confirmDel=true;prRefresh('[data-act="pr-del-yes"]');break;
-    case 'pr-del-no':PR.confirmDel=false;prRefresh('[data-act="pr-del"]');break;
-    case 'pr-del-yes':{
-      const t=PR.user&&PR.user.token;if(!t)break;
-      const r=await prApi({action:'deleteMe',token:t});
-      PR.confirmDel=false;
-      if(r.ok||r.error==='auth'){PR.user=null;PR.attempts=[];prLsDel(PR_SESSION);prLsDel(PR_PENDING);PR.notice='Your email and your saved scores have been deleted.';}
-      else PR.notice='We could not delete your data right now. Please try again, or write to '+PRACTICE.support+'.';
-      prRefresh('#pr-root h3');break;}
     case 'pr-clear-local':prLsDel(PR_LOCAL);PR.notice='Scores on this device were cleared.';prRefresh('#pr-root h3');break;
     case 'pr-report':{
       const i=parseInt(b.dataset.i,10),q=PR.res&&PR.res.qs[i];if(!q||!PR.user)break;
@@ -2714,26 +2733,192 @@ async function prAction(act,b){
 }
 window.addEventListener('beforeunload',e=>{if(PR.run&&PR.run.limit){e.preventDefault();e.returnValue='';}});
 
-/* ----- the Sign in button at the top right of every page ----- */
+
+/* ---------- ACCOUNTS: sign in by role (student, teacher, school management) ---------- */
+/* Uses the same PRACTICE.endpoint. While it is empty, nothing is gated and every section is open. */
+const ROLES={
+  student:{t:'Student',ico:'🎓',d:'Entrance-exam practice and your saved progress'},
+  teacher:{t:'Teacher',ico:'📚',d:'Educator Hub: ask for lesson plans, question papers, PPTs and more'},
+  management:{t:'School management',ico:'🏫',d:'The school tools, and everything teachers can use'}
+};
+const ROLE_ORDER=['student','teacher','management'];
+const GATES={
+  practice:{roles:['student'],def:'student',title:'Entrance-exam practice',msg:'Entrance-exam practice and saved progress are for students.'},
+  teachers:{roles:['teacher','management'],def:'teacher',title:'Educator Hub request form',msg:'The Educator Hub request form is for teachers and school management.'},
+  check:{roles:['management'],def:'management',title:'Academic Health Check',msg:'The Academic Health Check is for school management.'}
+};
+const authOn=()=>!!PRACTICE.endpoint;
+const canUse=k=>!authOn()||!!(PR.user&&GATES[k].roles.includes(PR.user.role));
+const roleName=r=>(ROLES[r]||{t:''}).t.toLowerCase();
+const AU={role:'',step:'start',email:'',code:'',msg:'',info:'',busy:false,after:null,confirmDel:false,notice:''};
+
+function authSave(){if(PR.user)prLsSet(PR_SESSION,JSON.stringify({token:PR.user.token,email:PR.user.email,role:PR.user.role}));}
+function authRender(sel){
+  prSyncTop();
+  if(state.view==='signin'||state.view==='account'){render();if(sel){const t=app.querySelector(sel);if(t)t.focus({preventScroll:true});}}
+}
+
+/* ----- the block that replaces a gated tool ----- */
+function gateHTML(kind){
+  const g=GATES[kind];
+  if(!PR.user)return `<div class="alert gate"><strong>Please sign in first.</strong> ${g.msg} It takes under a minute: we email you a 6-digit code, and there is no password.
+    <p class="links"><button type="button" class="btn" data-act="au-open" data-after="${kind}" data-role="${g.def}">Sign in as ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-open" data-after="${kind}">Choose another role</button></p></div>`;
+  return `<div class="alert gate"><strong>This part is not for your role.</strong> ${g.msg} You are signed in as ${roleName(PR.user.role)}.
+    <p class="links"><button type="button" class="btn" data-act="au-switch" data-r="${g.def}" data-after="${kind}">Switch my role to ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-account">My account</button></p></div>`;
+}
+function gateView(kind,title){
+  return `<div class="thead"><h1>${title}</h1></div><section class="block">${gateHTML(kind)}</section>${brandFoot()}`;
+}
+function authOpen(kind){
+  if(PR.user){ /* signed in with another role: show the section, which explains and offers a switch */
+    if(kind==='check'){state.chk=null;go('check');}
+    else if(kind==='teachers')go('teachers');
+    else{state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';prEnter();go('exams');}
+    return;
+  }
+  AU.after=kind?{kind}:null;AU.role=kind?GATES[kind].def:'';AU.step='start';AU.msg='';AU.info='';AU.code='';AU.busy=false;
+  go('signin');
+}
+
+/* ----- sign-in page ----- */
+function signinView(){
+  const A=AU,g=A.after&&GATES[A.after.kind];
+  const why=g?`<div class="alert" role="status"><strong>${g.title}.</strong> ${g.msg}</div>`:'';
+  const msg=A.msg?`<p class="pr-msg" role="alert">${esc(A.msg)}</p>`:'';
+  let body;
+  if(A.step==='code'){
+    body=`<h2>Enter your code</h2><p>We sent a 6-digit code to <strong>${esc(A.email)}</strong>. It works for 10 minutes. Check your spam folder too.</p>${A.info?`<p class="hint" role="status">${esc(A.info)}</p>`:''}${msg}
+    <label class="f">6-digit code <input id="au-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" value="${esc(A.code)}"></label>${A.busy?'<p role="status" class="hint">Checking your code. This can take a few seconds, please wait.</p>':''}
+    <p class="links"><button type="button" class="btn" data-act="au-verify"${A.busy?' disabled':''}>${A.busy?'Checking…':'Sign in'}</button> <button type="button" class="btn ghost" data-act="au-back">Use another email</button></p>`;
+  }else{
+    const cards=ROLE_ORDER.map(r=>`<button type="button" class="rolecard" data-act="au-role" data-r="${r}" aria-pressed="${A.role===r}"><span class="ic" aria-hidden="true">${ROLES[r].ico}</span><strong>${ROLES[r].t}</strong><span class="hint">${ROLES[r].d}</span></button>`).join('');
+    body=`<h2>1. Who are you?</h2><div class="rolegrid" role="group" aria-label="Choose your role">${cards}</div>
+    <h2 style="margin-top:1.6rem">2. Your email</h2>${msg}
+    <label class="f">Email <input id="au-email" type="email" autocomplete="email" value="${esc(A.email)}"></label>
+    <p class="pr-consent"><label><input type="checkbox" id="au-consent"> I agree that Arohaanex Edvantage may store my email address, my role and, if I am a student, my practice scores, to run my account and show my progress. I can delete them at any time from My account. If I am under 18, my parent or guardian knows and agrees.</label></p>
+    <p class="hint">We do not sell or share this information. Students: we do not store the questions you saw.</p>
+    <p class="links"><button type="button" class="btn" data-act="au-send"${A.busy?' disabled':''}>${A.busy?'Sending…':'Send me a code'}</button></p>`;
+  }
+  return `<div class="thead"><h1>Sign in</h1><p class="lead">Choose who you are and enter your email. We send you a 6-digit code, so you do not need a password.</p></div>${why}<section class="block">${body}</section>${brandFoot()}`;
+}
+
+/* ----- account page ----- */
+function accountView(){
+  if(!PR.user)return `<div class="thead"><h1>My account</h1></div><section class="block"><p>You are not signed in.</p><p class="links"><button type="button" class="btn" data-act="au-open">Sign in</button></p></section>${brandFoot()}`;
+  const r=PR.user.role,role=ROLES[r];
+  const open=[];
+  if(r==='student')open.push(['au-goto','practice','Open entrance-exam practice']);
+  if(r==='teacher'||r==='management')open.push(['au-goto','teachers','Open Educator Hub']);
+  if(r==='management')open.push(['au-goto','check','Open the Academic Health Check']);
+  const sw=ROLE_ORDER.map(x=>`<button type="button" class="rolecard" data-act="au-switch" data-r="${x}" aria-pressed="${x===r}"><span class="ic" aria-hidden="true">${ROLES[x].ico}</span><strong>${ROLES[x].t}</strong></button>`).join('');
+  return `<div class="thead"><h1>My account</h1>${AU.notice?`<p class="alert" role="status">${esc(AU.notice)}</p>`:''}<p class="lead">Signed in as <strong>${esc(PR.user.email)}</strong> · ${role.ico} ${role.t}</p></div>
+  <section class="block"><h2>Go to my section</h2><p class="links">${open.map(o=>`<button type="button" class="btn" data-act="${o[0]}" data-k="${o[1]}">${o[2]}</button>`).join(' ')}</p></section>
+  <section class="block"><h2>My role</h2><p class="hint">You can change your role at any time. Each role opens its own section.</p><div class="rolegrid" role="group" aria-label="Change my role">${sw}</div></section>
+  <section class="block"><h2>Sign out or delete</h2><p class="links"><button type="button" class="btn ghost" data-act="au-logout">Sign out</button> ${AU.confirmDel?`<span class="pr-del" role="alert">This deletes your email, your role${r==='student'?' and all your saved scores':''} from our records. <button type="button" class="btn small" data-act="au-del-yes">Yes, delete everything</button> <button type="button" class="btn ghost small" data-act="au-del-no">Cancel</button></span>`:`<button type="button" class="btn ghost" data-act="au-del">Delete my data</button>`}</p>
+  <p class="hint">We store your email, your role, when you signed in${r==='student'?' and the scores of your practice sessions':''}.</p></section>${brandFoot()}`;
+}
+
+/* ----- where to go after signing in or switching ----- */
+function authGoto(kind){
+  if(kind==='practice'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';prEnter();go('exams');}
+  else if(kind==='teachers'){go('teachers');setTimeout(()=>{const f=document.getElementById('treq-sec');if(f)f.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'start'});},60);}
+  else if(kind==='check'){state.chk=newCheck();go('check');}
+  else go('account');
+}
+function authAfter(){
+  const a=AU.after;AU.after=null;AU.step='start';AU.code='';AU.msg='';AU.info='';
+  const r=PR.user.role;
+  if(a&&a.kind&&GATES[a.kind].roles.includes(r))return authGoto(a.kind);
+  AU.notice='';go('account');
+}
+
+/* ----- actions ----- */
+async function authLogout(){
+  const t=PR.user&&PR.user.token;
+  clearInterval(PR.timer);PR.user=null;PR.attempts=[];PR.run=null;PR.res=null;PR.screen='home';prLsDel(PR_SESSION);AU.confirmDel=false;
+  prSyncTop();go('welcome');
+  if(t)prApi({action:'logout',token:t});
+}
+async function auAction(act,b){
+  const A=AU;
+  switch(act){
+    case 'au-open':{const k=b.dataset.after||'';A.after=k?{kind:k}:null;A.role=b.dataset.role||(k?GATES[k].def:A.role);A.step='start';A.msg='';A.info='';A.busy=false;go('signin');break;}
+    case 'au-role':{A.email=(document.getElementById('au-email')||{}).value||A.email;A.role=b.dataset.r;A.msg='';authRender('[data-act="au-role"][data-r="'+A.role+'"]');break;}
+    case 'au-back':A.step='start';A.msg='';A.info='';authRender('#au-email');break;
+    case 'au-send':{
+      if(A.busy)break;
+      A.email=((document.getElementById('au-email')||{}).value||'').trim();
+      const agreed=!!(document.getElementById('au-consent')||{}).checked;
+      if(!A.role){A.msg='Please choose who you are first.';authRender('[data-act="au-role"]');break;}
+      if(!/^\S+@\S+\.\S+$/.test(A.email)){A.msg=PR_ERR.email;authRender('#au-email');break;}
+      if(!agreed){A.msg=PR_ERR.consent;authRender('#au-consent');break;}
+      A.busy=true;A.msg='';authRender();
+      const r=await prApi({action:'requestCode',email:A.email,consent:true});
+      A.busy=false;
+      if(r.ok){A.step='code';A.code='';A.msg='';A.info=r.repeat?'We sent a code a moment ago. Please use the code from that email.':'';authRender('#au-code');}
+      else{A.msg=PR_ERR[r.error]||PR_ERR.server;authRender('#au-email');}
+      break;}
+    case 'au-verify':{
+      if(A.busy)break;
+      const code=((document.getElementById('au-code')||{}).value||'').replace(/\D/g,'');
+      A.code=code;
+      if(code.length!==6){A.msg=PR_ERR.short;authRender('#au-code');break;}
+      A.busy=true;A.msg='';authRender();
+      const r=await prApi({action:'verifyCode',email:A.email,code,role:A.role});
+      A.busy=false;
+      if(r.ok){
+        PR.user={email:r.email,token:r.token,role:r.role};PR.attempts=[];PR.started=false;authSave();A.code='';
+        prSyncTop();authAfter();
+      }else{A.msg=PR_ERR[r.error]||PR_ERR.server;authRender('#au-code');}
+      break;}
+    case 'au-switch':{
+      if(!PR.user)break;
+      const role=b.dataset.r,after=b.dataset.after||'';
+      if(role===PR.user.role){if(after)authGoto(after);else authRender();break;}
+      const r=await prApi({action:'setRole',token:PR.user.token,role});
+      if(r.ok){
+        PR.user.role=r.role;PR.attempts=[];PR.started=false;authSave();AU.notice='Your role is now '+roleName(r.role)+'.';prSyncTop();
+        if(after&&GATES[after].roles.includes(r.role))authGoto(after);else if(state.view==='account')authRender();else render();
+      }else if(r.error==='auth'){PR.user=null;prLsDel(PR_SESSION);prSyncTop();AU.after=after?{kind:after}:null;go('signin');}
+      else{AU.notice=PR_ERR[r.error]||PR_ERR.server;authRender();}
+      break;}
+    case 'au-account':go('account');break;
+    case 'au-goto':authGoto(b.dataset.k);break;
+    case 'au-logout':authLogout();break;
+    case 'au-del':A.confirmDel=true;authRender('[data-act="au-del-yes"]');break;
+    case 'au-del-no':A.confirmDel=false;authRender('[data-act="au-del"]');break;
+    case 'au-del-yes':{
+      const t=PR.user&&PR.user.token;if(!t)break;
+      const r=await prApi({action:'deleteMe',token:t});
+      A.confirmDel=false;
+      if(r.ok||r.error==='auth'){clearInterval(PR.timer);PR.user=null;PR.attempts=[];PR.run=null;PR.res=null;PR.screen='home';prLsDel(PR_SESSION);prLsDel(PR_PENDING);AU.notice='';prSyncTop();go('welcome');}
+      else{A.notice='We could not delete your data right now. Please try again, or write to '+PRACTICE.support+'.';authRender();}
+      break;}
+  }
+}
+
+/* ----- the Sign in button at the top right ----- */
 function prSyncTop(){
   const b=document.getElementById('nav-signin'),bar=document.getElementById('topbar');if(!b||!bar)return;
-  bar.hidden=!PRACTICE.endpoint;
-  if(!PRACTICE.endpoint)return;
-  if(PR.user){const nm=PR.user.email.split('@')[0],s=nm.length>12?nm.slice(0,11)+'…':nm;b.textContent='✓ '+s;b.setAttribute('aria-label','Signed in as '+PR.user.email+'. Open my practice page.');b.title=PR.user.email;}
-  else{b.textContent='Sign in';b.setAttribute('aria-label','Sign in to save your practice progress');b.removeAttribute('title');}
+  bar.hidden=!authOn();
+  if(!authOn())return;
+  if(PR.user){const nm=PR.user.email.split('@')[0],s=nm.length>12?nm.slice(0,11)+'…':nm;b.textContent='✓ '+s;b.setAttribute('aria-label','Signed in as '+PR.user.email+', '+roleName(PR.user.role)+'. Open my account.');b.title=PR.user.email+' ('+roleName(PR.user.role)+')';}
+  else{b.textContent='Sign in';b.setAttribute('aria-label','Sign in');b.removeAttribute('title');}
 }
-function prTop(){
-  state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';
-  prEnter();
-  if(!PR.user&&!PR.run){PR.screen='login';PR.login.step='email';PR.login.msg='';PR.login.info='';PR.login.busy=false;}
-  go('exams');
-  const t=document.getElementById('pr-email');if(t)t.focus({preventScroll:true});
-}
-function prBoot(){
+function prTop(){if(PR.user)go('account');else{AU.after=null;AU.role='';AU.step='start';AU.msg='';AU.info='';AU.busy=false;go('signin');}}
+async function prBoot(){
   const s=prJson(PR_SESSION,null);
-  if(PRACTICE.endpoint&&s&&s.token&&s.email)PR.user={email:s.email,token:s.token};
+  if(authOn()&&s&&s.token&&s.email&&ROLES[s.role])PR.user={email:s.email,token:s.token,role:s.role};
   const tb=document.getElementById('nav-signin');if(tb)tb.addEventListener('click',prTop);
   prSyncTop();
+  if(PR.user){
+    const r=await prApi({action:'whoami',token:PR.user.token});
+    let changed=false;
+    if(r.ok&&r.role!==PR.user.role){PR.user.role=r.role;authSave();changed=true;}
+    else if(!r.ok&&r.error==='auth'){PR.user=null;prLsDel(PR_SESSION);changed=true;}
+    prSyncTop();
+    if(changed&&!PR.run&&['exams','teachers','check','pulse','account'].includes(state.view))render();
+  }
 }
 
 /* ---------- QUIZ COUNTS AND OPTIONAL RESULT SHARING ---------- */
@@ -3517,7 +3702,7 @@ function compute(){
 
 function render(){
   const v=state.view;
-  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='exams'?exams():v==='schools'?schoolsPage():v==='about'?aboutPage():v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
+  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='exams'?exams():v==='signin'?signinView():v==='account'?accountView():v==='schools'?schoolsPage():v==='about'?aboutPage():(v==='check'||v==='pulse')&&!canUse('check')?gateView('check','Academic Health Check'):v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
   syncNav();
 }
 function refresh(){
@@ -3527,7 +3712,7 @@ function refresh(){
 function go(view){
   state.view=view;render();window.scrollTo(0,0);
   try{const hs=view==='teachers'?'#educators':view==='abroad'?'#abroad':view==='exams'?'#exams':view==='schools'?'#schools':view==='about'?'#about':(view==='check'||view==='pulse')?'#check':'';if(hs)history.replaceState(null,'',hs);else if(isEd(location.hash)||location.hash==='#abroad'||location.hash==='#exams'||location.hash==='#schools'||location.hash==='#about'||location.hash==='#contact'||location.hash==='#check')history.replaceState(null,'',location.pathname+location.search);}catch(e){}
-  const target=(view==='results'||view==='teachers'||view==='abroad'||view==='exams'||view==='schools'||view==='about'||view==='check'||view==='pulse')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
+  const target=(view==='results'||view==='signin'||view==='account'||view==='teachers'||view==='abroad'||view==='exams'||view==='schools'||view==='about'||view==='check'||view==='pulse')?app.querySelector('h1'):view==='quiz'?document.getElementById('qtext'):null;
   if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
   if(view==='results')animateCounts();
 }
@@ -3613,8 +3798,8 @@ app.addEventListener('change',e=>{
 });
 app.addEventListener('keydown',e=>{
   if(e.key!=='Enter')return;
-  if(e.target.id==='pr-email'){e.preventDefault();prAction('pr-send',e.target);}
-  else if(e.target.id==='pr-code'){e.preventDefault();prAction('pr-verify',e.target);}
+  if(e.target.id==='au-email'){e.preventDefault();auAction('au-send',e.target);}
+  else if(e.target.id==='au-code'){e.preventDefault();auAction('au-verify',e.target);}
 });
 app.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -3626,7 +3811,7 @@ app.addEventListener('click',e=>{
   else if(act==='teachers')go('teachers');
   else if(act==='schools')go('schools');
   else if(act==='about')go('about');
-  else if(act==='chk-open'||act==='chk-restart'){state.chk=newCheck();go('check');}
+  else if(act==='chk-open'||act==='chk-restart'){if(!canUse('check'))authOpen('check');else{state.chk=newCheck();go('check');}}
   else if(act==='chk-next')chkNext();
   else if(act==='chk-back'){state.chk.sec=Math.max(0,state.chk.sec-1);render();window.scrollTo(0,0);}
   else if(act==='chk-print')window.print();
