@@ -537,6 +537,7 @@ button.optbtn:hover:not(:disabled){border-color:var(--accent)}
 .rolecard:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .rolecard .ic{font-size:1.6rem}
 .gate{margin-top:1rem}
+.topnav [hidden],.topnav .menu[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -1508,6 +1509,7 @@ function copyRequest(btn){
   else{const ta=document.createElement('textarea');ta.value=state.treq.text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
 }
 function syncNav(){
+  authNav();
   const ids={home:'nav-home',abroad:'nav-abroad',exams:'nav-exams',teachers:'nav-teachers',schools:'nav-schools',about:'nav-about'};
   const cur=(state.view==='check'||state.view==='pulse')?'schools':(['teachers','schools','about','abroad','exams'].includes(state.view)?state.view:'home');
   Object.keys(ids).forEach(k=>{const el=document.getElementById(ids[k]);if(el)el.setAttribute('aria-current',k===cur?'page':'false');});
@@ -2744,9 +2746,15 @@ const ROLES={
 const ROLE_ORDER=['student','teacher','management'];
 const GATES={
   practice:{roles:['student'],def:'student',title:'Entrance-exam practice',msg:'Entrance-exam practice and saved progress are for students.'},
-  teachers:{roles:['teacher','management'],def:'teacher',title:'Educator Hub request form',msg:'The Educator Hub request form is for teachers and school management.'},
-  check:{roles:['management'],def:'management',title:'Academic Health Check',msg:'The Academic Health Check is for school management.'}
+  teachers:{roles:['teacher','management'],def:'teacher',title:'Educator Hub',msg:'The Educator Hub is for teachers and school management.'},
+  check:{roles:['management'],def:'management',title:'Academic Health Check',msg:'The Academic Health Check is for school management.'},
+  student:{roles:['student'],def:'student',title:'Student Hub',msg:'The Student Hub (career guidance, study abroad and entrance exams) is for students.'},
+  school:{roles:['management'],def:'management',title:'For Schools',msg:'The school section is for school management.'}
 };
+/* which section each page belongs to. About us, sign-in and My account are open to everyone. */
+const SECTION_OF={welcome:'student',quiz:'student',loading:'student',results:'student',abroad:'student',exams:'student',teachers:'teachers',schools:'school',check:'school',pulse:'school'};
+function viewGate(v){const s=SECTION_OF[v];return s&&authOn()&&!canUse(s)?s:null;}
+function authPrepare(kind,view){const A=AU;A.after={kind,view};A.role=GATES[kind].def;A.step='start';A.msg='';A.info='';A.code='';A.busy=false;}
 const authOn=()=>!!PRACTICE.endpoint;
 const canUse=k=>!authOn()||!!(PR.user&&GATES[k].roles.includes(PR.user.role));
 const roleName=r=>(ROLES[r]||{t:''}).t.toLowerCase();
@@ -2759,15 +2767,15 @@ function authRender(sel){
 }
 
 /* ----- the block that replaces a gated tool ----- */
-function gateHTML(kind){
-  const g=GATES[kind];
+function gateHTML(kind,view){
+  const g=GATES[kind],vw=view?` data-view="${view}"`:'';
   if(!PR.user)return `<div class="alert gate"><strong>Please sign in first.</strong> ${g.msg} It takes under a minute: we email you a 6-digit code, and there is no password.
-    <p class="links"><button type="button" class="btn" data-act="au-open" data-after="${kind}" data-role="${g.def}">Sign in as ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-open" data-after="${kind}">Choose another role</button></p></div>`;
+    <p class="links"><button type="button" class="btn" data-act="au-open" data-after="${kind}"${vw} data-role="${g.def}">Sign in as ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-open" data-after="${kind}"${vw}>Choose another role</button></p></div>`;
   return `<div class="alert gate"><strong>This part is not for your role.</strong> ${g.msg} You are signed in as ${roleName(PR.user.role)}.
-    <p class="links"><button type="button" class="btn" data-act="au-switch" data-r="${g.def}" data-after="${kind}">Switch my role to ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-account">My account</button></p></div>`;
+    <p class="links"><button type="button" class="btn" data-act="au-switch" data-r="${g.def}" data-after="${kind}"${vw}>Switch my role to ${roleName(g.def)}</button> <button type="button" class="btn ghost" data-act="au-account">My account</button></p></div>`;
 }
 function gateView(kind,title){
-  return `<div class="thead"><h1>${title}</h1></div><section class="block">${gateHTML(kind)}</section>${brandFoot()}`;
+  return `<div class="thead"><h1>${title}</h1></div><section class="block">${gateHTML(kind,state.view)}</section>${brandFoot()}`;
 }
 function authOpen(kind){
   if(PR.user){ /* signed in with another role: show the section, which explains and offers a switch */
@@ -2807,9 +2815,9 @@ function accountView(){
   if(!PR.user)return `<div class="thead"><h1>My account</h1></div><section class="block"><p>You are not signed in.</p><p class="links"><button type="button" class="btn" data-act="au-open">Sign in</button></p></section>${brandFoot()}`;
   const r=PR.user.role,role=ROLES[r];
   const open=[];
-  if(r==='student')open.push(['au-goto','practice','Open entrance-exam practice']);
+  if(r==='student'){open.push(['au-goto','student','Open Student Hub']);open.push(['au-goto','practice','Open entrance-exam practice']);}
   if(r==='teacher'||r==='management')open.push(['au-goto','teachers','Open Educator Hub']);
-  if(r==='management')open.push(['au-goto','check','Open the Academic Health Check']);
+  if(r==='management'){open.push(['au-goto','school','Open For Schools']);open.push(['au-goto','check','Open the Academic Health Check']);}
   const sw=ROLE_ORDER.map(x=>`<button type="button" class="rolecard" data-act="au-switch" data-r="${x}" aria-pressed="${x===r}"><span class="ic" aria-hidden="true">${ROLES[x].ico}</span><strong>${ROLES[x].t}</strong></button>`).join('');
   return `<div class="thead"><h1>My account</h1>${AU.notice?`<p class="alert" role="status">${esc(AU.notice)}</p>`:''}<p class="lead">Signed in as <strong>${esc(PR.user.email)}</strong> · ${role.ico} ${role.t}</p></div>
   <section class="block"><h2>Go to my section</h2><p class="links">${open.map(o=>`<button type="button" class="btn" data-act="${o[0]}" data-k="${o[1]}">${o[2]}</button>`).join(' ')}</p></section>
@@ -2823,13 +2831,16 @@ function authGoto(kind){
   if(kind==='practice'){state.exMode='exam';state.exId='npat';state.exTab='practice';state.exGoal='';prEnter();go('exams');}
   else if(kind==='teachers'){go('teachers');setTimeout(()=>{const f=document.getElementById('treq-sec');if(f)f.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'start'});},60);}
   else if(kind==='check'){state.chk=newCheck();go('check');}
+  else if(kind==='student')go('welcome');
+  else if(kind==='school')go('schools');
   else go('account');
 }
 function authAfter(){
   const a=AU.after;AU.after=null;AU.step='start';AU.code='';AU.msg='';AU.info='';
   const r=PR.user.role;
-  if(a&&a.kind&&GATES[a.kind].roles.includes(r))return authGoto(a.kind);
-  AU.notice='';go('account');
+  if(a&&a.kind&&GATES[a.kind].roles.includes(r)){if(a.view)return go(a.view);return authGoto(a.kind);}
+  AU.notice='';
+  go(r==='student'?'welcome':r==='teacher'?'teachers':'schools'); /* the person's own section */
 }
 
 /* ----- actions ----- */
@@ -2842,7 +2853,7 @@ async function authLogout(){
 async function auAction(act,b){
   const A=AU;
   switch(act){
-    case 'au-open':{const k=b.dataset.after||'';A.after=k?{kind:k}:null;A.role=b.dataset.role||(k?GATES[k].def:A.role);A.step='start';A.msg='';A.info='';A.busy=false;go('signin');break;}
+    case 'au-open':{const k=b.dataset.after||'';A.after=k?{kind:k,view:b.dataset.view||''}:null;A.role=b.dataset.role||(k?GATES[k].def:A.role);A.step='start';A.msg='';A.info='';A.busy=false;go('signin');break;}
     case 'au-role':{A.email=(document.getElementById('au-email')||{}).value||A.email;A.role=b.dataset.r;A.msg='';authRender('[data-act="au-role"][data-r="'+A.role+'"]');break;}
     case 'au-back':A.step='start';A.msg='';A.info='';authRender('#au-email');break;
     case 'au-send':{
@@ -2873,13 +2884,13 @@ async function auAction(act,b){
       break;}
     case 'au-switch':{
       if(!PR.user)break;
-      const role=b.dataset.r,after=b.dataset.after||'';
-      if(role===PR.user.role){if(after)authGoto(after);else authRender();break;}
+      const role=b.dataset.r,after=b.dataset.after||'',view=b.dataset.view||'';
+      if(role===PR.user.role){if(view)go(view);else if(after)authGoto(after);else authRender();break;}
       const r=await prApi({action:'setRole',token:PR.user.token,role});
       if(r.ok){
         PR.user.role=r.role;PR.attempts=[];PR.started=false;authSave();AU.notice='Your role is now '+roleName(r.role)+'.';prSyncTop();
-        if(after&&GATES[after].roles.includes(r.role))authGoto(after);else if(state.view==='account')authRender();else render();
-      }else if(r.error==='auth'){PR.user=null;prLsDel(PR_SESSION);prSyncTop();AU.after=after?{kind:after}:null;go('signin');}
+        if(after&&GATES[after].roles.includes(r.role)){if(view)go(view);else authGoto(after);}else if(state.view==='account')authRender();else render();
+      }else if(r.error==='auth'){PR.user=null;prLsDel(PR_SESSION);prSyncTop();AU.after=after?{kind:after,view}:null;go('signin');}
       else{AU.notice=PR_ERR[r.error]||PR_ERR.server;authRender();}
       break;}
     case 'au-account':go('account');break;
@@ -2898,7 +2909,14 @@ async function auAction(act,b){
 }
 
 /* ----- the Sign in button at the top right ----- */
+/* show each signed-in person only the sections they can use */
+function authNav(){
+  const set=(id,show)=>{const el=document.getElementById(id);if(el)el.hidden=!show;};
+  const on=authOn()&&!!PR.user;
+  set('menu-student',!on||canUse('student'));set('nav-teachers',!on||canUse('teachers'));set('nav-schools',!on||canUse('school'));
+}
 function prSyncTop(){
+  authNav();
   const b=document.getElementById('nav-signin'),bar=document.getElementById('topbar');if(!b||!bar)return;
   bar.hidden=!authOn();
   if(!authOn())return;
@@ -2917,7 +2935,7 @@ async function prBoot(){
     if(r.ok&&r.role!==PR.user.role){PR.user.role=r.role;authSave();changed=true;}
     else if(!r.ok&&r.error==='auth'){PR.user=null;prLsDel(PR_SESSION);changed=true;}
     prSyncTop();
-    if(changed&&!PR.run&&['exams','teachers','check','pulse','account'].includes(state.view))render();
+    if(changed&&!PR.run)render();
   }
 }
 
@@ -3701,8 +3719,10 @@ function compute(){
 }
 
 function render(){
+  const gk=viewGate(state.view);
+  if(gk&&!PR.user){authPrepare(gk,state.view);state.view='signin';}
   const v=state.view;
-  app.innerHTML=v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='exams'?exams():v==='signin'?signinView():v==='account'?accountView():v==='schools'?schoolsPage():v==='about'?aboutPage():(v==='check'||v==='pulse')&&!canUse('check')?gateView('check','Academic Health Check'):v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
+  app.innerHTML=(gk&&PR.user)?gateView(gk,GATES[gk].title):v==='welcome'?welcome():v==='quiz'?quiz():v==='loading'?loadingView():v==='teachers'?teachers():v==='abroad'?abroad():v==='exams'?exams():v==='signin'?signinView():v==='account'?accountView():v==='schools'?schoolsPage():v==='about'?aboutPage():(v==='check'||v==='pulse')&&!canUse('check')?gateView('check','Academic Health Check'):v==='check'?checkView():v==='pulse'?pulseView():(state.level==='after10'?results10():results());
   syncNav();
 }
 function refresh(){
